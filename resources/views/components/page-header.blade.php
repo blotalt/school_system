@@ -1,0 +1,3 @@
+<header class="topbar">
+    {{ $slot }}
+</header>
