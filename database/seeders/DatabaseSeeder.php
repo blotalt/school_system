@@ -7,11 +7,9 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
+        // B1 — seed test accounts (kept exactly as B1 wrote it)
         User::updateOrCreate(
             ['email' => 'admin@school.test'],
             ['name' => 'Test Admin', 'password' => 'password', 'role' => 'admin']
@@ -26,5 +24,24 @@ class DatabaseSeeder extends Seeder
             ['email' => 'student@school.test'],
             ['name' => 'Test Student', 'password' => 'password', 'role' => 'student']
         );
+
+        // B2 — order matters: subjects → teachers → classes → students
+        $this->call([
+            SubjectSeeder::class,
+            TeacherSeeder::class,
+            ClassSeeder::class,
+            StudentSeeder::class,
+        ]);
+
+        // B3 (uncomment after B3 merges)
+        // $this->call([
+        //     ExamSeeder::class,
+        //     AttendanceSeeder::class,
+        // ]);
+
+        // B4 (uncomment after B4 merges)
+        // $this->call([
+        //     AnnouncementSeeder::class,
+        // ]);
     }
 }
