@@ -1843,5 +1843,35 @@ Personal Information
         gap:20px;
 
     }
+    /* Shift Selection */
+
+.shift-selection{
+    display:flex;
+    align-items:center;
+    background:#eefbf8;
+    border-radius:18px;
+    padding:8px;
+    width:260px;
+    overflow:hidden;
+}
+
+.shift-tab{
+    flex:1;
+    border:none;
+    background:transparent;
+    padding:16px 0;
+    font-size:20px;
+    font-weight:700;
+    color:#6b7280;
+    cursor:pointer;
+    transition:.3s;
+    border-radius:12px;
+}
+
+.shift-tab.active{
+    background:#fff;
+    color:#0c4da2;
+    box-shadow:0 0 0 3px #0c4da2 inset;
+}
 
 }

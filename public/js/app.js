@@ -192,3 +192,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
+
+const morningBtn = document.getElementById("morningBtn");
+const afternoonBtn = document.getElementById("afternoonBtn");
+
+morningBtn.onclick = function () {
+
+    morningBtn.classList.add("active");
+    afternoonBtn.classList.remove("active");
+
+    document.getElementById("morningSchedule").style.display = "block";
+    document.getElementById("afternoonSchedule").style.display = "none";
+
+}
+
+afternoonBtn.onclick = function () {
+
+    afternoonBtn.classList.add("active");
+    morningBtn.classList.remove("active");
+
+    document.getElementById("morningSchedule").style.display = "none";
+    document.getElementById("afternoonSchedule").style.display = "block";
+
+}

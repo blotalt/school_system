@@ -35,27 +35,21 @@
 
             <!-- Shift -->
 
-            <div class="header-group">
+            <div class="shift-box">
 
-                <label>SHIFT SELECTION</label>
+    <button id="morningBtn" class="shift-btn active">
+        Morning<br>
+    </button>
 
-                <div class="shift-box">
+    <button id="afternoonBtn" class="shift-btn">
+        Afternoon<br>
+    </button>
 
-                    <button class="shift-btn active">
-                        Morning<br>shift
-                    </button>
+    
 
-                    <button class="shift-btn">
-                        Afternoon<br>shift
-                    </button>
 
-                    <button class="setting-btn">
-                        <i class="fa-solid fa-gear"></i>
-                    </button>
 
-                </div>
-
-            </div>
+         
 
         </div>
 
@@ -361,81 +355,11 @@
 
 
 
-<!-- ================= Subject Color Legend ================= -->
-
-<div class="legend-card">
-
-    <h4>SUBJECT COLOR LEGEND</h4>
-
-    <div class="legend-list">
-
-        <div class="legend-item">
-            <span class="legend-box math-box"></span>
-            Mathematics
-        </div>
-
-        <div class="legend-item">
-            <span class="legend-box science-box"></span>
-            Science
-        </div>
-
-        <div class="legend-item">
-            <span class="legend-box language-box"></span>
-            Languages
-        </div>
-
-        <div class="legend-item">
-            <span class="legend-box social-box"></span>
-            Social Studies
-        </div>
-
-        <div class="legend-item">
-            <span class="legend-box other-box"></span>
-            Others
-        </div>
-
-        <div class="legend-item">
-            <span class="legend-box empty-box"></span>
-            No Class
-        </div>
-
-    </div>
-
-</div>
-
-
-
-<!-- ================= Bottom Controls ================= -->
 
 <div class="control-panel">
+    
 
     <div class="control-item">
-
-        <label>SCHOOL START TIME</label>
-
-        <input type="time" value="07:10">
-
-    </div>
-
-    <div class="control-item">
-
-        <label>CLASS DURATION</label>
-
-        <div class="input-unit">
-            <input type="number" value="50">
-            <span>MIN</span>
-        </div>
-
-    </div>
-
-    <div class="control-item">
-
-        <label>BREAK DURATION</label>
-
-        <div class="input-unit">
-            <input type="number" value="10">
-            <span>MIN</span>
-        </div>
 
     </div>
 
