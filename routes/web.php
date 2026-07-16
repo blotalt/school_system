@@ -83,3 +83,30 @@ Route::get('/admin/teachers/create', fn() => view('admin.teachers-create'))->nam
 Route::get('/admin/classes', fn() => view('admin.classes'))->name('admin.classes.index');
 Route::get('/admin/attendance', fn() => view('admin.attendance'))->name('admin.attendance.index');
 Route::get('/admin/announcements', fn() => view('admin.announcements'))->name('admin.announcements.index');
+    if (auth()->check()) {
+        return match (auth()->user()->role) {
+            'admin'   => redirect()->route('admin.dashboard'),
+            'teacher' => redirect()->route('teacher.dashboard'),
+            'student' => redirect()->route('student.dashboard'),
+            default   => redirect()->route('login'),
+        };
+    }
+    return redirect()->route('login');
+});
+
+require __DIR__ . '/auth.php';
+
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(base_path('routes/admin.php'));
+
+Route::middleware(['auth', 'role:teacher'])
+    ->prefix('teacher')
+    ->name('teacher.')
+    ->group(base_path('routes/teacher.php'));
+
+Route::middleware(['auth', 'role:student'])
+    ->prefix('student')
+    ->name('student.')
+    ->group(base_path('routes/student.php'));
