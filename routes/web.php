@@ -3,6 +3,12 @@
 use Illuminate\Support\Facades\Route;
 
 
+use App\Http\Controllers\Teacher\AttendanceController;
+use App\Http\Controllers\Teacher\GradebookController;
+use App\Http\Controllers\Teacher\HomeworkController;
+use App\Http\Controllers\Teacher\ExamController;
+
+
 
 
 
@@ -23,13 +29,17 @@ Route::get('/teacher/classes', function () {
     return view('teacher.classes');
 });
 
-Route::get('/teacher/attendance', function () {
-    return view('teacher.attendance');
-});
+Route::get('/teacher/classes/{class}/attendance', [AttendanceController::class, 'show'])
+    ->name('teacher.attendance.show');
 
-Route::get('/teacher/gradebook', function () {
-    return view('teacher.gradebook');
-});
+Route::post('/teacher/classes/{class}/attendance', [AttendanceController::class, 'store'])
+    ->name('teacher.attendance.store');
+
+Route::get('/teacher/classes/{class}/gradebook/{exam}', [GradebookController::class, 'show'])
+    ->name('teacher.gradebook.show');
+
+Route::post('/teacher/classes/{class}/gradebook/{exam}', [GradebookController::class, 'store'])
+    ->name('teacher.gradebook.store');
 
 Route::get('/teacher/announcements', function () {
     return view('teacher.announcements');
@@ -62,8 +72,8 @@ Route::get('/student/myprofile', function () {
 
 
 // DELETE these:
-Route::get('register', [RegisteredUserController::class, 'create']);
-Route::post('register', [RegisteredUserController::class, 'store']);
+// Route::get('register', [RegisteredUserController::class, 'create']);
+// Route::post('register', [RegisteredUserController::class, 'store']);
 
 Route::get('/admin/dashboard', fn() => view('admin.dashboard'))->name('admin.dashboard');
 Route::get('/admin/students', fn() => view('admin.students'))->name('admin.students.index');

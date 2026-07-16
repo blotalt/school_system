@@ -12,7 +12,7 @@
 
             <p>
                 Manage and evaluate academic performance for
-                <span>Grade 12 - A</span>
+                <span>{{ $exam->class->name ?? 'Class' }}</span>
             </p>
 
         </div>
@@ -26,7 +26,7 @@
             </select>
 
             <select>
-                <option>Mathematics</option>
+                <option>{{ $exam->subject->name }}</option>
                 <option>Physics</option>
                 <option>Chemistry</option>
                 <option>English</option>
@@ -42,7 +42,7 @@
 
     </div>
 
-</div>
+
 
 
 <!-- Gradebook Table -->
@@ -69,175 +69,65 @@
 
         </thead>
 
-        <tbody>
+       <tbody>
 
-            <!-- Student rows go here -->
-<!-- Student 1 -->
+@foreach($students as $student)
 
-<tr>
+@php
+    $score = $results[$student->id]->score ?? 0;
 
-    <td>
-        <div class="student-info">
-
-            <img src="{{ asset('images/student1.jpg') }}" alt="Student">
-
-            <div>
-                <h4>Sophal Kim</h4>
-                <p>ID: 20230045</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="88">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-a">A</span>
-    </td>
-
-    
-
-</tr>
-
-<!-- Student 2 -->
+    if ($score >= 90) {
+        $grade = 'A';
+    } elseif ($score >= 80) {
+        $grade = 'B';
+    } elseif ($score >= 70) {
+        $grade = 'C';
+    } elseif ($score >= 60) {
+        $grade = 'D';
+    } else {
+        $grade = 'F';
+    }
+@endphp
 
 <tr>
 
     <td>
         <div class="student-info">
 
-            <img src="{{ asset('images/student2.jpg') }}" alt="Student">
+            <img src="{{ asset('images/avatar.png') }}" alt="Student">
 
             <div>
-                <h4>Bopha Chen</h4>
-                <p>ID: 20230046</p>
+                <h4>{{ $student->name }}</h4>
+                <p>ID: {{ $student->student_id }}</p>
             </div>
 
         </div>
     </td>
 
     <td>
-        <span class="subject-badge">Mathematics</span>
+        <span class="subject-badge">
+            {{ $exam->subject->name }}
+        </span>
     </td>
 
     <td>
-        <input type="number" class="score-input" value="76">
+        <input
+            type="number"
+            class="score-input"
+            value="{{ $score }}">
     </td>
 
     <td>
-        <span class="grade-circle grade-b">B</span>
+        <span class="grade-circle">
+            {{ $grade }}
+        </span>
     </td>
-
-    
 
 </tr>
 
-<!-- Student 3 -->
+@endforeach
 
-<tr>
-
-    <td>
-        <div class="student-info">
-
-            <img src="{{ asset('images/student3.jpg') }}" alt="Student">
-
-            <div>
-                <h4>Piseth Vong</h4>
-                <p>ID: 20230047</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="62">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-c">C</span>
-    </td>
-
-    
-
-</tr>
-
-<!-- Student 4 -->
-
-<tr>
-
-    <td>
-        <div class="student-info">
-
-            <img src="{{ asset('images/student4.jpg') }}" alt="Student">
-
-            <div>
-                <h4>Channary Meas</h4>
-                <p>ID: 20230048</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="45">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-d">D</span>
-    </td>
-
-    
-
-</tr>
-
-<!-- Student 5 -->
-
-<tr>
-
-    <td>
-        <div class="student-info">
-
-            <img src="{{ asset('images/student5.jpg') }}" alt="Student">
-
-            <div>
-                <h4>Rithy Som</h4>
-                <p>ID: 20230049</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="32">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-f">F</span>
-    </td>
-
-    
-
-</tr>
-
-        </tbody>
+</tbody>
 
     </table>
 
@@ -263,7 +153,7 @@
 
 </div>
 
-
+</div>
 
 
 @endsection
