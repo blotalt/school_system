@@ -92,7 +92,7 @@ Route::get('/admin/announcements', fn() => view('admin.announcements'))->name('a
         };
     }
     return redirect()->route('login');
-});
+
 
 require __DIR__ . '/auth.php';
 
