@@ -31,28 +31,28 @@
         <ul class="menu">
 
             <li>
-                <a href="/st-myschedule" class="{{ request()->is('st-myschedule') ? 'active' : '' }}">
+                <a href="/student/dashboard" class="{{ request()->is('student/dashboard') ? 'active' : '' }}">
                     <i class="fa-regular fa-calendar"></i>
                     My Schedule
                 </a>
             </li>
 
             <li>
-                <a href="/grade-report" class="{{ request()->is('grade-report') ? 'active' : '' }}">
+                <a href="/student/grades" class="{{ request()->is('student/grades') ? 'active' : '' }}">
                     <i class="fa-solid fa-users"></i>
                     Grade / Report Card
                 </a>
             </li>
 
             <li>
-                <a href="/st-attendance" class="{{ request()->is('st-attendance') ? 'active' : '' }}">
+                <a href="/student/attendance" class="{{ request()->is('student/attendance') ? 'active' : '' }}">
                     <i class="fa-solid fa-users"></i>
                     Attendance
                 </a>
             </li>
 
             <li>
-                <a href="/st-announcement" class="{{ request()->is('st-announcement') ? 'active' : '' }}">
+                <a href="/student/announcements" class="{{ request()->is('student/announcements') ? 'active' : '' }}">
                     <i class="fa-solid fa-bullhorn"></i>
                     Announcements
                 </a>
