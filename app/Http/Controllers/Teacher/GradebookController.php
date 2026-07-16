@@ -6,65 +6,39 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Teacher\Concerns\EnsuresClassOwnership;
 use App\Models\Exam;
 use App\Models\ExamResult;
+use App\Models\SchoolClass;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class GradebookController extends Controller
 {
     use EnsuresClassOwnership;
 
-    /**
-     * Show the gradebook grid for one exam: every student in that exam's
-     * class, plus their existing score if one was already entered.
-     */
-    public function show(Exam $exam)
+    public function show(SchoolClass $class, Exam $exam)
     {
-        $this->ensureTeacherOwnsClass($exam->class_id);
+        $this->ensureTeacherOwnsClass($class->id);
 
-        $students = $exam->schoolClass->students;
-
-        // Keyed by student_id so the Blade grid can look up each student's
-        // current score in O(1) instead of searching a flat list.
+        $students = $class->students;
         $results = $exam->results->keyBy('student_id');
 
-        return view('teacher.gradebook', [
-            'exam' => $exam,
-            'students' => $students,
-            'results' => $results,
-        ]);
+        return view('teacher.gradebook', compact('exam', 'students', 'results'));
     }
 
-    /**
-     * Save the whole grid in one submission.
-     * Expects: scores[student_id] = score  (array-keyed by student id -
-     * this exact shape must match what F2's grid form sends).
-     */
     public function store(Request $request, Exam $exam)
     {
         $this->ensureTeacherOwnsClass($exam->class_id);
 
         $validated = $request->validate([
             'scores' => 'required|array',
-            'scores.*' => 'nullable|integer|min:0|max:' . $exam->max_score,
+            'scores.*' => 'required|integer|min:0|max:' . $exam->max_score,
         ]);
 
-        DB::transaction(function () use ($validated, $exam) {
-            foreach ($validated['scores'] as $studentId => $score) {
-                if ($score === null || $score === '') {
-                    continue;
-                }
+        foreach ($validated['scores'] as $studentId => $score) {
+            ExamResult::updateOrCreate(
+                ['exam_id' => $exam->id, 'student_id' => $studentId],
+                ['score' => $score]
+            );
+        }
 
-                // updateOrCreate + the unique(exam_id, student_id) constraint
-                // together mean re-submitting the grid corrects a score
-                // instead of creating a duplicate result row.
-                ExamResult::updateOrCreate(
-                    ['exam_id' => $exam->id, 'student_id' => $studentId],
-                    ['score' => $score]
-                );
-            }
-        });
-
-        return redirect()->route('teacher.gradebook.show', $exam)
-            ->with('status', 'Scores saved.');
+        return redirect()->back()->with('success', 'Scores saved.');
     }
 }
