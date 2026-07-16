@@ -8,7 +8,7 @@
     {{-- CSS --}}
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/te-style2.css') }}">
-
+     <link rel="stylesheet" href="{{ asset('css/ad-style.css') }}">
     {{-- Font Awesome --}}
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -39,28 +39,28 @@
             </li>
 
             <li>
-                <a href="/teacher/classes" class="{{ request()->is('teacher/classes') ? 'active' : '' }}">
+                <a href="/classes" class="{{ request()->is('classes') ? 'active' : '' }}">
                     <i class="fa-solid fa-users"></i>
                     My Classes
                 </a>
             </li>
 
             <li>
-                <a href="/teacher/attendance" class="{{ request()->is('teacher/attendance') ? 'active' : '' }}">
+                <a href="/attendance" class="{{ request()->is('attendance') ? 'active' : '' }}">
                     <i class="fa-solid fa-user-check"></i>
                     Attendance
                 </a>
             </li>
 
             <li>
-                <a href="/teacher/gradebook" class="{{ request()->is('teacher/gradebook') ? 'active' : '' }}">
+                <a href="/gradebook" class="{{ request()->is('gradebook') ? 'active' : '' }}">
                     <i class="fa-regular fa-clipboard"></i>
                     Gradebook
                 </a>
             </li>
 
             <li>
-                <a href="/teacher/announcements" class="{{ request()->is('teacher/announcements') ? 'active' : '' }}">
+                <a href="/announcements" class="{{ request()->is('announcements') ? 'active' : '' }}">
                     <i class="fa-solid fa-bullhorn"></i>
                     Announcements
                 </a>
