@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('exam_results', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('exam_id')->constrained('exams')->cascadeOnDelete();
-            $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
+            $table->unsignedBigInteger('exam_id');
+            $table->unsignedBigInteger('student_id');
             $table->unsignedInteger('score');
             $table->timestamps();
 
@@ -25,4 +25,3 @@ return new class extends Migration
         Schema::dropIfExists('exam_results');
     }
 };
-

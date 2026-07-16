@@ -3,101 +3,66 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Teacher\Concerns\EnsuresClassOwnership;
 use App\Models\Exam;
-use App\Models\Subject;
+use App\Models\SchoolClass;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ExamController extends Controller
 {
-    use EnsuresClassOwnership;
-
     public function index()
     {
-        $teacherId = Auth::user()->teacher->id;
+        $teacherId = auth()->user()->teacher->id;
 
         $exams = Exam::where('teacher_id', $teacherId)
             ->with(['schoolClass', 'subject'])
-            ->latest('exam_date')
-            ->paginate(20);
+            ->get();
 
-        return view('teacher.exams', ['exams' => $exams]);
-    }
-
-    public function create()
-    {
-        $teacher = Auth::user()->teacher;
-
-        return view('teacher.exams-create', [
-            'classes' => $teacher->classes,
-            'subjects' => Subject::all(),
-        ]);
+        return view('teacher.exams', compact('exams'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'class_id' => 'required|exists:classes,id',
+            'class_id'   => 'required|exists:classes,id',
             'subject_id' => 'required|exists:subjects,id',
-            'exam_type' => 'required|in:monthly,semester',
-            'title' => 'required|string|max:255',
-            'exam_date' => 'required|date',
-            'max_score' => 'required|integer|min:1',
+            'exam_type'  => 'required|in:monthly,semester',
+            'title'      => 'required|string|max:255',
+            'exam_date'  => 'required|date',
+            'max_score'  => 'required|integer|min:1',
         ]);
 
-        $this->ensureTeacherOwnsClass($validated['class_id']);
+        $class = SchoolClass::findOrFail($validated['class_id']);
+        abort_unless($class->teacher_id === auth()->user()->teacher->id, 403);
 
         Exam::create([
             ...$validated,
-            'teacher_id' => Auth::user()->teacher->id,
+            'teacher_id' => auth()->user()->teacher->id,
         ]);
 
-        return redirect()->route('teacher.exams.index')
-            ->with('status', 'Exam created.');
-    }
-
-    public function edit(Exam $exam)
-    {
-        $this->ensureTeacherOwnsClass($exam->class_id);
-
-        $teacher = Auth::user()->teacher;
-
-        return view('teacher.exams-edit', [
-            'exam' => $exam,
-            'classes' => $teacher->classes,
-            'subjects' => Subject::all(),
-        ]);
+        return redirect()->route('teacher.exams.index')->with('success', 'Exam created.');
     }
 
     public function update(Request $request, Exam $exam)
     {
-        $this->ensureTeacherOwnsClass($exam->class_id);
+        abort_unless($exam->teacher_id === auth()->user()->teacher->id, 403);
 
         $validated = $request->validate([
-            'class_id' => 'required|exists:classes,id',
-            'subject_id' => 'required|exists:subjects,id',
-            'exam_type' => 'required|in:monthly,semester',
-            'title' => 'required|string|max:255',
+            'title'     => 'required|string|max:255',
             'exam_date' => 'required|date',
             'max_score' => 'required|integer|min:1',
         ]);
 
-        $this->ensureTeacherOwnsClass($validated['class_id']);
-
         $exam->update($validated);
 
-        return redirect()->route('teacher.exams.index')
-            ->with('status', 'Exam updated.');
+        return redirect()->route('teacher.exams.index')->with('success', 'Exam updated.');
     }
 
     public function destroy(Exam $exam)
     {
-        $this->ensureTeacherOwnsClass($exam->class_id);
+        abort_unless($exam->teacher_id === auth()->user()->teacher->id, 403);
 
         $exam->delete();
 
-        return redirect()->route('teacher.exams.index')
-            ->with('status', 'Exam deleted.');
+        return redirect()->route('teacher.exams.index')->with('success', 'Exam deleted.');
     }
 }
