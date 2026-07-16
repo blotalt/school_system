@@ -10,9 +10,9 @@ return new class extends Migration
     {
         Schema::create('homeworks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('class_id')->constrained('classes')->cascadeOnDelete();
-            $table->foreignId('teacher_id')->constrained('teachers')->cascadeOnDelete();
-            $table->foreignId('subject_id')->constrained('subjects')->cascadeOnDelete();
+            $table->unsignedBigInteger('class_id');
+            $table->unsignedBigInteger('teacher_id');
+            $table->unsignedBigInteger('subject_id');
             $table->string('title');
             $table->text('description')->nullable();
             $table->date('due_date');
