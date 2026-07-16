@@ -32,35 +32,35 @@
         <ul class="menu">
 
             <li>
-                <a href="/dashboard" class="{{ request()->is('dashboard') ? 'active' : '' }}">
+                <a href="/teacher/dashboard" class="{{ request()->is('teacher/dashboard') ? 'active' : '' }}">
                     <i class="fa-regular fa-calendar"></i>
                     My Schedule
                 </a>
             </li>
 
             <li>
-                <a href="/classes" class="{{ request()->is('classes') ? 'active' : '' }}">
+                <a href="/teacher/classes" class="{{ request()->is('teacher/classes') ? 'active' : '' }}">
                     <i class="fa-solid fa-users"></i>
                     My Classes
                 </a>
             </li>
 
             <li>
-                <a href="/attendance" class="{{ request()->is('attendance') ? 'active' : '' }}">
+                <a href="/teacher/attendance" class="{{ request()->is('teacher/attendance') ? 'active' : '' }}">
                     <i class="fa-solid fa-user-check"></i>
                     Attendance
                 </a>
             </li>
 
             <li>
-                <a href="/gradebook" class="{{ request()->is('gradebook') ? 'active' : '' }}">
+                <a href="/teacher/gradebook" class="{{ request()->is('teacher/gradebook') ? 'active' : '' }}">
                     <i class="fa-regular fa-clipboard"></i>
                     Gradebook
                 </a>
             </li>
 
             <li>
-                <a href="/announcements" class="{{ request()->is('announcements') ? 'active' : '' }}">
+                <a href="/teacher/announcements" class="{{ request()->is('teacher/announcements') ? 'active' : '' }}">
                     <i class="fa-solid fa-bullhorn"></i>
                     Announcements
                 </a>
