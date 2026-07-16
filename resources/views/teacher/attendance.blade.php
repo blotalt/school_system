@@ -14,7 +14,7 @@
                 ONGOING SESSION
             </span>
 
-            <h1>Grade 12A - Mathematics</h1>
+            <h1>{{ $class->grade }} - {{ $class->subject->name }}</h1>
 
             <div class="session-info">
 
@@ -56,210 +56,54 @@
 
         </div>
 
-    </div>
+   @foreach($students as $student)
 
-</div>
-
-
-
-<!-- Student 1 -->
+@php
+    $status = $records[$student->id]->status ?? 'present';
+@endphp
 
 <div class="student-row">
 
     <div class="student-info">
 
-        <img src="{{ asset('images/student1.jpg') }}" alt="Student">
+        <img src="{{ asset('images/avatar.png') }}" alt="Student">
 
         <div>
-
-            <h4>Kalyan Bopha</h4>
-            <p>ID: 2023XXXX</p>
-
+            <h4>{{ $student->name }}</h4>
+            <p>ID: {{ $student->student_id }}</p>
         </div>
 
     </div>
 
     <div class="attendance-status">
 
-        <button class="status-btn present active">Present</button>
-        <button class="status-btn">Late</button>
-        <button class="status-btn">Absent</button>
+        <button class="status-btn present {{ $status == 'present' ? 'active' : '' }}">
+            Present
+        </button>
+
+        <button class="status-btn late {{ $status == 'late' ? 'active' : '' }}">
+            Late
+        </button>
+
+        <button class="status-btn absent {{ $status == 'absent' ? 'active' : '' }}">
+            Absent
+        </button>
 
     </div>
 
 </div>
 
-<!-- Student 2 -->
-
-<div class="student-row">
-
-    <div class="student-info">
-
-        <img src="{{ asset('images/student2.jpg') }}" alt="Student">
-
-        <div>
-
-            <h4>Dara Phirun</h4>
-            <p>ID: 2023XXXX</p>
-
-        </div>
-
-    </div>
-
-    <div class="attendance-status">
-
-        <button class="status-btn present active">Present</button>
-        <button class="status-btn">Late</button>
-        <button class="status-btn">Absent</button>
-
-    </div>
+@endforeach
 
 </div>
-
-<!-- Student 3 -->
-
-<div class="student-row">
-
-    <div class="student-info">
-
-        <img src="{{ asset('images/student3.jpg') }}" alt="Student">
-
-        <div>
-
-            <h4>Vannak Chantrea</h4>
-            <p>ID: 2023XXXX</p>
-
-        </div>
-
-    </div>
-
-    <div class="attendance-status">
-
-        <button class="status-btn present active">Present</button>
-        <button class="status-btn">Late</button>
-        <button class="status-btn">Absent</button>
-
-    </div>
-
-</div>
-
-<!-- Student 4 -->
-
-<div class="student-row">
-
-    <div class="student-info">
-
-        <img src="{{ asset('images/student4.jpg') }}" alt="Student">
-
-        <div>
-
-            <h4>Visal Rattanak</h4>
-            <p>ID: 2023XXXX</p>
-
-        </div>
-
-    </div>
-
-    <div class="attendance-status">
-
-        <button class="status-btn present active">Present</button>
-        <button class="status-btn">Late</button>
-        <button class="status-btn">Absent</button>
-
-    </div>
-
-</div>
-
-<!-- Student 5 -->
-
-<div class="student-row">
-
-    <div class="student-info">
-
-        <img src="{{ asset('images/student5.jpg') }}" alt="Student">
-
-        <div>
-
-            <h4>Serey Sokha</h4>
-            <p>ID: 2023XXXX</p>
-
-        </div>
-
-    </div>
-
-    <div class="attendance-status">
-
-        <button class="status-btn present active">Present</button>
-        <button class="status-btn">Late</button>
-        <button class="status-btn">Absent</button>
-
-    </div>
-
-</div>
-
-<!-- Student 6 -->
-
-<div class="student-row">
-
-    <div class="student-info">
-
-        <img src="{{ asset('images/student6.jpg') }}" alt="Student">
-
-        <div>
-
-            <h4>Bruno Mars</h4>
-            <p>ID: 2023XXXX</p>
-
-        </div>
-
-    </div>
-
-    <div class="attendance-status">
-
-        <button class="status-btn present active">Present</button>
-        <button class="status-btn">Late</button>
-        <button class="status-btn">Absent</button>
-
-    </div>
-
-</div>
-
-<!-- Student 7 -->
-
-<div class="student-row">
-
-    <div class="student-info">
-
-        <img src="{{ asset('images/student7.jpg') }}" alt="Student">
-
-        <div>
-
-            <h4>Channary Meas</h4>
-            <p>ID: 2023XXXX</p>
-
-        </div>
-
-    </div>
-
-    <div class="attendance-status">
-
-        <button class="status-btn present active">Present</button>
-        <button class="status-btn">Late</button>
-        <button class="status-btn">Absent</button>
-
-    </div>
-
-</div>
-
-
-
-<!-- Attendance Footer -->
-
 <div class="attendance-footer">
 
     <div class="attendance-summary">
 
-        <span><strong>Total Students:</strong> 12</span>
+        <span>
+    <strong>Total Students:</strong>
+    {{ $students->count() }}
+</span>
 
         <span class="summary present">
             Present: 10
@@ -283,6 +127,7 @@
 
     </button>
 
+</div>
 </div>
 
 @endsection
