@@ -6,7 +6,7 @@
     <title>Cambodia High School</title>
 
     {{-- CSS --}}
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style1.css') }}">
     <link rel="stylesheet" href="{{ asset('css/st-style.css') }}">
     {{-- Font Awesome --}}
     <link rel="stylesheet"
