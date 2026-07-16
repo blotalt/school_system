@@ -6,8 +6,8 @@ use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\ClassController;
 // use App\Http\Controllers\Admin\ExamController;       // B3
-// use App\Http\Controllers\Admin\AttendanceController; // B4
-// use App\Http\Controllers\Admin\AnnouncementController; // B4
+use App\Http\Controllers\Admin\AttendanceController; // B4
+use App\Http\Controllers\Admin\AnnouncementController; // B4
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -18,3 +18,5 @@ Route::resource('classes', ClassController::class);
 // Route::resource('exams', ExamController::class);
 // Route::resource('announcements', AnnouncementController::class);
 // Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
