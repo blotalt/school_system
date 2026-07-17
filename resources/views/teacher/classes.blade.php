@@ -10,12 +10,14 @@
     <div class="schedule-header">
 
         <div class="header-left">
+    <h1>Weekly Class Schedule</h1>
 
-            <h1>Weekly Class Schedule</h1>
-
-            <p>Managing {{ $class->name }} weekly schedule</p>
-
-        </div>
+    @if(isset($classes) && $classes->count())
+        <p>Manage your assigned classes</p>
+    @else
+        <p>No classes assigned</p>
+    @endif
+</div>
 
         <div class="header-right">
 
@@ -26,12 +28,13 @@
                 <label> SELECT CLASS</label>
 
                 <select name="class_id">
-    @foreach($classes as $schoolClass)
-        <option value="{{ $schoolClass->id }}"
-            {{ $schoolClass->id == $class->id ? 'selected' : '' }}>
-            {{ $schoolClass->name }}
-        </option>
-    @endforeach
+    @isset($classes)
+        @foreach($classes as $schoolClass)
+            <option value="{{ $schoolClass->id }}">
+                {{ $schoolClass->name }}
+            </option>
+        @endforeach
+    @endisset
 </select>
 
             </div>
