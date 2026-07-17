@@ -13,7 +13,7 @@
 
             <h1>Weekly Class Schedule</h1>
 
-            <p>Managing Grade 12 - Section A weekly schedule</p>
+            <p>Managing {{ $class->name }} weekly schedule</p>
 
         </div>
 
@@ -23,33 +23,32 @@
 
             <div class="header-group">
 
-                <label>SELECT CLASS</label>
+                <label> SELECT CLASS</label>
 
-                <select>
-                    <option>Grade 12 - A</option>
-                    <option>Grade 12 - B</option>
-                    <option>Grade 11 - A</option>
-                </select>
+                <select name="class_id">
+    @foreach($classes as $schoolClass)
+        <option value="{{ $schoolClass->id }}"
+            {{ $schoolClass->id == $class->id ? 'selected' : '' }}>
+            {{ $schoolClass->name }}
+        </option>
+    @endforeach
+</select>
 
             </div>
 
-            <!-- Shift -->
+            <div class="header-group">
+                <label>SHIFT SELECTION</label>
+            <div class="shift-toggle">
 
-            <div class="shift-box">
-
-    <button id="morningBtn" class="shift-btn active">
-        Morning<br>
+    <button id="morningBtn" class="shift-btn active" data-shift="morning">
+        Morning shift
     </button>
 
-    <button id="afternoonBtn" class="shift-btn">
-        Afternoon<br>
+    <button id="afternoonBtn" class="shift-btn" data-shift="afternoon">
+        Afternoon shift
     </button>
 
-    
-
-
-
-         
+        </div>
 
         </div>
 
@@ -194,44 +193,12 @@
 
             <tr>
 
-                <td class="period">
-                    <strong>P3</strong>
-                    <span>9:10 - 10:00</span>
-                </td>
+                {{-- <td class="period">
+                    <h4>{{ $lesson->subject->name }}</h4>
+                    <small>{{ $lesson->teacher->user->name }}</small>
+                </td> --}}
 
-                <td>
-                    <div class="card math">
-                        <h4>Math</h4>
-                        <small>BK</small>
-                    </div>
-                </td>
-
-                <td>
-                    <div class="card science">
-                        <h4>Biology</h4>
-                        <small>TM</small>
-                    </div>
-                </td>
-
-                <td>
-                    <div class="empty-card">
-                        +
-                    </div>
-                </td>
-
-                <td>
-                    <div class="card other">
-                        <h4>Physics</h4>
-                        <small>LV</small>
-                    </div>
-                </td>
-
-                <td>
-                    <div class="card science">
-                        <h4>Biology</h4>
-                        <small>TM</small>
-                    </div>
-                </td>
+                
 
             </tr>
 

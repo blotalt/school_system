@@ -49,4 +49,5 @@ class AttendanceController extends Controller
 
         return redirect()->back()->with('success', 'Attendance saved.');
     }
+    
 }

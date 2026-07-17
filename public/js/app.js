@@ -215,3 +215,46 @@ afternoonBtn.onclick = function () {
     document.getElementById("afternoonSchedule").style.display = "block";
 
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Attendance Status Buttons
+    const studentRows = document.querySelectorAll('.student-row');
+
+    studentRows.forEach(row => {
+
+        const buttons = row.querySelectorAll('.status-btn');
+        const hiddenInput = row.querySelector('.attendance-input');
+
+        buttons.forEach(button => {
+
+            button.addEventListener('click', (e) => {
+
+                e.preventDefault();
+
+                // Remove active class from all buttons in this row
+                buttons.forEach(btn => btn.classList.remove('active'));
+
+                // Activate the clicked button
+                button.classList.add('active');
+
+                // Update hidden input value
+                if (button.classList.contains('present')) {
+                    hiddenInput.value = 'present';
+                }
+
+                if (button.classList.contains('late')) {
+                    hiddenInput.value = 'late';
+                }
+
+                if (button.classList.contains('absent')) {
+                    hiddenInput.value = 'absent';
+                }
+
+            });
+
+        });
+
+    });
+
+});

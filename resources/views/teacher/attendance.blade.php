@@ -2,6 +2,9 @@
 
 @section('content')
 
+
+<form method="POST" action="{{ route('teacher.attendance.store', $class) }}">
+    @csrf
 <div class="attendance-page">
 
     <!-- Ongoing Session -->
@@ -77,17 +80,10 @@
 
     <div class="attendance-status">
 
-        <button class="status-btn present {{ $status == 'present' ? 'active' : '' }}">
-            Present
-        </button>
-
-        <button class="status-btn late {{ $status == 'late' ? 'active' : '' }}">
-            Late
-        </button>
-
-        <button class="status-btn absent {{ $status == 'absent' ? 'active' : '' }}">
-            Absent
-        </button>
+        <button type="button" class="status-btn present {{ $status == 'present' ? 'active' : '' }}" >Present</button>
+        <button type="button" class="status-btn late {{ $status == 'late' ? 'active' : '' }}"> Late </button>
+        <button type="button" class="status-btn absent {{ $status == 'absent' ? 'active' : '' }}"> Absent </button>
+        <input type="hidden" name="attendance[{{ $student->id }}]" value="{{ $status }}" class="attendance-input">
 
     </div>
 
@@ -97,37 +93,21 @@
 
 </div>
 <div class="attendance-footer">
-
     <div class="attendance-summary">
-
         <span>
     <strong>Total Students:</strong>
     {{ $students->count() }}
 </span>
 
-        <span class="summary present">
-            Present: 10
-        </span>
-
-        <span class="summary late">
-            Late: 1
-        </span>
-
-        <span class="summary absent">
-            Absent: 1
-        </span>
-
+        <span class="summary present">Present: 10</span>
+        <span class="summary late"> Late: 1</span>
+        <span class="summary absent">Absent: 1</span>
     </div>
-
-    <button class="save-attendance-btn">
-
-        <i class="fa-solid fa-floppy-disk"></i>
-
-        Save Attendance
-
-    </button>
+    <button type="submit" class="save-attendance-btn"><i class="fa-solid fa-floppy-disk"></i> Save Attendance</button>
 
 </div>
 </div>
+</div>
+</form>
 
 @endsection
