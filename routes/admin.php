@@ -16,7 +16,7 @@ Route::resource('teachers', TeacherController::class);
 Route::resource('classes', ClassController::class);
 
 // Route::resource('exams', ExamController::class);
-// Route::resource('announcements', AnnouncementController::class);
-// Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
 Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
 Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+Route::post('announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
+Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');

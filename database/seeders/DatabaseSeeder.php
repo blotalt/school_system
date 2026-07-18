@@ -33,15 +33,15 @@ class DatabaseSeeder extends Seeder
             StudentSeeder::class,
         ]);
 
-        // B3 (uncomment after B3 merges)
-        // $this->call([
-        //     ExamSeeder::class,
-        //     AttendanceSeeder::class,
-        // ]);
+        // B3
+        $this->call([
+            ExamSeeder::class,
+            AttendanceSeeder::class,
+        ]);
 
-        // B4 (uncomment after B4 merges)
-        // $this->call([
-        //     AnnouncementSeeder::class,
-        // ]);
+        // B4
+        $this->call([
+            AnnouncementSeeder::class,
+        ]);
     }
 }

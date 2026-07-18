@@ -11,78 +11,89 @@
     </button>
 </x-page-header>
 
+@if (session('success'))
+    <div class="alert alert-success" style="margin-bottom:16px;padding:12px 16px;background:#e6f9f0;border:1px solid #10b981;border-radius:10px;color:#0a7a4d;">
+        {{ session('success') }}
+    </div>
+@endif
+
 <div class="filter-card">
     <span>Audience:</span>
-    <button type="button" class="active">All</button>
-    <button type="button">Students</button>
-    <button type="button">Teachers</button>
-    <button type="button">Everyone</button>
+    <a href="{{ route('admin.announcements.index') }}" class="{{ !$audience || $audience === 'all' ? 'active' : '' }}">All</a>
+    <a href="{{ route('admin.announcements.index', ['audience' => 'students']) }}" class="{{ $audience === 'students' ? 'active' : '' }}">Students</a>
+    <a href="{{ route('admin.announcements.index', ['audience' => 'teachers']) }}" class="{{ $audience === 'teachers' ? 'active' : '' }}">Teachers</a>
 </div>
 
 @php
-$announcements = [
-    (object)['icon'=>'navy','iconClass'=>'fa-bullhorn','title'=>'Mid-Term Exam Schedule Released','date'=>'July 12, 2026','author'=>'Admin Office','body'=>'The mid-term examination schedule for all grades has been published. Please check the Exams section for your specific timetable.','tag'=>'academic','tagLabel'=>'Academic','priority'=>'high','priorityLabel'=>'High Priority'],
-    (object)['icon'=>'green','iconClass'=>'fa-circle-check','title'=>'School Closed for Public Holiday','date'=>'July 10, 2026','author'=>'Admin Office','body'=>'The school will be closed on July 18th in observance of the public holiday. Classes will resume as normal the following day.','tag'=>'everyone','tagLabel'=>'Everyone','priority'=>'normal','priorityLabel'=>'Normal'],
-    (object)['icon'=>'red','iconClass'=>'fa-triangle-exclamation','title'=>'Staff Meeting - Mandatory Attendance','date'=>'July 8, 2026','author'=>'Admin Office','body'=>'All teaching staff are required to attend the quarterly review meeting this Friday at 3:30 PM in Conference Room A.','tag'=>'teacher','tagLabel'=>'Teachers','priority'=>'medium','priorityLabel'=>'Medium Priority'],
+$audienceMeta = [
+    'all'      => ['icon' => 'navy',  'iconClass' => 'fa-bullhorn',            'tagLabel' => 'Everyone'],
+    'students' => ['icon' => 'green', 'iconClass' => 'fa-circle-check',        'tagLabel' => 'Students'],
+    'teachers' => ['icon' => 'red',   'iconClass' => 'fa-triangle-exclamation','tagLabel' => 'Teachers'],
 ];
 @endphp
 
-@foreach($announcements as $a)
+@forelse($announcements as $announcement)
+@php $meta = $audienceMeta[$announcement->audience] ?? $audienceMeta['all']; @endphp
 <div class="announcement-card">
-    <div class="announcement-icon {{ $a->icon }}">
-        <i class="fa-solid {{ $a->iconClass }}"></i>
+    <div class="announcement-icon {{ $meta['icon'] }}">
+        <i class="fa-solid {{ $meta['iconClass'] }}"></i>
     </div>
     <div class="announcement-content">
         <div class="announcement-top">
-            <h3>{{ $a->title }}</h3>
-            <i class="fa-solid fa-ellipsis"></i>
+            <h3>{{ $announcement->title }}</h3>
+            <form action="{{ route('admin.announcements.destroy', $announcement) }}" method="POST" onsubmit="return confirm('Delete this announcement?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" title="Delete" style="background:none;border:none;cursor:pointer;color:#9ca3af;">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </form>
         </div>
         <div class="announcement-info">
-            <span><i class="fa-regular fa-calendar"></i> {{ $a->date }}</span>
-            <span><i class="fa-regular fa-user"></i> {{ $a->author }}</span>
+            <span><i class="fa-regular fa-calendar"></i> {{ $announcement->created_at->format('F j, Y') }}</span>
+            <span><i class="fa-regular fa-user"></i> {{ $announcement->author->name ?? 'Admin Office' }}</span>
         </div>
-        <p>{{ $a->body }}</p>
+        <p>{{ $announcement->body }}</p>
         <div class="announcement-footer">
-            <span class="tag {{ $a->tag }}">{{ $a->tagLabel }}</span>
-            <span class="priority {{ $a->priority }}">{{ $a->priorityLabel }}</span>
+            <span class="tag {{ $announcement->audience }}">{{ $meta['tagLabel'] }}</span>
         </div>
     </div>
 </div>
-@endforeach
+@empty
+<p>No announcements yet.</p>
+@endforelse
 
 <div class="announcement-pagination">
-    <div class="page-number">
-        <button class="number active">1</button>
-        <button class="number">2</button>
-        <button class="number">3</button>
-    </div>
-    <button class="page-btn">Next <i class="fa-solid fa-arrow-right"></i></button>
+    {{ $announcements->links() }}
 </div>
 
 <!-- New Announcement Modal -->
 <div id="newAnnouncementModal" class="slot-modal-overlay" style="display:none;">
     <div class="slot-modal" style="width:480px;">
         <h3>New Announcement</h3>
-        <div class="form-group">
-            <label>Title</label>
-            <input type="text" placeholder="Announcement title">
-        </div>
-        <div class="form-group">
-            <label>Message</label>
-            <textarea rows="4" style="width:100%;border:1px solid #e5e9f2;border-radius:10px;padding:12px;"></textarea>
-        </div>
-        <div class="form-group">
-            <label>Audience</label>
-            <select>
-                <option>Everyone</option>
-                <option>Students</option>
-                <option>Teachers</option>
-            </select>
-        </div>
-        <div class="form-actions">
-            <button type="button" class="cancel-btn" onclick="document.getElementById('newAnnouncementModal').style.display='none'">Cancel</button>
-            <button type="button" class="save-btn">Post Announcement</button>
-        </div>
+        <form action="{{ route('admin.announcements.store') }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" placeholder="Announcement title" required>
+            </div>
+            <div class="form-group">
+                <label>Message</label>
+                <textarea name="body" rows="4" style="width:100%;border:1px solid #e5e9f2;border-radius:10px;padding:12px;" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Audience</label>
+                <select name="audience">
+                    <option value="all">Everyone</option>
+                    <option value="students">Students</option>
+                    <option value="teachers">Teachers</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="cancel-btn" onclick="document.getElementById('newAnnouncementModal').style.display='none'">Cancel</button>
+                <button type="submit" class="save-btn">Post Announcement</button>
+            </div>
+        </form>
     </div>
 </div>
 @endsection

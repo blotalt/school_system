@@ -453,15 +453,19 @@
     margin:16px 0 24px;
 }
 .filter-card span{ font-weight:600; color:#6b7280; }
-.filter-card button{
+.filter-card button,
+.filter-card a{
     padding:8px 18px;
     border:1px solid #e5e9f2;
     background:#fff;
     border-radius:30px;
     cursor:pointer;
     font-size:14px;
+    text-decoration:none;
+    color:inherit;
 }
-.filter-card button.active{ background:#0b3f86; color:#fff; border-color:#0b3f86; }
+.filter-card button.active,
+.filter-card a.active{ background:#0b3f86; color:#fff; border-color:#0b3f86; }
 
 .view-btn{
     background:#0b3f86;
@@ -507,8 +511,9 @@
 .announcement-footer{ display:flex; gap:12px; align-items:center; }
 .tag{ padding:5px 12px; border-radius:20px; font-size:12px; font-weight:600; }
 .tag.academic{ background:#eef4ff; color:#1d4ed8; }
-.tag.everyone{ background:#ebfff2; color:#169c57; }
-.tag.teacher{ background:#fff1ef; color:#d35454; }
+.tag.everyone, .tag.all{ background:#ebfff2; color:#169c57; }
+.tag.teacher, .tag.teachers{ background:#fff1ef; color:#d35454; }
+.tag.students{ background:#eef4ff; color:#1d4ed8; }
 
 .priority{ font-size:12px; font-weight:700; }
 .priority.high{ color:#d62828; }
