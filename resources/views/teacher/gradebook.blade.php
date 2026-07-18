@@ -11,9 +11,9 @@
             <h1>Gradebook</h1>
 
             <p>
-                Manage and evaluate academic performance for
-                <span>{{ $exam->class->name ?? 'Class' }}</span>
-            </p>
+    Manage and evaluate academic performance for
+    <span>Grade 10 - A</span>
+</p>
 
         </div>
 
@@ -26,16 +26,15 @@
             </select>
 
             <select>
-                <option>{{ $exam->subject->name }}</option>
+                <option>Mathematics</option>
                 <option>Physics</option>
                 <option>Chemistry</option>
                 <option>English</option>
             </select>
 
             <select>
-                <option>Monthly Score</option>
-                <option>Semester Score</option>
-                <option>Homework Score</option>
+                <option>Exam</option>
+                <option>Homework</option>
             </select>
 
         </div>
@@ -71,61 +70,177 @@
 
        <tbody>
 
-@foreach($students as $student)
-
-@php
-    $score = $results[$student->id]->score ?? 0;
-
-    if ($score >= 90) {
-        $grade = 'A';
-    } elseif ($score >= 80) {
-        $grade = 'B';
-    } elseif ($score >= 70) {
-        $grade = 'C';
-    } elseif ($score >= 60) {
-        $grade = 'D';
-    } else {
-        $grade = 'F';
-    }
-@endphp
+<tbody>
 
 <tr>
 
     <td>
         <div class="student-info">
-
             <img src="{{ asset('images/avatar.png') }}" alt="Student">
 
             <div>
-                <h4>{{ $student->name }}</h4>
-                <p>ID: {{ $student->student_id }}</p>
+                <h4>Kalyan Bopha</h4>
+                <p>ID: 2023XXXX</p>
             </div>
 
         </div>
     </td>
 
     <td>
-        <span class="subject-badge">
-            {{ $exam->subject->name }}
-        </span>
+        <span class="subject-badge">Mathematics</span>
     </td>
 
     <td>
-        <input
-            type="number"
-            class="score-input"
-            value="{{ $score }}">
+        <input type="number" class="score-input" value="95">
     </td>
 
     <td>
-        <span class="grade-circle">
-            {{ $grade }}
-        </span>
+        <span class="grade-circle grade-a">A</span>
     </td>
 
 </tr>
 
-@endforeach
+<tr>
+
+    <td>
+        <div class="student-info">
+            <img src="{{ asset('images/avatar.png') }}" alt="Student">
+
+            <div>
+                <h4>Dara Phirun</h4>
+                <p>ID: 2023XXXX</p>
+            </div>
+
+        </div>
+    </td>
+
+    <td>
+        <span class="subject-badge">Mathematics</span>
+    </td>
+
+    <td>
+        <input type="number" class="score-input" value="86">
+    </td>
+
+    <td>
+        <span class="grade-circle grade-b">B</span>
+    </td>
+
+</tr>
+
+<tr>
+
+    <td>
+        <div class="student-info">
+            <img src="{{ asset('images/avatar.png') }}" alt="Student">
+
+            <div>
+                <h4>Vannak Chantrea</h4>
+                <p>ID: 2023XXXX</p>
+            </div>
+
+        </div>
+    </td>
+
+    <td>
+        <span class="subject-badge">Mathematics</span>
+    </td>
+
+    <td>
+        <input type="number" class="score-input" value="78">
+    </td>
+
+    <td>
+        <span class="grade-circle grade-c">C</span>
+    </td>
+
+</tr>
+
+<tr>
+
+    <td>
+        <div class="student-info">
+            <img src="{{ asset('images/avatar.png') }}" alt="Student">
+
+            <div>
+                <h4>Visal Rattanak</h4>
+                <p>ID: 2023XXXX</p>
+            </div>
+
+        </div>
+    </td>
+
+    <td>
+        <span class="subject-badge">Mathematics</span>
+    </td>
+
+    <td>
+        <input type="number" class="score-input" value="67">
+    </td>
+
+    <td>
+        <span class="grade-circle grade-d">D</span>
+    </td>
+
+</tr>
+
+<tr>
+
+    <td>
+        <div class="student-info">
+            <img src="{{ asset('images/avatar.png') }}" alt="Student">
+
+            <div>
+                <h4>Serey Sokha</h4>
+                <p>ID: 2023XXXX</p>
+            </div>
+
+        </div>
+    </td>
+
+    <td>
+        <span class="subject-badge">Mathematics</span>
+    </td>
+
+    <td>
+        <input type="number" class="score-input" value="52">
+    </td>
+
+    <td>
+        <span class="grade-circle grade-f">F</span>
+    </td>
+
+</tr>
+
+<tr>
+
+    <td>
+        <div class="student-info">
+            <img src="{{ asset('images/avatar.png') }}" alt="Student">
+
+            <div>
+                <h4>Bruno Mars</h4>
+                <p>ID: 2023XXXX</p>
+            </div>
+
+        </div>
+    </td>
+
+    <td>
+        <span class="subject-badge">Mathematics</span>
+    </td>
+
+    <td>
+        <input type="number" class="score-input" value="91">
+    </td>
+
+    <td>
+        <span class="grade-circle grade-a">A</span>
+    </td>
+
+</tr>
+
+</tbody>
 
 </tbody>
 

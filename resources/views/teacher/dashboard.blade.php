@@ -26,10 +26,7 @@
 
             </div>
 
-            <button class="publish-btn">
-                <i class="fa-solid fa-arrow-up"></i>
-                Publish Timetable
-            </button>
+            
 
         </div>
 

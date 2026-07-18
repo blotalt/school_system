@@ -28,11 +28,8 @@
 
         <div class="student-photo">
 
-            <img src="{{ asset('images/student.png') }}" alt="Student">
-
-            <span class="status-badge">
-                ACTIVE
-            </span>
+            <img src="{{ asset('images/student.png') }}" >
+       
 
         </div>
 
@@ -132,15 +129,6 @@
 
     <!-- Learning Goal -->
 
-<div class="form-group">
-
-    <label>LEARNING GOAL</label>
-
-    <textarea rows="5">
-Mastering academic writing for university level, focusing on complex grammar structures and high-level vocabulary expansion in formal contexts.
-    </textarea>
-
-</div>
 
 <!-- Buttons -->
 

@@ -29,19 +29,15 @@ Route::get('/teacher/dashboard', function () {
 Route::get('/teacher/classes', function () {
     return view('teacher.classes');
 })->name('teacher.classes');
+Route::get('/teacher/attendance', function () {
+    return view('teacher.attendance');
+})->name('teacher.attendance');
+
+Route::get('/teacher/gradebook', function () {
+    return view('teacher.gradebook');
+})->name('teacher.gradebook');
 
 
-// Route::get('/teacher/classes/{class}/attendance', [AttendanceController::class, 'show'])
-//     ->name('teacher.attendance.show');
-
-// Route::post('/teacher/classes/{class}/attendance', [AttendanceController::class, 'store'])
-//     ->name('teacher.attendance.store');
-
-Route::get('/teacher/classes/{class}/gradebook/{exam}', [GradebookController::class, 'show'])
-    ->name('teacher.gradebook.show');
-
-Route::post('/teacher/classes/{class}/gradebook/{exam}', [GradebookController::class, 'store'])
-    ->name('teacher.gradebook.store');
 
 Route::get('/teacher/announcements', function () {
     return view('teacher.announcements');

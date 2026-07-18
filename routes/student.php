@@ -31,3 +31,9 @@ Route::get('/student/attendance', function () {
 Route::get('/student/announcements', function () {
     return view('student.announcements');
 })->name('student.announcements');
+Route::get('/student/myprofile', function () {
+    return view('student.myprofile');
+})->name('student.myprofile');
+Route::get('/student/view-class', function () {
+    return view('student.view-class');
+})->name('student.view-class');

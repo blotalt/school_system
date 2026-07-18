@@ -270,28 +270,15 @@
 
 <div class="announcement-pagination">
 
-    <button class="page-btn">
-        <i class="fa-solid fa-angle-left"></i>
-        Previous
-    </button>
+   
 
     <div class="page-number">
 
-        <button class="number active">1</button>
-
-        <button class="number">2</button>
-
-        <button class="number">3</button>
+      
 
     </div>
 
-    <button class="page-btn">
-
-        Next
-
-        <i class="fa-solid fa-angle-right"></i>
-
-    </button>
+   
 
 </div>
 

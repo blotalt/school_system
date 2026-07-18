@@ -12,11 +12,8 @@
         <div class="header-left">
     <h1>Weekly Class Schedule</h1>
 
-    @if(isset($classes) && $classes->count())
         <p>Manage your assigned classes</p>
-    @else
-        <p>No classes assigned</p>
-    @endif
+  
 </div>
 
         <div class="header-right">
@@ -27,15 +24,11 @@
 
                 <label> SELECT CLASS</label>
 
-                <select name="class_id">
-    @isset($classes)
-        @foreach($classes as $schoolClass)
-            <option value="{{ $schoolClass->id }}">
-                {{ $schoolClass->name }}
-            </option>
-        @endforeach
-    @endisset
-</select>
+                <select>
+                    <option>Grade 12 - ALL</option>
+                    <option>Grade 11</option>
+                    <option>Grade 10</option>
+                </select>
 
             </div>
 
@@ -194,16 +187,7 @@
 
             <!-- P3 -->
 
-            <tr>
-
-                {{-- <td class="period">
-                    <h4>{{ $lesson->subject->name }}</h4>
-                    <small>{{ $lesson->teacher->user->name }}</small>
-                </td> --}}
-
-                
-
-            </tr>
+           
 
             <!-- Break -->
 
@@ -326,76 +310,17 @@
 
 
 
-<div class="control-panel">
-    
+   
 
-    <div class="control-item">
+        
 
-    </div>
-
-    <div class="control-buttons">
-
-        <button class="save-btn">
-            <i class="fa-regular fa-floppy-disk"></i>
-            Save Timetable
-        </button>
-
-        <button class="reset-btn">
-            Reset
-        </button>
+      
 
     </div>
 
 </div>
 
-<!-- ================= Subject Modal ================= -->
 
-<div class="modal" id="subjectModal">
-
-    <div class="modal-content">
-
-        <div class="modal-header">
-            <h2>Add Subject</h2>
-
-            <span class="close-btn">&times;</span>
-        </div>
-
-        <div class="modal-body">
-
-            <div class="form-group">
-                <label>Subject Name</label>
-                <input type="text" placeholder="Mathematics">
-            </div>
-
-            <div class="form-group">
-                <label>Teacher</label>
-                <input type="text" placeholder="Mr. Sok">
-            </div>
-
-            <div class="form-group">
-                <label>Room</label>
-                <input type="text" placeholder="Room 302">
-            </div>
-
-            <div class="form-group">
-                <label>Color</label>
-
-                <select>
-                    <option>Blue</option>
-                    <option>Green</option>
-                    <option>Orange</option>
-                    <option>Purple</option>
-                </select>
-
-            </div>
-
-            <button class="save-subject">
-                Save Subject
-            </button>
-
-        </div>
-
-    </div>
 
 </div>
 

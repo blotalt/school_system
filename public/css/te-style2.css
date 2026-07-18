@@ -1197,19 +1197,7 @@ MY PROFILE
 
     gap:25px;
 
-}
 
-.profile-right{
-
-    background:#fff;
-
-    border:1px solid #dce5f1;
-
-    border-radius:15px;
-
-    padding:30px;
-
-}
 
 /*==========================
 Profile Card
@@ -1873,5 +1861,6 @@ Personal Information
     color:#0c4da2;
     box-shadow:0 0 0 3px #0c4da2 inset;
 }
+
 
 }

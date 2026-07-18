@@ -3,8 +3,7 @@
 @section('content')
 
 
-<form method="POST" action="{{ route('teacher.attendance.store', $class) }}">
-    @csrf
+
 <div class="attendance-page">
 
     <!-- Ongoing Session -->
@@ -17,7 +16,7 @@
                 ONGOING SESSION
             </span>
 
-            <h1>{{ $class->grade }} - {{ $class->subject->name }}</h1>
+            <h1>Grade 10-A - Mathematics</h1>
 
             <div class="session-info">
 
@@ -59,11 +58,42 @@
 
         </div>
 
-   @foreach($students as $student)
+   <div class="student-row">
 
-@php
-    $status = $records[$student->id]->status ?? 'present';
-@endphp
+    <div class="student-info">
+
+        <img src="{{ asset('images/avatar.png') }}" alt="Student">
+
+        <div>
+            <h4>Kalyan Bopha</h4>
+            <p>ID: 2023XXXX</p>
+        </div>
+
+    </div>
+
+    <div class="attendance-status">
+
+       <button type="button"
+        class="status-btn present active"
+        data-status="present">
+        Present
+    </button>
+
+    <button type="button"
+        class="status-btn late"
+        data-status="late">
+        Late
+    </button>
+
+    <button type="button"
+        class="status-btn absent"
+        data-status="absent">
+        Absent
+    </button>
+
+    </div>
+
+</div>
 
 <div class="student-row">
 
@@ -72,31 +102,188 @@
         <img src="{{ asset('images/avatar.png') }}" alt="Student">
 
         <div>
-            <h4>{{ $student->name }}</h4>
-            <p>ID: {{ $student->student_id }}</p>
+            <h4>Dara Phirun</h4>
+            <p>ID: 2023XXXX</p>
         </div>
 
     </div>
 
     <div class="attendance-status">
 
-        <button type="button" class="status-btn present {{ $status == 'present' ? 'active' : '' }}" >Present</button>
-        <button type="button" class="status-btn late {{ $status == 'late' ? 'active' : '' }}"> Late </button>
-        <button type="button" class="status-btn absent {{ $status == 'absent' ? 'active' : '' }}"> Absent </button>
-        <input type="hidden" name="attendance[{{ $student->id }}]" value="{{ $status }}" class="attendance-input">
+        <button type="button"
+        class="status-btn present active"
+        data-status="present">
+        Present
+    </button>
+
+    <button type="button"
+        class="status-btn late"
+        data-status="late">
+        Late
+    </button>
+
+    <button type="button"
+        class="status-btn absent"
+        data-status="absent">
+        Absent
+    </button>
 
     </div>
 
 </div>
 
-@endforeach
+<div class="student-row">
 
+    <div class="student-info">
+
+        <img src="{{ asset('images/avatar.png') }}" alt="Student">
+
+        <div>
+            <h4>Vannak Chantrea</h4>
+            <p>ID: 2023XXXX</p>
+        </div>
+
+    </div>
+
+    <div class="attendance-status">
+
+       <button type="button"
+        class="status-btn present active"
+        data-status="present">
+        Present
+    </button>
+
+    <button type="button"
+        class="status-btn late"
+        data-status="late">
+        Late
+    </button>
+
+    <button type="button"
+        class="status-btn absent"
+        data-status="absent">
+        Absent
+    </button>
+    </div>
+
+</div>
+
+<div class="student-row">
+
+    <div class="student-info">
+
+        <img src="{{ asset('images/avatar.png') }}" alt="Student">
+
+        <div>
+            <h4>Visal Rattanak</h4>
+            <p>ID: 2023XXXX</p>
+        </div>
+
+    </div>
+
+    <div class="attendance-status">
+
+        <button type="button"
+        class="status-btn present active"
+        data-status="present">
+        Present
+    </button>
+
+    <button type="button"
+        class="status-btn late"
+        data-status="late">
+        Late
+    </button>
+
+    <button type="button"
+        class="status-btn absent"
+        data-status="absent">
+        Absent
+    </button>
+
+    </div>
+
+</div>
+
+<div class="student-row">
+
+    <div class="student-info">
+
+        <img src="{{ asset('images/avatar.png') }}" alt="Student">
+
+        <div>
+            <h4>Serey Sokha</h4>
+            <p>ID: 2023XXXX</p>
+        </div>
+
+    </div>
+
+    <div class="attendance-status">
+
+       <button type="button"
+        class="status-btn present active"
+        data-status="present">
+        Present
+    </button>
+
+    <button type="button"
+        class="status-btn late"
+        data-status="late">
+        Late
+    </button>
+
+    <button type="button"
+        class="status-btn absent"
+        data-status="absent">
+        Absent
+    </button>
+
+    </div>
+
+</div>
+
+<div class="student-row">
+
+    <div class="student-info">
+
+        <img src="{{ asset('images/avatar.png') }}" alt="Student">
+
+        <div>
+            <h4>Bruno Mars</h4>
+            <p>ID: 2023XXXX</p>
+        </div>
+
+    </div>
+
+    <div class="attendance-status">
+
+        <button type="button"
+        class="status-btn present active"
+        data-status="present">
+        Present
+    </button>
+
+    <button type="button"
+        class="status-btn late"
+        data-status="late">
+        Late
+    </button>
+
+    <button type="button"
+        class="status-btn absent"
+        data-status="absent">
+        Absent
+    </button>
+
+    </div>
+
+</div>
 </div>
 <div class="attendance-footer">
     <div class="attendance-summary">
         <span>
     <strong>Total Students:</strong>
-    {{ $students->count() }}
+    
 </span>
 
         <span class="summary present">Present: 10</span>
@@ -108,6 +295,6 @@
 </div>
 </div>
 </div>
-</form>
+
 
 @endsection

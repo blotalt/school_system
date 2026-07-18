@@ -84,31 +84,37 @@
                 </td>
 
                 <td>
+                    <a href="/student/view-class">
                     <div class="lesson green">
                         <h4>Mathematics</h4>
                         <p>Room 302</p>
                         <span>SM</span>
                     </div>
+                    </a>
                 </td>
 
                 <td></td>
 
                 <td>
+                    <a href="/student/view-class">
                     <div class="lesson orange">
-                        <h4>Khmer Lit</h4>
+                        <h4 >Khmer Lit</h4>
                         <p>Library Hall</p>
                         <span>CR</span>
                     </div>
+                </a>
                 </td>
 
                 <td></td>
 
                 <td>
+                    <a href="/student/view-class">
                     <div class="lesson blue">
-                        <h4>Physics</h4>
+                        <h4 >Physics</h4>
                         <p>Lab B</p>
                         <span>NT</span>
                     </div>
+                </a>
                 </td>
 
             </tr>
@@ -122,29 +128,35 @@
                 </td>
 
                 <td>
+                    <a href="/student/view-class">
                     <div class="lesson blue">
                         <h4>Chemistry</h4>
                         <p>Lab A</p>
                         <span>PK</span>
                     </div>
+                </a>
                 </td>
 
                 <td>
+                    <a href="/student/view-class">
                     <div class="lesson green">
                         <h4>Mathematics</h4>
                         <p>Room 302</p>
                         <span>SM</span>
                     </div>
+                </a>
                 </td>
 
                 <td></td>
 
                 <td>
+                    <a href="/student/view-class">
                     <div class="lesson orange">
                         <h4>History</h4>
                         <p>Room 201</p>
                         <span>LY</span>
                     </div>
+                </a>
                 </td>
 
                 <td></td>
@@ -178,29 +190,35 @@
                 <td></td>
 
                 <td>
+                    <a href="/student/view-class">
                     <div class="lesson blue">
-                        <h4>English</h4>
+                        <h4 >English</h4>
                         <p>Room 105</p>
                         <span>JD</span>
                     </div>
+                </a>
                 </td>
 
                 <td>
+                    <a href="/student/view-class">
                     <div class="lesson green">
                         <h4>Mathematics</h4>
                         <p>Room 302</p>
                         <span>SM</span>
                     </div>
+                </a>
                 </td>
 
                 <td></td>
 
                 <td>
+                    <a href="/student/view-class">
                     <div class="lesson orange">
                         <h4>Geography</h4>
                         <p>Room 204</p>
                         <span>VN</span>
                     </div>
+                </a>
                 </td>
 
             </tr>

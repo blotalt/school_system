@@ -123,7 +123,7 @@
 
         <h2>Recent Academic Performance</h2>
 
-        <span>Last updated: May 15, 2024</span>
+        <span></span>
 
     </div>
 
@@ -135,9 +135,9 @@
 
                 <th>SUBJECT</th>
 
-                <th>WEIGHT</th>
+                
 
-                <th>SCORE (%)</th>
+                <th>SCORE</th>
 
                 <th>GRADE</th>
 
@@ -172,7 +172,7 @@
 
     </td>
 
-    <td>4.0</td>
+   
 
     <td>
 
@@ -218,7 +218,7 @@
 
     </td>
 
-    <td>5.0</td>
+  
 
     <td>
 
@@ -264,7 +264,7 @@
 
     </td>
 
-    <td>4.0</td>
+
 
     <td>
 
@@ -310,7 +310,7 @@
 
     </td>
 
-    <td>4.0</td>
+
 
     <td>
 
@@ -356,7 +356,7 @@
 
     </td>
 
-    <td>3.0</td>
+
 
     <td>
 

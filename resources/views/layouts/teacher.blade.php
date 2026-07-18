@@ -7,8 +7,9 @@
     <title>Cambodia High School - Admin</title>
      <link rel="stylesheet" href="{{ asset('css/style1.css') }}">
     <link rel="stylesheet" href="{{ asset('css/te-style2.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/st-style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/ad-style.css') }}">
+   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
@@ -75,7 +76,7 @@
                         <h4>Phearun Khun</h4>
                         <span>Biology Teacher</span>
                     </div>
-                    <a href="/myprofile">
+                    <a href="/teacher/myprofile">
                         <div class="avatar-circle" style="width:40px;height:40px;">CS</div>
                     </a>
                 </div>
@@ -86,5 +87,6 @@
     </main>
 </div>
 <script src="{{ asset('js/app.js') }}"></script>
+<script src="{{ asset('js/teacher.js') }}"></script>
 </body>
 </html>

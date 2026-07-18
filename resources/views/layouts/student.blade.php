@@ -6,6 +6,7 @@
     <title>Cambodia High School</title>
 
     {{-- CSS --}}
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style1.css') }}">
     <link rel="stylesheet" href="{{ asset('css/st-style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -107,7 +108,7 @@
                 <span>Student</span>
             </div>
 
-            <a href="/st-myprofile">
+            <a href="/student/myprofile">
                 <img src="{{ asset('images/avatar.png') }}"
                      class="avatar"
                      alt="Student">

@@ -183,13 +183,13 @@
 
 <!-- Attendance Footer -->
 
-<div class="attendance-footer">
+
 
     <span>
        
     </span>
 
-    <div class="attendance-pagination">
+    
 
         <button>
             

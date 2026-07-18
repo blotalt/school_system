@@ -2,89 +2,35 @@
 
 @section('content')
 
-<div class="profile-page">
+<div class="student-profile-page">
 
-    <!-- Header -->
+    <!-- Page Header -->
     <div class="profile-header">
         <div>
             <h1>My Profile</h1>
-            <p>Manage your personal information and learning account.</p>
+            <p>
+                Manage your personal information and teacher account.
+            </p>
         </div>
     </div>
 
-    <!-- Two Columns -->
-    <div class="profile-wrapper">
+    <!-- Teacher Profile Card -->
+    <div class="student-card">
 
-        <!-- LEFT SIDE -->
-        <div class="profile-left">
+        <div class="student-left">
 
-            <!-- Teacher Profile Card -->
-            <div class="profile-card">
-
-                <div class="profile-image">
-                    <img src="{{ asset('images/avatar.png') }}" alt="Teacher">
-
-                    <button class="camera-btn">
-                        <i class="fa-solid fa-camera"></i>
-                    </button>
-                </div>
-
-                <h2>Phearun Khun</h2>
-
-                <span class="role-badge">
-                    Teacher
-                </span>
-
-                <hr>
-
-                <div class="profile-info">
-
-                    <div>
-                        <label>STUDENT ID</label>
-                        <h5>ENG2026001</h5>
-                    </div>
-
-                    <div>
-                        <label>JOIN DATE</label>
-                        <h5>January 2026</h5>
-                    </div>
-
-                </div>
-
-                <div class="email-box">
-
-                    <label>EMAIL ADDRESS</label>
-
-                    <h5>phearunkhun@email.com</h5>
-
-                </div>
-
+            <div class="student-photo">
+                <img src="{{ asset('images/avatar.png') }}">
             </div>
 
-            <!-- Account Settings -->
-            <div class="account-card">
+            <div class="student-info">
 
-                <h3>Account Settings</h3>
+                <h2>Phearun Khun</h2>
+            
+                <h4>Biology Teacher</h4>
 
-                <div class="setting-item">
+                <div class="student-tags">
 
-                    <div class="setting-left">
-                        <i class="fa-solid fa-pen"></i>
-                        <span>Edit Profile Details</span>
-                    </div>
-
-                    <i class="fa-solid fa-angle-right"></i>
-
-                </div>
-
-                <div class="setting-item">
-
-                    <div class="setting-left">
-                        <i class="fa-solid fa-lock"></i>
-                        <span>Change Password</span>
-                    </div>
-
-                    <i class="fa-solid fa-angle-right"></i>
 
                 </div>
 
@@ -92,64 +38,105 @@
 
         </div>
 
-        <!-- RIGHT SIDE -->
-        <div class="profile-right">
+        <div class="student-id-card">
 
-            <div class="profile-form-header">
+            <small>TEACHER ID</small>
 
-                <h2>Personal Information</h2>
+            <h3>TCH-2026-001</h3>
 
-                <button class="edit-btn">
-                    Edit Mode
-                </button>
+        </div>
 
-            </div>
+    </div>
 
-            <div class="form-group">
-                <label>FULL NAME</label>
-                <input type="text" value="Phearun Khun">
-            </div>
+    <!-- Personal Information -->
+    <div class="profile-form">
 
-            <div class="form-row">
+        <div class="form-header">
 
-                <div class="form-group">
-                    <label>DATE OF BIRTH</label>
-                    <input type="text" value="May 14, 1998">
-                </div>
+            <h2>Personal Information</h2>
 
-                <div class="form-group">
-                    <label>COUNTRY</label>
-                    <input type="text" value="Cambodia">
-                </div>
+            <button class="edit-btn">
+                Edit Mode
+            </button>
 
-            </div>
+        </div>
 
-            <div class="form-group">
-                <label>PHONE NUMBER</label>
-                <input type="text" value="+1 (855) 012-3456">
-            </div>
+        <!-- Full Name -->
+        <div class="form-group">
 
-            <div class="form-group">
-                <label>LEARNING GOAL</label>
+            <label>FULL NAME</label>
 
-                <textarea rows="5">Mastering academic writing for university level, focusing on complex grammar structures and high-level vocabulary expansion in formal contexts.</textarea>
+            <input
+                type="text"
+                value="Phearun Khun">
 
-            </div>
-            <!-- ================= Action Buttons ================= -->
+        </div>
 
-<div class="profile-actions">
+        <!-- Date of Birth -->
+        <div class="form-group">
 
-    <button class="discard-profile-btn">
-        <i class="fa-solid fa-xmark"></i>
-        Discard Changes
-    </button>
+            <label>DATE OF BIRTH</label>
 
-    <button class="save-profile-btn">
-        <i class="fa-solid fa-floppy-disk"></i>
-        Save Details
-    </button>
+            <input
+                type="text"
+                value="May 14, 1998">
 
-</div>
+        </div>
+
+        <!-- Country -->
+        <div class="form-group">
+
+            <label>COUNTRY</label>
+
+            <input
+                type="text"
+                value="Cambodia">
+
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+
+            <label>PHONE NUMBER</label>
+
+            <input
+                type="text"
+                value="+855 12 345 678">
+
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+
+            <label>EMAIL ADDRESS</label>
+
+            <input
+                type="email"
+                value="phearunkhun@email.com">
+
+        </div>
+
+        <!-- Department -->
+        <div class="form-group">
+
+            <label>DEPARTMENT</label>
+
+            <input
+                type="text"
+                value="Science Department">
+
+        </div>
+
+        <!-- Buttons -->
+        <div class="profile-actions">
+
+            <button class="discard-btn">
+                Discard Changes
+            </button>
+
+            <button class="save-btn">
+                Save Details
+            </button>
 
         </div>
 
