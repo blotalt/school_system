@@ -45,4 +45,5 @@ Route::get('/admin/announcements', fn () => view('admin.announcements'))
 // // Route::resource('announcements', AnnouncementController::class);
 // // Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
 // Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
-// Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
