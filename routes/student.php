@@ -14,3 +14,17 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 // Route::get('homework', [HomeworkController::class, 'index'])->name('homework.index');
 // Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule.index');
 // Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+
+Route::get('/student/dashboard', function () {
+    return view('student.dashboard');
+})->name('student.dashboard');
+
+Route::get('/student/classes', function () {
+    return view('student.classes');
+})->name('student.classes');
+Route::get('/student/attendance', function () {
+    return view('student.attendance');
+})->name('student.attendance');
+Route::get('/student/announcements', function () {
+    return view('student.announcements');
+})->name('student.announcements');
