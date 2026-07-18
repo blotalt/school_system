@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\AttendanceController; // B4
 use App\Http\Controllers\Admin\AnnouncementController; // B4
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::resource('students', StudentController::class);
 Route::resource('teachers', TeacherController::class);
 Route::resource('classes', ClassController::class);
