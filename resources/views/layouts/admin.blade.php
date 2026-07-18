@@ -27,7 +27,7 @@
             </ul>
         </div>
         <div class="settings">
-            <a href="/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+            <a href="{{ route('admin.profile.edit') }}"><i class="fa-solid fa-gear"></i> Settings</a>
         </div>
     </x-sidebar>
 
@@ -40,23 +40,24 @@
             <div class="top-right">
                 <div class="icon-btn"><i class="fa-regular fa-bell"></i></div>
                 <div class="icon-btn"><i class="fa-solid fa-grip"></i></div>
+                @php $initials = collect(explode(' ', auth()->user()->name))->map(fn ($n) => mb_substr($n, 0, 1))->take(2)->implode(''); @endphp
                 <div class="teacher profile-dropdown-wrapper" onclick="toggleProfileDropdown(event)">
                     <div class="teacher-info">
-                        <h4>Chann Socheat</h4>
-                        <span>Senior Administrator</span>
+                        <h4>{{ auth()->user()->name }}</h4>
+                        <span>Administrator</span>
                     </div>
-                    <div class="avatar-circle">CS</div>
+                    <div class="avatar-circle">{{ $initials }}</div>
 
                     <div class="profile-dropdown" id="profileDropdown">
                         <div class="dropdown-user-info">
-                            <div class="avatar-circle" style="width:44px;height:44px;">CS</div>
+                            <div class="avatar-circle" style="width:44px;height:44px;">{{ $initials }}</div>
                             <div>
-                                <strong>Chann Socheat</strong>
-                                <p>chann.socheat@cambodiahigh.edu.kh</p>
+                                <strong>{{ auth()->user()->name }}</strong>
+                                <p>{{ auth()->user()->email }}</p>
                             </div>
                         </div>
                         <hr>
-                        <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+                        <a href="{{ route('admin.profile.edit') }}"><i class="fa-solid fa-gear"></i> Settings</a>
                         <hr>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

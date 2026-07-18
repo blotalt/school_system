@@ -33,11 +33,11 @@ class DatabaseSeeder extends Seeder
             StudentSeeder::class,
         ]);
 
-        // B3 (uncomment after B3 merges)
-        // $this->call([
-        //     ExamSeeder::class,
-        //     AttendanceSeeder::class,
-        // ]);
+        // B3
+        $this->call([
+            ExamSeeder::class,
+            AttendanceSeeder::class,
+        ]);
 
         // B4 — announcements (B4 owns this table; runs last, after users exist)
         $this->call([

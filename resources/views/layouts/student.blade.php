@@ -45,7 +45,7 @@
                         <h4>{{ auth()->user()->name }}</h4>
                         <span>Student</span>
                     </div>
-                    <a href="/myprofile">
+                    <a href="{{ route('student.profile.edit') }}">
                         <div class="avatar-circle" style="width:40px;height:40px;">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</div>
                     </a>
                 </div>

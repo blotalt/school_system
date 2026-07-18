@@ -14,7 +14,7 @@
     </div>
 </x-page-header>
 
-<form method="POST" action="#" class="form-card">
+<form method="POST" action="{{ route('admin.students.store') }}" class="form-card">
     @csrf
 
     <div class="form-row">
@@ -37,41 +37,41 @@
             @error('password') <span class="field-error">{{ $message }}</span> @enderror
         </div>
         <div class="form-group">
-            <label>Date of Birth</label>
-            <input type="date" name="dob" value="{{ old('dob') }}">
+            <label>Roll Number</label>
+            <input type="text" name="roll_no" placeholder="e.g. STU-006" value="{{ old('roll_no') }}">
+            @error('roll_no') <span class="field-error">{{ $message }}</span> @enderror
         </div>
     </div>
 
     <div class="form-row">
         <div class="form-group">
-            <label>Gender</label>
-            <select name="gender">
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select>
+            <label>Date of Birth</label>
+            <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}">
+            @error('date_of_birth') <span class="field-error">{{ $message }}</span> @enderror
         </div>
         <div class="form-group">
-            <label>Phone Number</label>
-            <input type="text" name="phone" placeholder="+855 000 000 000" value="{{ old('phone') }}">
+            <label>Guardian Contact</label>
+            <input type="text" name="guardian_contact" placeholder="+855 000 000 000" value="{{ old('guardian_contact') }}">
+            @error('guardian_contact') <span class="field-error">{{ $message }}</span> @enderror
         </div>
     </div>
 
     <div class="form-group">
-        <label>Assigned Class Section</label>
+        <label>Assigned Class</label>
         <div class="section-toggle-group">
-            @foreach(['12A','12B','12C','11A','11B','11C','10A','10B','10C'] as $section)
+            @foreach($classes as $class)
                 <label class="section-toggle">
-                    <input type="radio" name="section" value="{{ $section }}" {{ old('section') === $section ? 'checked' : '' }}>
-                    <span>{{ $section }}</span>
+                    <input type="radio" name="class_id" value="{{ $class->id }}" {{ (string) old('class_id') === (string) $class->id ? 'checked' : '' }}>
+                    <span>{{ $class->name }}</span>
                 </label>
             @endforeach
         </div>
+        @error('class_id') <span class="field-error">{{ $message }}</span> @enderror
     </div>
 
     <div class="info-box">
         <i class="fa-solid fa-lightbulb"></i>
-        <span>Once registered, student IDs are automatically generated based on the current academic year (2025-2026). Student records will be available in the dashboard immediately.</span>
+        <span>Once registered, the student account is available immediately with the roll number entered above.</span>
     </div>
 
     <div class="form-actions">

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Teacher extends Model
@@ -11,7 +12,17 @@ class Teacher extends Model
     protected $fillable = [
         'user_id',
         'subject_specialty',
+        'date_of_birth',
+        'gender',
+        'phone',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'date_of_birth' => 'date',
+        ];
+    }
 
     public function user(): BelongsTo
     {
@@ -21,5 +32,10 @@ class Teacher extends Model
     public function classes(): HasMany
     {
         return $this->hasMany(SchoolClass::class, 'teacher_id');
+    }
+
+    public function subjects(): BelongsToMany
+    {
+        return $this->belongsToMany(Subject::class);
     }
 }

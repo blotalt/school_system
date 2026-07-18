@@ -11,11 +11,44 @@ use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $students = Student::with(['user', 'schoolClass'])->paginate(20);
+        $search = $request->query('search');
+        $grade = $request->query('grade');
+        $track = $request->query('track');
 
-        return view('admin.students', compact('students'));
+        $students = Student::with(['user', 'schoolClass'])
+            ->when($search, fn ($query) => $query->whereHas(
+                'user',
+                fn ($user) => $user->where('name', 'like', "%{$search}%")
+            ))
+            ->when($grade, fn ($query) => $query->whereHas(
+                'schoolClass',
+                fn ($class) => $class->where('grade_level', $grade)
+            ))
+            ->when($track, fn ($query) => $query->whereHas(
+                'schoolClass',
+                fn ($class) => $class->where('track', $track)
+            ))
+            ->paginate(20)
+            ->withQueryString();
+
+        $students->getCollection()->transform(function (Student $student) {
+            $total = $student->attendances()->count();
+            $present = $student->attendances()->where('status', 'present')->count();
+            $student->attendance_percent = $total ? (int) round($present / $total * 100) : null;
+
+            return $student;
+        });
+
+        $grades = SchoolClass::whereNotNull('grade_level')->distinct()->orderBy('grade_level')->pluck('grade_level');
+        $tracks = SchoolClass::whereNotNull('track')
+            ->whereNotIn('track', ['Arts', 'Commerce'])
+            ->distinct()
+            ->orderBy('track')
+            ->pluck('track');
+
+        return view('admin.students', compact('students', 'search', 'grade', 'track', 'grades', 'tracks'));
     }
 
     public function create()

@@ -16,6 +16,13 @@ class Student extends Model
         'date_of_birth',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'date_of_birth' => 'date',
+        ];
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -30,5 +37,10 @@ class Student extends Model
     public function results(): HasMany
     {
         return $this->hasMany(ExamResult::class);
+    }
+
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(Attendance::class);
     }
 }

@@ -26,4 +26,9 @@ class SchoolClass extends Model
     {
         return $this->hasMany(Student::class, 'class_id');
     }
+
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(ClassSchedule::class, 'class_id');
+    }
 }

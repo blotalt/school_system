@@ -4,18 +4,21 @@
 <x-page-header>
     <div>
         <h1>Class Timetable - Weekly Grid</h1>
-        <p>Managing Grade 12 - Section A weekly schedule</p>
+        <p>{{ $class ? "Managing {$class->name} weekly schedule" : 'No classes yet.' }}</p>
     </div>
+    @if($class)
     <div style="display:flex;gap:20px;align-items:flex-end;">
-        <div class="header-group">
-            <label>SELECT CLASS</label>
-            <select class="filter-select">
-                <option>Grade 12 - A</option>
-                <option>Grade 12 - B</option>
-                <option>Grade 11 - A</option>
-                <option>Grade 11 - B</option>
-            </select>
-        </div>
+        <form method="GET" action="{{ route('admin.classes.index') }}" id="classSwitchForm">
+            <div class="header-group">
+                <label>SELECT CLASS</label>
+                <select name="class" class="filter-select" onchange="this.form.submit()">
+                    @foreach($classes as $c)
+                        <option value="{{ $c->id }}" {{ $class->id === $c->id ? 'selected' : '' }}>{{ $c->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <input type="hidden" name="shift" id="shiftInput" value="morning">
+        </form>
         <div class="header-group">
             <label>SHIFT SELECTION</label>
             <div class="shift-toggle">
@@ -23,39 +26,43 @@
                 <button type="button" class="shift-btn" data-shift="afternoon">Afternoon shift</button>
             </div>
         </div>
-        <button type="button" class="icon-only-btn"><i class="fa-solid fa-gear"></i></button>
     </div>
+    @endif
 </x-page-header>
 
+@if (session('success'))
+    <div class="alert alert-success" style="margin-bottom:16px;padding:12px 16px;background:#e6f9f0;border:1px solid #10b981;border-radius:10px;color:#0a7a4d;">
+        {{ session('success') }}
+    </div>
+@endif
+@if ($errors->any())
+    <div class="alert alert-error" style="margin-bottom:16px;padding:12px 16px;background:#fdecea;border:1px solid #f5b7b1;border-radius:10px;color:#c0392b;">
+        {{ $errors->first() }}
+    </div>
+@endif
+
+@if(!$class)
+    <div class="data-card" style="padding:40px;text-align:center;color:#9ca3af;">
+        No classes exist yet. <a href="{{ route('admin.classes.create') }}">Create one</a> to build its schedule.
+    </div>
+@else
+
 @php
-$days = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
-
-$morningPeriods = [
-    ['label' => 'P1', 'time' => '7:10 - 8:00', 'slots' => ['Chemistry|SK|chemistry','Math|BK|math','Chemistry|SK|chemistry','Math|BK|math', null]],
-    ['break' => '10 MIN BREAK (8:00 - 8:10 AM)'],
-    ['label' => 'P2', 'time' => '8:10 - 9:00', 'slots' => ['Khmer|SR|khmer','Physics|LV|physics','Physics|LV|physics','Khmer|SR|khmer','Math|BK|math']],
-    ['break' => '10 MIN BREAK (9:00 - 9:10 AM)'],
-    ['label' => 'P3', 'time' => '9:10 - 10:00', 'slots' => ['Math|BK|math','Biology|TM|biology', null, 'Physics|LV|physics','Biology|TM|biology']],
-    ['break' => '10 MIN BREAK (10:00 - 10:10 AM)'],
-    ['label' => 'P4', 'time' => '10:10 - 11:00', 'slots' => ['Physics|LV|physics','Khmer|SR|khmer','Math|BK|math','Chemistry|SK|chemistry','History|NN|khmer']],
-];
-
-$afternoonPeriods = [
-    ['label' => 'P1', 'time' => '1:10 - 2:00', 'slots' => ['Chemistry|SK|chemistry','Math|BK|math','Chemistry|SK|chemistry','Math|BK|math', null]],
-    ['break' => '10 MIN BREAK (8:00 - 8:10 AM)'],
-    ['label' => 'P2', 'time' => '2:10 - 3:00', 'slots' => ['Khmer|SR|khmer','Physics|LV|physics','Physics|LV|physics','Khmer|SR|khmer','Math|BK|math']],
-    ['break' => '10 MIN BREAK (9:00 - 9:10 AM)'],
-    ['label' => 'P3', 'time' => '3:10 - 4:00', 'slots' => ['Math|BK|math','Biology|TM|biology', null, 'Physics|LV|physics','Biology|TM|biology']],
-    ['break' => '10 MIN BREAK (10:00 - 10:10 AM)'],
-    ['label' => 'P4', 'time' => '4:10 - 5:00', 'slots' => ['Physics|LV|physics','Khmer|SR|khmer','Math|BK|math','Chemistry|SK|chemistry','History|NN|khmer']],
+$subjectColors = [
+    'Mathematics' => 'math', 'Physics' => 'physics', 'Biology' => 'biology',
+    'Chemistry' => 'chemistry', 'English' => 'english', 'History' => 'history',
+    'Geography' => 'geography', 'Computer Science' => 'computerscience',
 ];
 @endphp
 
 <button type="button" id="editBtn" class="add-btn" style="margin:16px 0;" onclick="enterEditMode()">
     <i class="fa-solid fa-pen"></i> Edit Schedule
 </button>
+<button type="button" id="exitEditBtn" class="cancel-btn" style="margin:16px 0 16px 10px;display:none;" onclick="exitEditMode()">
+    Done Editing
+</button>
 
-@foreach(['morning' => $morningPeriods, 'afternoon' => $afternoonPeriods] as $shiftKey => $periods)
+@foreach(['morning', 'afternoon'] as $shiftKey)
 <div class="timetable-container shift-grid" data-shift="{{ $shiftKey }}" style="{{ $shiftKey === 'afternoon' ? 'display:none;' : '' }}">
     <table class="schedule-table-grid">
         <thead>
@@ -67,109 +74,107 @@ $afternoonPeriods = [
             </tr>
         </thead>
         <tbody>
-            @foreach($periods as $row)
-                @if(isset($row['break']))
+            @for($period = 1; $period <= 4; $period++)
+                <tr>
+                    <td class="time-box">P{{ $period }}<br><small>{{ $periodTimes[$shiftKey][$period] }}</small></td>
+                    @foreach($days as $day)
+                        @php $slot = $schedules->get("{$shiftKey}-{$day}-{$period}"); @endphp
+                        <td>
+                            @if($slot)
+                                @php $colorClass = $subjectColors[$slot->subject->name] ?? 'default'; @endphp
+                                <div class="subject-card subject-{{ $colorClass }}" style="position:relative;">
+                                    <strong>{{ $slot->subject->name }}</strong><br>
+                                    <span>{{ collect(explode(' ', $slot->teacher->user->name))->map(fn($n) => mb_substr($n, 0, 1))->take(2)->implode('') }}</span>
+                                    <form action="{{ route('admin.classes.schedule.destroy', [$class, $slot]) }}" method="POST" class="edit-only-delete" style="display:none;position:absolute;top:2px;right:2px;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" title="Clear slot" style="background:none;border:none;cursor:pointer;color:inherit;opacity:.6;">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            @else
+                                <div class="empty-slot" onclick="openSlotModal({{ $period }}, '{{ $day }}', '{{ $shiftKey }}')"><i class="fa-solid fa-plus"></i></div>
+                            @endif
+                        </td>
+                    @endforeach
+                </tr>
+                @if($period < 4)
+                    @php
+                        $breakStart = explode(' - ', $periodTimes[$shiftKey][$period])[1];
+                        $breakEnd = explode(' - ', $periodTimes[$shiftKey][$period + 1])[0];
+                    @endphp
                     <tr class="break-row">
-                        <td colspan="6"><i class="fa-regular fa-clock"></i> {{ $row['break'] }}</td>
-                    </tr>
-                @else
-                    <tr>
-                        <td class="time-box">{{ $row['label'] }}<br><small>{{ $row['time'] }}</small></td>
-                        @foreach($row['slots'] as $slot)
-                            <td>
-                                @if($slot)
-                                    @php [$subj, $initials, $color] = explode('|', $slot); @endphp
-                                    <div class="subject-card subject-{{ $color }}">
-                                        <strong>{{ $subj }}</strong><br>
-                                        <span>{{ $initials }}</span>
-                                    </div>
-                                @else
-                                    <div class="empty-slot" onclick="openSlotModal(this)"><i class="fa-solid fa-plus"></i></div>
-                                @endif
-                            </td>
-                        @endforeach
+                        <td colspan="6"><i class="fa-regular fa-clock"></i> 10 MIN BREAK ({{ $breakStart }} - {{ $breakEnd }})</td>
                     </tr>
                 @endif
-            @endforeach
+            @endfor
         </tbody>
     </table>
 </div>
 @endforeach
 
-<div class="grid-actions" id="gridActions" style="display:none;">
-    <button type="button" class="save-btn" onclick="applyChanges()"><i class="fa-solid fa-floppy-disk"></i> Apply Changes</button>
-    <button type="button" class="cancel-btn" onclick="resetGrid()">Reset Grid</button>
-</div>
-
 <!-- Add Subject Modal -->
 <div id="slotModal" class="slot-modal-overlay" style="display:none;">
-    <div class="slot-modal">
+    <form class="slot-modal" method="POST" id="slotForm" action="">
+        @csrf
         <h3>Add Subject</h3>
+        <input type="hidden" name="day_of_week" id="modalDay">
+        <input type="hidden" name="period" id="modalPeriod">
+        <input type="hidden" name="shift" id="modalShift">
         <div class="form-group">
             <label>Subject</label>
-            <select id="modalSubject">
-                <option value="Chemistry|chemistry">Chemistry</option>
-                <option value="Math|math">Math</option>
-                <option value="Physics|physics">Physics</option>
-                <option value="Biology|biology">Biology</option>
-                <option value="Khmer|khmer">Khmer</option>
-                <option value="History|khmer">History</option>
+            <select name="subject_id" required>
+                @foreach($subjects as $subject)
+                    <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                @endforeach
             </select>
         </div>
         <div class="form-group">
-            <label>Teacher Initials</label>
-            <input type="text" id="modalInitials" placeholder="e.g. SK" maxlength="3">
+            <label>Teacher</label>
+            <select name="teacher_id" required>
+                @foreach($teachers as $teacher)
+                    <option value="{{ $teacher->id }}">{{ $teacher->user->name }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="form-actions">
             <button type="button" class="cancel-btn" onclick="closeSlotModal()">Cancel</button>
-            <button type="button" class="save-btn" onclick="confirmAddSubject()">Add</button>
+            <button type="submit" class="save-btn">Add</button>
         </div>
-    </div>
+    </form>
 </div>
 
 <script>
-let activeSlot = null;
 let editMode = false;
 
 function enterEditMode() {
     editMode = true;
     document.getElementById('editBtn').style.display = 'none';
-    document.getElementById('gridActions').style.display = 'flex';
+    document.getElementById('exitEditBtn').style.display = 'inline-flex';
     document.body.classList.add('grid-editing');
+    document.querySelectorAll('.edit-only-delete').forEach(el => el.style.display = 'block');
 }
 
 function exitEditMode() {
     editMode = false;
     document.getElementById('editBtn').style.display = 'inline-flex';
-    document.getElementById('gridActions').style.display = 'none';
+    document.getElementById('exitEditBtn').style.display = 'none';
     document.body.classList.remove('grid-editing');
+    document.querySelectorAll('.edit-only-delete').forEach(el => el.style.display = 'none');
 }
 
-function openSlotModal(el) {
-    if (!editMode) return; // only allow adding when in edit mode
-    activeSlot = el;
+function openSlotModal(period, day, shift) {
+    if (!editMode) return;
+    document.getElementById('modalPeriod').value = period;
+    document.getElementById('modalDay').value = day;
+    document.getElementById('modalShift').value = shift;
+    document.getElementById('slotForm').action = "{{ route('admin.classes.schedule.store', $class) }}";
     document.getElementById('slotModal').style.display = 'flex';
 }
 
 function closeSlotModal() {
     document.getElementById('slotModal').style.display = 'none';
-    activeSlot = null;
-}
-
-function confirmAddSubject() {
-    const [subj, color] = document.getElementById('modalSubject').value.split('|');
-    const initials = document.getElementById('modalInitials').value || '--';
-    activeSlot.outerHTML = `<div class="subject-card subject-${color}"><strong>${subj}</strong><br><span>${initials}</span></div>`;
-    closeSlotModal();
-}
-
-function applyChanges() {
-    alert('Changes saved (not yet connected to backend).');
-    exitEditMode();
-}
-
-function resetGrid() {
-    location.reload();
 }
 
 document.querySelectorAll('.shift-btn').forEach(btn => {
@@ -178,10 +183,12 @@ document.querySelectorAll('.shift-btn').forEach(btn => {
         this.classList.add('active');
 
         const shift = this.dataset.shift;
+        document.getElementById('shiftInput').value = shift;
         document.querySelectorAll('.shift-grid').forEach(grid => {
             grid.style.display = (grid.dataset.shift === shift) ? 'block' : 'none';
         });
     });
 });
 </script>
+@endif
 @endsection
