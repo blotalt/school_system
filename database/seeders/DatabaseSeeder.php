@@ -39,9 +39,9 @@ class DatabaseSeeder extends Seeder
         //     AttendanceSeeder::class,
         // ]);
 
-        // B4 (uncomment after B4 merges)
-        // $this->call([
-        //     AnnouncementSeeder::class,
-        // ]);
+        // B4 — announcements (B4 owns this table; runs last, after users exist)
+        $this->call([
+            AnnouncementSeeder::class,
+        ]);
     }
 }
