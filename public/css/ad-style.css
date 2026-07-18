@@ -196,3 +196,16 @@
 .dropdown-user-info{display:flex;align-items:center;gap:12px;padding:10px;}
 .dropdown-user-info strong{display:block;font-size:14px;color:#1e293b;}
 .dropdown-user-info p{font-size:12px;color:#9ca3af;margin-top:2px;}
+
+.back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color:#6b7280;
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:16px;
+}
+.back-link:hover{
+    color:#0b3f86;
+}
