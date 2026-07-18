@@ -38,9 +38,9 @@
 
         <div class="welcome-right">
 
-            <span>CURRENT DATE</span>
+            <span></span>
 
-            <h2>July 4, 2026</h2>
+            <h2></h2>
 
         </div>
 

@@ -18,20 +18,16 @@
 
             <div>
 
-                @if($student)
-                    <h1>Hello, {{ $student->user->name }}</h1>
-                @else
-                    <h1>Hello, Student</h1>
-                @endif
+                <h1>Hello, John Doe</h1>
 
                 <div class="student-badge">
 
                     <span class="grade-badge">
-                        {{ $class?->name ?? 'No Class' }}
+                        Grade 10-A
                     </span>
 
                     <span class="track-badge">
-                        {{ $class?->track ?? 'N/A' }}
+                        Science
                     </span>
 
                 </div>
@@ -42,9 +38,9 @@
 
         <div class="welcome-right">
 
-            <span>CURRENT DATE</span>
+            <span></span>
 
-            <h2>{{ now()->format('F d, Y') }}</h2>
+            <h2></h2>
 
         </div>
 

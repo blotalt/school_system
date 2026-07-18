@@ -22,6 +22,9 @@ Route::get('/student/dashboard', function () {
 Route::get('/student/classes', function () {
     return view('student.classes');
 })->name('student.classes');
+Route::get('/student/grades', function () {
+    return view('student.grades');
+})->name('student.grades');
 Route::get('/student/attendance', function () {
     return view('student.attendance');
 })->name('student.attendance');

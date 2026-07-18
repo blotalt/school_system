@@ -38,9 +38,9 @@
 
         <div class="welcome-right">
 
-            <span>CURRENT DATE</span>
+            <span></span>
 
-            <h2>July 4, 2026</h2>
+            <h2></h2>
 
         </div>
 
@@ -186,17 +186,17 @@
 <div class="attendance-footer">
 
     <span>
-        Showing 1-6 of 18 attendance records
+       
     </span>
 
     <div class="attendance-pagination">
 
         <button>
-            <i class="fa-solid fa-chevron-left"></i>
+            
         </button>
 
         <button>
-            <i class="fa-solid fa-chevron-right"></i>
+          
         </button>
 
     </div>
