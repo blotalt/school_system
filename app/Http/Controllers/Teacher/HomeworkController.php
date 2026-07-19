@@ -8,10 +8,13 @@ use App\Models\Homework;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class HomeworkController extends Controller
 {
     use EnsuresClassOwnership;
+
+    private const ATTACHMENT_RULES = ['nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:10240'];
 
     public function index()
     {
@@ -43,13 +46,18 @@ class HomeworkController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'required|date',
+            'attachment' => self::ATTACHMENT_RULES,
         ]);
 
         $this->ensureTeacherOwnsClass($validated['class_id']);
 
+        $attachment = $this->storeAttachment($request);
+
         Homework::create([
             ...$validated,
             'teacher_id' => Auth::user()->teacher->id,
+            'attachment_path' => $attachment['path'] ?? null,
+            'attachment_name' => $attachment['name'] ?? null,
         ]);
 
         return redirect()->route('teacher.homework.index')
@@ -79,10 +87,25 @@ class HomeworkController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'required|date',
+            'attachment' => self::ATTACHMENT_RULES,
+            'remove_attachment' => 'nullable|boolean',
         ]);
 
         // If the class is being changed, confirm ownership of the NEW class too.
         $this->ensureTeacherOwnsClass($validated['class_id']);
+
+        $attachment = $this->storeAttachment($request);
+
+        if ($attachment || $request->boolean('remove_attachment')) {
+            if ($homework->attachment_path) {
+                Storage::disk('public')->delete($homework->attachment_path);
+            }
+
+            $validated['attachment_path'] = $attachment['path'] ?? null;
+            $validated['attachment_name'] = $attachment['name'] ?? null;
+        }
+
+        unset($validated['remove_attachment']);
 
         $homework->update($validated);
 
@@ -94,9 +117,27 @@ class HomeworkController extends Controller
     {
         $this->ensureTeacherOwnsClass($homework->class_id);
 
+        if ($homework->attachment_path) {
+            Storage::disk('public')->delete($homework->attachment_path);
+        }
+
         $homework->delete();
 
         return redirect()->route('teacher.homework.index')
             ->with('status', 'Homework deleted.');
+    }
+
+    private function storeAttachment(Request $request): ?array
+    {
+        if (! $request->hasFile('attachment')) {
+            return null;
+        }
+
+        $file = $request->file('attachment');
+
+        return [
+            'path' => $file->store('homework-attachments', 'public'),
+            'name' => $file->getClientOriginalName(),
+        ];
     }
 }

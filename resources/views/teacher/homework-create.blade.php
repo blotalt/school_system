@@ -15,7 +15,7 @@
     </div>
 </x-page-header>
 
-<form method="POST" action="{{ route('teacher.homework.store') }}" class="form-card">
+<form method="POST" action="{{ route('teacher.homework.store') }}" class="form-card" enctype="multipart/form-data">
     @csrf
 
     <div class="form-row">
@@ -53,10 +53,17 @@
         @error('description') <span class="field-error">{{ $message }}</span> @enderror
     </div>
 
-    <div class="form-group" style="max-width:300px;">
-        <label>Due Date</label>
-        <input type="date" name="due_date" value="{{ old('due_date') }}">
-        @error('due_date') <span class="field-error">{{ $message }}</span> @enderror
+    <div class="form-row">
+        <div class="form-group" style="max-width:300px;">
+            <label>Due Date</label>
+            <input type="date" name="due_date" value="{{ old('due_date') }}">
+            @error('due_date') <span class="field-error">{{ $message }}</span> @enderror
+        </div>
+        <div class="form-group">
+            <label>Attachment <span style="color:#9ca3af;font-weight:400;">(optional — PDF, Word, or image, max 10MB)</span></label>
+            <input type="file" name="attachment" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+            @error('attachment') <span class="field-error">{{ $message }}</span> @enderror
+        </div>
     </div>
 
     <div class="form-actions">

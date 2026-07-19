@@ -26,6 +26,7 @@
                 <th>Class</th>
                 <th>Subject</th>
                 <th>Due Date</th>
+                <th>Attachment</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -36,6 +37,13 @@
                     <td>{{ $hw->schoolClass->name ?? '—' }}</td>
                     <td>{{ $hw->subject->name ?? '—' }}</td>
                     <td>{{ $hw->due_date->format('M j, Y') }}</td>
+                    <td>
+                        @if($hw->attachment_path)
+                            <a href="{{ asset('storage/' . $hw->attachment_path) }}" target="_blank" title="{{ $hw->attachment_name }}"><i class="fa-solid fa-paperclip"></i></a>
+                        @else
+                            <span style="color:#c4c9d4;">—</span>
+                        @endif
+                    </td>
                     <td>
                         <a href="{{ route('teacher.homework.edit', $hw) }}" title="Edit"><i class="fa-solid fa-pen"></i></a>
                         <form action="{{ route('teacher.homework.destroy', $hw) }}" method="POST" style="display:inline;margin-left:12px;" onsubmit="return confirm('Delete this homework?');">
@@ -48,7 +56,7 @@
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="5" style="text-align:center;color:#8a94a6;">No homework assigned yet.</td></tr>
+                <tr><td colspan="6" style="text-align:center;color:#8a94a6;">No homework assigned yet.</td></tr>
             @endforelse
         </tbody>
     </table>

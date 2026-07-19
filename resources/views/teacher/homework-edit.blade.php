@@ -15,7 +15,7 @@
     </div>
 </x-page-header>
 
-<form method="POST" action="{{ route('teacher.homework.update', $homework) }}" class="form-card">
+<form method="POST" action="{{ route('teacher.homework.update', $homework) }}" class="form-card" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -52,10 +52,26 @@
         @error('description') <span class="field-error">{{ $message }}</span> @enderror
     </div>
 
-    <div class="form-group" style="max-width:300px;">
-        <label>Due Date</label>
-        <input type="date" name="due_date" value="{{ old('due_date', $homework->due_date->format('Y-m-d')) }}">
-        @error('due_date') <span class="field-error">{{ $message }}</span> @enderror
+    <div class="form-row">
+        <div class="form-group" style="max-width:300px;">
+            <label>Due Date</label>
+            <input type="date" name="due_date" value="{{ old('due_date', $homework->due_date->format('Y-m-d')) }}">
+            @error('due_date') <span class="field-error">{{ $message }}</span> @enderror
+        </div>
+        <div class="form-group">
+            <label>Attachment <span style="color:#9ca3af;font-weight:400;">(optional — PDF, Word, or image, max 10MB)</span></label>
+            @if($homework->attachment_path)
+                <div style="margin-bottom:8px;font-size:14px;">
+                    <i class="fa-solid fa-paperclip"></i>
+                    <a href="{{ asset('storage/' . $homework->attachment_path) }}" target="_blank">{{ $homework->attachment_name }}</a>
+                    <label style="margin-left:12px;font-weight:400;color:#c0392b;">
+                        <input type="checkbox" name="remove_attachment" value="1"> Remove
+                    </label>
+                </div>
+            @endif
+            <input type="file" name="attachment" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+            @error('attachment') <span class="field-error">{{ $message }}</span> @enderror
+        </div>
     </div>
 
     <div class="form-actions">

@@ -15,6 +15,8 @@ class Homework extends Model
         'title',
         'description',
         'due_date',
+        'attachment_path',
+        'attachment_name',
     ];
 
     protected $casts = [
