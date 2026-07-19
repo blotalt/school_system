@@ -242,29 +242,7 @@ ul{list-style:none;}
 }
 
 }
-.status-btn{
-    cursor:pointer;
-    transition:.2s;
-}
 
-.status-btn:hover{
-    transform:scale(1.05);
-}
-
-.status-btn.active.present{
-    background:#dcfce7;
-    color:#15803d;
-}
-
-.status-btn.active.late{
-    background:#fef3c7;
-    color:#d97706;
-}
-
-.status-btn.active.absent{
-    background:#fee2e2;
-    color:#dc2626;
-}
 .grade-circle{
     width:42px;
     height:42px;

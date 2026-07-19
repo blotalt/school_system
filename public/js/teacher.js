@@ -1,27 +1,41 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.querySelectorAll(".teacher-attendance-status").forEach(row => {
 
-    const rows = document.querySelectorAll(".attendance-status");
+    const buttons = row.querySelectorAll(".teacher-status-btn");
 
-    rows.forEach(function (row) {
+    buttons.forEach(button => {
 
-        const buttons = row.querySelectorAll(".status-btn");
+        button.addEventListener("click", function(){
 
-        buttons.forEach(function (button) {
+            buttons.forEach(btn => btn.classList.remove("active"));
 
-            button.addEventListener("click", function () {
-
-                // Remove active from all buttons in this row
-                buttons.forEach(function (btn) {
-                    btn.classList.remove("active");
-                });
-
-                // Add active to the clicked button
-                this.classList.add("active");
-
-            });
+            this.classList.add("active");
 
         });
 
     });
 
 });
+// Mark All Present
+const markAllBtn = document.getElementById("markAllPresent");
+
+if (markAllBtn) {
+
+    markAllBtn.addEventListener("click", function () {
+
+        document.querySelectorAll(".teacher-attendance-status").forEach(row => {
+
+            const buttons = row.querySelectorAll(".teacher-status-btn");
+
+            buttons.forEach(btn => btn.classList.remove("active"));
+
+            const presentBtn = row.querySelector('[data-status="present"]');
+
+            if (presentBtn) {
+                presentBtn.classList.add("active");
+            }
+
+        });
+
+    });
+
+}

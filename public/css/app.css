@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.teacher-status-btn{
+    padding:10px 22px;
+    border:none;
+    border-radius:30px;
+    background:#f3f4f6;
+    color:#6b7280;
+    cursor:pointer;
+    font-weight:600;
+    transition:.2s;
+}
+
+.teacher-status-btn:hover{
+    transform:scale(1.05);
+}
+
+.teacher-status-btn.active[data-status="present"]{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+.teacher-status-btn.active[data-status="late"]{
+    background:#fef3c7;
+    color:#d97706;
+}
+
+.teacher-status-btn.active[data-status="absent"]{
+    background:#fee2e2;
+    color:#dc2626;
+}

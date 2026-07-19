@@ -34,14 +34,31 @@
 
         </div>
 
-        <button class="present-btn">
+        <button id="markAllPresent" class="present-btn">
             <i class="fa-solid fa-check-double"></i>
             Mark All Present
         </button>
 
     </div>
+</div>
 
+   <div class="header-action">
 
+            <div class="class-select">
+
+                <label>Select Class</label>
+
+                <select>
+                    <option>Grade 12 - ALL</option>
+                    <option>Grade 11 - A</option>
+                    <option>Grade 10 - A</option>
+                </select>
+
+            </div>
+
+            
+
+        </div>
     <!-- Attendance Table -->
 
     <div class="attendance-card">
@@ -71,27 +88,30 @@
 
     </div>
 
-    <div class="attendance-status">
+   <div class="teacher-attendance-status">
 
-       <button type="button"
-        class="status-btn present active"
+    <button
+        type="button"
+        class="teacher-status-btn active"
         data-status="present">
         Present
     </button>
 
-    <button type="button"
-        class="status-btn late"
+    <button
+        type="button"
+        class="teacher-status-btn"
         data-status="late">
         Late
     </button>
 
-    <button type="button"
-        class="status-btn absent"
+    <button
+        type="button"
+        class="teacher-status-btn"
         data-status="absent">
         Absent
     </button>
 
-    </div>
+</div>
 
 </div>
 
@@ -108,27 +128,30 @@
 
     </div>
 
-    <div class="attendance-status">
+    <div class="teacher-attendance-status">
 
-        <button type="button"
-        class="status-btn present active"
+    <button
+        type="button"
+        class="teacher-status-btn active"
         data-status="present">
         Present
     </button>
 
-    <button type="button"
-        class="status-btn late"
+    <button
+        type="button"
+        class="teacher-status-btn"
         data-status="late">
         Late
     </button>
 
-    <button type="button"
-        class="status-btn absent"
+    <button
+        type="button"
+        class="teacher-status-btn"
         data-status="absent">
         Absent
     </button>
 
-    </div>
+</div>
 
 </div>
 
@@ -145,26 +168,30 @@
 
     </div>
 
-    <div class="attendance-status">
+    <div class="teacher-attendance-status">
 
-       <button type="button"
-        class="status-btn present active"
+    <button
+        type="button"
+        class="teacher-status-btn active"
         data-status="present">
         Present
     </button>
 
-    <button type="button"
-        class="status-btn late"
+    <button
+        type="button"
+        class="teacher-status-btn"
         data-status="late">
         Late
     </button>
 
-    <button type="button"
-        class="status-btn absent"
+    <button
+        type="button"
+        class="teacher-status-btn"
         data-status="absent">
         Absent
     </button>
-    </div>
+
+</div>
 
 </div>
 
@@ -181,27 +208,30 @@
 
     </div>
 
-    <div class="attendance-status">
+    <div class="teacher-attendance-status">
 
-        <button type="button"
-        class="status-btn present active"
+    <button
+        type="button"
+        class="teacher-status-btn active"
         data-status="present">
         Present
     </button>
 
-    <button type="button"
-        class="status-btn late"
+    <button
+        type="button"
+        class="teacher-status-btn"
         data-status="late">
         Late
     </button>
 
-    <button type="button"
-        class="status-btn absent"
+    <button
+        type="button"
+        class="teacher-status-btn"
         data-status="absent">
         Absent
     </button>
 
-    </div>
+</div>
 
 </div>
 
@@ -218,27 +248,30 @@
 
     </div>
 
-    <div class="attendance-status">
+    <div class="teacher-attendance-status">
 
-       <button type="button"
-        class="status-btn present active"
+    <button
+        type="button"
+        class="teacher-status-btn active"
         data-status="present">
         Present
     </button>
 
-    <button type="button"
-        class="status-btn late"
+    <button
+        type="button"
+        class="teacher-status-btn"
         data-status="late">
         Late
     </button>
 
-    <button type="button"
-        class="status-btn absent"
+    <button
+        type="button"
+        class="teacher-status-btn"
         data-status="absent">
         Absent
     </button>
 
-    </div>
+</div>
 
 </div>
 
@@ -255,27 +288,30 @@
 
     </div>
 
-    <div class="attendance-status">
+    <div class="teacher-attendance-status">
 
-        <button type="button"
-        class="status-btn present active"
+    <button
+        type="button"
+        class="teacher-status-btn active"
         data-status="present">
         Present
     </button>
 
-    <button type="button"
-        class="status-btn late"
+    <button
+        type="button"
+        class="teacher-status-btn"
         data-status="late">
         Late
     </button>
 
-    <button type="button"
-        class="status-btn absent"
+    <button
+        type="button"
+        class="teacher-status-btn"
         data-status="absent">
         Absent
     </button>
 
-    </div>
+</div>
 
 </div>
 </div>
