@@ -43,13 +43,15 @@
     </div>
 
     @forelse($todaySchedule as $slot)
-        <div class="today-item">
-            <div class="today-left">
-                <span class="today-time">{{ $slot->time }}</span>
-                <h3>{{ $slot->subject }}</h3>
-                <p><i class="fa-regular fa-user"></i> {{ $slot->teacher }}</p>
+        <a href="{{ route('student.view-class', $slot->id) }}" style="text-decoration:none;color:inherit;">
+            <div class="today-item">
+                <div class="today-left">
+                    <span class="today-time">{{ $slot->time }}</span>
+                    <h3>{{ $slot->subject }}</h3>
+                    <p><i class="fa-regular fa-user"></i> {{ $slot->teacher }}</p>
+                </div>
             </div>
-        </div>
+        </a>
     @empty
         <div class="today-item"><div class="today-left"><p>No classes scheduled today.</p></div></div>
     @endforelse

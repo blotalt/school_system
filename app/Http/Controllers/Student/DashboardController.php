@@ -59,6 +59,7 @@ class DashboardController extends Controller
             ->orderBy('period')
             ->get()
             ->map(fn (ClassSchedule $s) => (object) [
+                'id'      => $s->id,
                 'time'    => self::PERIOD_TIMES[$s->period] ?? '',
                 'subject' => $s->subject->name,
                 'teacher' => $s->teacher->user->name,

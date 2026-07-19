@@ -20,6 +20,7 @@
                 <th>Due Date</th>
                 <th>Attachment</th>
                 <th>Status</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -43,9 +44,10 @@
                             {{ $overdue ? 'Past Due' : 'Upcoming' }}
                         </span>
                     </td>
+                    <td><a href="{{ route('student.view-task', $hw) }}" title="View"><i class="fa-regular fa-eye"></i></a></td>
                 </tr>
             @empty
-                <tr><td colspan="5" style="text-align:center;color:#8a94a6;">No homework assigned yet.</td></tr>
+                <tr><td colspan="6" style="text-align:center;color:#8a94a6;">No homework assigned yet.</td></tr>
             @endforelse
         </tbody>
     </table>

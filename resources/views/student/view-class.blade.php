@@ -1,219 +1,64 @@
 @extends('layouts.student')
+
 @section('content')
 
+<div class="breadcrumb">
+    <a href="{{ route('student.dashboard') }}">Dashboard</a> &gt;
+    <span>{{ $schedule->subject->name ?? 'Class' }}</span>
+</div>
 
+<x-page-header>
+    <div>
+        <h1>{{ $schedule->subject->name ?? '—' }}</h1>
+        <p>{{ $schedule->schoolClass->name ?? '—' }} &middot; {{ $schedule->day_of_week }}, Period {{ $schedule->period }}</p>
+    </div>
+</x-page-header>
+
+<div class="profile-wrapper">
+    <div class="profile-left">
         <div class="profile-card">
-
-
-            <div class="profile-top">
-
-                <div class="profile-photo">
-
-                    <img src="{{ asset('images/student1.jpg') }}" alt="">
-
+            <div class="profile-image">
+                <div class="avatar-circle" style="width:100px;height:100px;font-size:28px;">
+                    {{ collect(explode(' ', $schedule->teacher->user->name ?? '—'))->map(fn ($n) => mb_substr($n, 0, 1))->take(2)->implode('') }}
                 </div>
-
-                <div class="profile-info">
-
-                    <h2>Phearun Khun</h2>
-
-                    <span class="badge">
-                        Mathematics
-                    </span>
-
-                </div>
-
-                <div class="profile-details">
-
-                    <div>
-
-                        <small>TEACHER ID</small>
-
-                        <h4>Math2026001</h4>
-
-                    </div>
-
-                    <div>
-
-                        <small>JOIN DATE</small>
-
-                        <h4>January 2026</h4>
-
-                    </div>
-
-                </div>
-
             </div>
-
+            <h2>{{ $schedule->teacher->user->name ?? 'Unassigned' }}</h2>
+            <span class="role-badge">Teacher</span>
+            <hr>
+            <div class="profile-info">
+                <label>Subject</label>
+                <h4>{{ $schedule->subject->name ?? '—' }}</h4>
+            </div>
+            <div class="profile-info">
+                <label>Email</label>
+                <h4>{{ $schedule->teacher->user->email ?? '—' }}</h4>
+            </div>
         </div>
+    </div>
 
-        <div class="student-table">
-
-        <table>
-
-        <thead>
-
-        <tr>
-
-        <th>STUDENT NAME & ID</th>
-
-       
-
-        </tr>
-
-        </thead>
-
-        <tbody>
-
-        <tr>
-
-        <td>
-
-        <div class="student-item">
-
-        <img src="{{ asset('images/student1.jpg') }}">
-
-        <div>
-
-        <h4>Kalyan Bopha</h4>
-
-        <p>ID: 2023XXXX</p>
-
+    <div class="profile-right">
+        <div class="data-card-header" style="padding:0 0 16px;">
+            <h3>Classmates</h3>
         </div>
-
-        </div>
-
-        </td>
-
-        
-
-        </tr>
-
-        <tr>
-
-        <td>
-
-        <div class="student-item">
-
-        <img src="{{ asset('images/student2.jpg') }}">
-
-        <div>
-
-        <h4>Dara Phirun</h4>
-
-        <p>ID: 2023XXXX</p>
-
-        </div>
-
-        </div>
-
-        </td>
-
-       
-
-        </tr>
-
-        <tr>
-
-        <td>
-
-        <div class="student-item">
-
-        <img src="{{ asset('images/student3.jpg') }}">
-
-        <div>
-
-        <h4>Vannak Chantrea</h4>
-
-        <p>ID: 2023XXXX</p>
-
-        </div>
-
-        </div>
-
-        </td>
-
-        
-
-        </tr>
-
-        <tr>
-
-        <td>
-
-        <div class="student-item">
-
-        <img src="{{ asset('images/student4.jpg') }}">
-
-        <div>
-
-        <h4>Visal Rattanak</h4>
-
-        <p>ID: 2023XXXX</p>
-
-        </div>
-
-        </div>
-
-        </td>
-
-        
-
-        </tr>
-
-        <tr>
-
-        <td>
-
-        <div class="student-item">
-
-        <img src="{{ asset('images/student5.jpg') }}">
-
-        <div>
-
-        <h4>Serey Sokha</h4>
-
-        <p>ID: 2023XXXX</p>
-
-        </div>
-
-        </div>
-
-        </td>
-
-        
-
-        </tr>
-
-        <tr>
-
-        <td>
-
-        <div class="student-item">
-
-        <img src="{{ asset('images/student6.jpg') }}">
-
-        <div>
-
-        <h4>Bruno Mars</h4>
-
-        <p>ID: 2023XXXX</p>
-
-        </div>
-
-        </div>
-
-        </td>
-
-        
-
-        </tr>
-
-        </tbody>
-
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Roll No.</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($classmates as $classmate)
+                    <tr>
+                        <td>{{ $classmate->user->name }}</td>
+                        <td>{{ $classmate->roll_no }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="2" style="text-align:center;color:#8a94a6;">No classmates found.</td></tr>
+                @endforelse
+            </tbody>
         </table>
-
-        </div>
-
+    </div>
+</div>
 
 @endsection

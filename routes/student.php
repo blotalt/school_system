@@ -23,5 +23,5 @@ Route::get('announcements', [AnnouncementController::class, 'index'])->name('ann
 // myprofile duplicated the real profile page before it existed — alias it there.
 Route::redirect('myprofile', '/student/profile');
 
-Route::get('view-class', fn () => view('student.view-class'))->name('view-class');
-Route::get('view-task', fn () => view('student.view-task'))->name('view-task');
+Route::get('view-class/{schedule}', [ScheduleController::class, 'showClass'])->name('view-class');
+Route::get('view-task/{homework}', [HomeworkController::class, 'show'])->name('view-task');
