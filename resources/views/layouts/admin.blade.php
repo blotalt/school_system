@@ -38,7 +38,7 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
             </div>
             <div class="top-right">
-                <div class="icon-btn"><i class="fa-regular fa-bell"></i></div>
+                <x-notifications-bell />
                 <div class="icon-btn"><i class="fa-solid fa-grip"></i></div>
                 @php $initials = collect(explode(' ', auth()->user()->name))->map(fn ($n) => mb_substr($n, 0, 1))->take(2)->implode(''); @endphp
                 <div class="teacher profile-dropdown-wrapper" onclick="toggleProfileDropdown(event)">

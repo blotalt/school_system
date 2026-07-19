@@ -9,6 +9,7 @@ use App\Models\SchoolClass;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
+use App\Notifications\ExamGradedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -116,15 +117,21 @@ class ExamController extends Controller
             'scores.*' => ['nullable', 'integer', 'min:0', 'max:' . $exam->max_score],
         ]);
 
+        $exam->loadMissing('subject');
+
         foreach ($validated['scores'] as $studentId => $score) {
             if ($score === null || $score === '') {
                 continue;
             }
 
-            ExamResult::updateOrCreate(
+            $result = ExamResult::updateOrCreate(
                 ['exam_id' => $exam->id, 'student_id' => $studentId],
                 ['score' => $score]
             );
+            $result->setRelation('exam', $exam);
+
+            $student = Student::with('user')->find($studentId);
+            $student?->user?->notify(new ExamGradedNotification($result));
         }
 
         return redirect()->route('admin.exams.results.index', $exam)->with('success', 'Scores saved.');

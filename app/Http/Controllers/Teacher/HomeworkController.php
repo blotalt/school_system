@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Teacher\Concerns\EnsuresClassOwnership;
 use App\Models\Homework;
 use App\Models\Subject;
+use App\Models\User;
+use App\Notifications\HomeworkAssignedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
 class HomeworkController extends Controller
@@ -53,12 +56,18 @@ class HomeworkController extends Controller
 
         $attachment = $this->storeAttachment($request);
 
-        Homework::create([
+        $homework = Homework::create([
             ...$validated,
             'teacher_id' => Auth::user()->teacher->id,
             'attachment_path' => $attachment['path'] ?? null,
             'attachment_name' => $attachment['name'] ?? null,
         ]);
+
+        $students = User::where('role', 'student')
+            ->whereHas('student', fn ($q) => $q->where('class_id', $homework->class_id))
+            ->get();
+
+        Notification::send($students, new HomeworkAssignedNotification($homework));
 
         return redirect()->route('teacher.homework.index')
             ->with('status', 'Homework created.');

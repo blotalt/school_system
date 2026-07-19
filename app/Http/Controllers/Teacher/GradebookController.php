@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use App\Models\ExamResult;
 use App\Models\Student;
+use App\Notifications\ExamGradedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -56,10 +57,14 @@ class GradebookController extends Controller
                 continue;
             }
 
-            ExamResult::updateOrCreate(
+            $result = ExamResult::updateOrCreate(
                 ['exam_id' => $exam->id, 'student_id' => $studentId],
                 ['score' => $score]
             );
+            $result->setRelation('exam', $exam);
+
+            $student = Student::with('user')->find($studentId);
+            $student?->user?->notify(new ExamGradedNotification($result));
         }
 
         return redirect()->route('teacher.gradebook.show', $exam)->with('success', 'Scores saved.');

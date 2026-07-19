@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Announcement;
 use App\Models\SchoolClass;
+use App\Models\User;
+use App\Notifications\NewAnnouncementNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class AnnouncementController extends Controller
 {
@@ -40,9 +43,24 @@ class AnnouncementController extends Controller
             $validated['class_id'] = null;
         }
 
-        Announcement::create($validated);
+        $announcement = Announcement::create($validated);
+
+        $this->notifyAudience($announcement);
 
         return redirect()->route('admin.announcements.index')
             ->with('status', 'Announcement posted.');
+    }
+
+    private function notifyAudience(Announcement $announcement): void
+    {
+        $recipients = match ($announcement->audience) {
+            'everyone' => User::query(),
+            'students' => User::where('role', 'student'),
+            'teachers' => User::where('role', 'teacher'),
+            'class'    => User::where('role', 'student')
+                ->whereHas('student', fn ($q) => $q->where('class_id', $announcement->class_id)),
+        };
+
+        Notification::send($recipients->get(), new NewAnnouncementNotification($announcement));
     }
 }

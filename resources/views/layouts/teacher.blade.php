@@ -44,7 +44,7 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
             </div>
             <div class="top-right">
-                <div class="icon-btn"><i class="fa-regular fa-bell"></i></div>
+                <x-notifications-bell />
                 <div class="teacher">
                     <div class="teacher-info">
                         <h4>{{ auth()->user()->name }}</h4>

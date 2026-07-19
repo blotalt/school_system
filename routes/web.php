@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboard;
 use App\Http\Controllers\Student\DashboardController as StudentDashboard;
+use App\Http\Controllers\NotificationController;
 
 // Route::get('/', function () {
 //     if (auth()->check()) {
@@ -33,6 +34,9 @@ Route::middleware(['auth'])->group(function () {
             default   => redirect()->route('login'),
         };
     })->name('dashboard'); // <-- This gives the route its name so the redirect above works!
+
+    Route::get('notifications/{notification}/read', [NotificationController::class, 'read'])->name('notifications.read');
+    Route::post('notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.readAll');
 
 });
 // Route::get('/myprofile', function () {
