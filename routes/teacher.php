@@ -30,6 +30,7 @@ Route::get('attendance', function () {
 Route::get('gradebook', [GradebookController::class, 'index'])->name('gradebook.index');
 Route::get('gradebook/{exam}', [GradebookController::class, 'show'])->name('gradebook.show');
 Route::post('gradebook/{exam}', [GradebookController::class, 'store'])->name('gradebook.store');
+Route::get('gradebook/{exam}/export', [GradebookController::class, 'export'])->name('gradebook.export');
 
 Route::resource('homework', HomeworkController::class)->except(['show']);
 Route::resource('exams', ExamController::class)->except(['show']);

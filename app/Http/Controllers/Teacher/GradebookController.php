@@ -70,6 +70,50 @@ class GradebookController extends Controller
         return redirect()->route('teacher.gradebook.show', $exam)->with('success', 'Scores saved.');
     }
 
+    public function export(Exam $exam)
+    {
+        $this->authorizeExam($exam);
+
+        $exam->load(['schoolClass', 'subject']);
+
+        $students = Student::with('user')
+            ->where('class_id', $exam->class_id)
+            ->orderBy('roll_no')
+            ->get();
+
+        $scores = ExamResult::where('exam_id', $exam->id)->pluck('score', 'student_id');
+
+        $filename = str($exam->title . '-scores')->slug() . '.csv';
+
+        return response()->streamDownload(function () use ($students, $scores, $exam) {
+            $out = fopen('php://output', 'w');
+            // Excel needs a UTF-8 BOM to render non-ASCII names correctly.
+            fwrite($out, "\xEF\xBB\xBF");
+            fputcsv($out, ['Student Name', 'Roll No', 'Subject', 'Score', 'Max Score', 'Grade']);
+
+            foreach ($students as $student) {
+                $score = $scores->get($student->id);
+                $pct = $score !== null && $exam->max_score > 0 ? $score / $exam->max_score * 100 : null;
+                $grade = match (true) {
+                    $pct === null => '',
+                    $pct >= 90 => 'A', $pct >= 80 => 'B', $pct >= 70 => 'C', $pct >= 60 => 'D',
+                    default => 'F',
+                };
+
+                fputcsv($out, [
+                    $student->user->name,
+                    $student->roll_no,
+                    $exam->subject->name ?? '',
+                    $score ?? '',
+                    $exam->max_score,
+                    $grade,
+                ]);
+            }
+
+            fclose($out);
+        }, $filename, ['Content-Type' => 'text/csv']);
+    }
+
     // Exam-scoped, not class-scoped: a class's homeroom teacher and the
     // teacher who set a given exam aren't necessarily the same person, so
     // grading permission follows the exam's own teacher_id.

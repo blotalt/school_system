@@ -8,6 +8,11 @@
             <h1>Gradebook</h1>
             <p>{{ $exam->title }} &mdash; <span>{{ $exam->schoolClass->name ?? '—' }}</span></p>
         </div>
+        <div class="header-right">
+            <a href="{{ route('teacher.gradebook.export', $exam) }}" class="add-btn">
+                <i class="fa-solid fa-file-excel"></i> Export
+            </a>
+        </div>
     </div>
 </div>
 
