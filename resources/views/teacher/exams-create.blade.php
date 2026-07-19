@@ -37,12 +37,19 @@
         </div>
         <div class="form-group">
             <label>Subject</label>
-            <select name="subject_id">
-                <option value="">Select Subject</option>
-                @foreach($subjects as $subject)
-                    <option value="{{ $subject->id }}" {{ (string) old('subject_id') === (string) $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
-                @endforeach
-            </select>
+            @if($subjects->count() === 1)
+                <input type="text" value="{{ $subjects->first()->name }}" disabled>
+                <input type="hidden" name="subject_id" value="{{ $subjects->first()->id }}">
+            @elseif($subjects->count() > 1)
+                <select name="subject_id">
+                    <option value="">Select Subject</option>
+                    @foreach($subjects as $subject)
+                        <option value="{{ $subject->id }}" {{ (string) old('subject_id') === (string) $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
+                    @endforeach
+                </select>
+            @else
+                <input type="text" value="No subject assigned" disabled>
+            @endif
             @error('subject_id') <span class="field-error">{{ $message }}</span> @enderror
         </div>
         <div class="form-group">
@@ -70,12 +77,12 @@
 
     <div class="info-box">
         <i class="fa-solid fa-circle-info"></i>
-        <span>You can only create exams for classes where you're the homeroom teacher.</span>
+        <span>You can only create exams for classes where you're the homeroom teacher, in the subject you're assigned to teach.</span>
     </div>
 
     <div class="form-actions">
         <a href="{{ route('teacher.exams.index') }}" class="cancel-btn">Cancel</a>
-        <button type="submit" class="save-btn">Create Exam</button>
+        <button type="submit" class="save-btn" {{ $subjects->isEmpty() ? 'disabled' : '' }}>Create Exam</button>
     </div>
 </form>
 
