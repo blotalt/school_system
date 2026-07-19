@@ -1,0 +1,2320 @@
+/*==================================
+ Student Dashboard
+==================================*/
+
+.student-dashboard{
+
+    padding:35px;
+
+}
+
+/* Welcome Card */
+
+.welcome-card{
+
+    background:#E9F8F7;
+
+    border:1px solid #CFE8E5;
+
+    border-radius:16px;
+
+    padding:25px 35px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:35px;
+
+}
+
+.welcome-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:25px;
+
+}
+
+.student-photo img{
+
+    width:95px;
+
+    height:95px;
+
+    border-radius:50%;
+
+    border:4px solid #ffffff;
+
+    object-fit:cover;
+
+}
+
+.welcome-left h1{
+
+    font-size:52px;
+
+    color:#0D5E59;
+
+    margin-bottom:12px;
+
+    font-weight:600;
+
+}
+
+.student-badge{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+.grade-badge{
+
+    background:#E6ECFF;
+
+    color:#28488F;
+
+    padding:8px 16px;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+}
+
+.track-badge{
+
+    background:#D9F6EF;
+
+    color:#0B6B60;
+
+    padding:8px 16px;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+}
+
+.welcome-right{
+
+    text-align:right;
+
+}
+
+.welcome-right span{
+
+    font-size:13px;
+
+    color:#777;
+
+    letter-spacing:1px;
+
+    font-weight:600;
+
+}
+
+.welcome-right h2{
+
+    margin-top:10px;
+
+    font-size:40px;
+
+    color:#0B6B60;
+
+}
+
+/*==============================
+ Student Weekly Schedule
+==============================*/
+
+.student-timetable{
+
+    margin-top:30px;
+
+}
+
+.schedule-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    background:#fff;
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+}
+
+.schedule-table th{
+
+    background:#eef4ff;
+
+    padding:18px;
+
+    text-align:center;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    border:1px solid #d9e3ef;
+
+}
+
+.schedule-table td{
+
+    border:1px solid #d9e3ef;
+
+    height:95px;
+
+    padding:8px;
+
+    vertical-align:top;
+
+}
+
+.time-column{
+
+    width:90px;
+
+    text-align:center;
+
+    font-weight:700;
+
+    font-size:20px;
+
+    background:#f8fbff;
+
+}
+
+.break-row{
+
+    text-align:center;
+
+    background:#eef4ff;
+
+    font-weight:700;
+
+    letter-spacing:2px;
+
+    color:#444;
+
+}
+
+.lesson{
+
+    border-radius:12px;
+
+    padding:10px;
+
+    height:72px;
+
+    position:relative;
+
+}
+
+.lesson h4{
+
+    font-size:18px;
+
+    margin-bottom:5px;
+
+}
+
+.lesson p{
+
+    font-size:14px;
+
+    color:#666;
+
+}
+
+.lesson span{
+
+    position:absolute;
+
+    right:10px;
+
+    top:10px;
+
+    background:#fff;
+
+    padding:2px 7px;
+
+    border-radius:6px;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+}
+
+.lesson.green{
+
+    background:#EAF9F4;
+
+    border:1px solid #BDE9D6;
+
+}
+
+.lesson.blue{
+
+    background:#EAF4FF;
+
+    border:1px solid #BFD8FF;
+
+}
+
+.lesson.orange{
+
+    background:#FFF2EB;
+
+    border:1px solid #FFD3BE;
+
+}
+
+
+/*=========================
+ Today's Schedule
+==========================*/
+
+.today-card{
+
+    margin-top:30px;
+
+    background:#fff;
+
+    border:1px solid #dbe4ef;
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+}
+
+.today-header{
+
+    background:#eef4ff;
+
+    padding:22px 28px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.today-header h2{
+
+    font-size:32px;
+
+    font-weight:700;
+
+}
+
+.today-header a{
+
+    text-decoration:none;
+
+    color:#0b7566;
+
+    font-weight:600;
+
+}
+
+.today-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    padding:28px;
+
+    border-top:1px solid #e7edf5;
+
+}
+
+.today-left h3{
+
+    margin:10px 0;
+
+    font-size:30px;
+
+}
+
+.today-left p{
+
+    color:#555;
+
+    font-size:18px;
+
+}
+
+.today-time{
+
+    color:#0b7566;
+
+    font-weight:700;
+
+    font-size:18px;
+
+}
+
+.today-room{
+
+    background:#eef4ff;
+
+    color:#4b5563;
+
+    padding:8px 16px;
+
+    border-radius:8px;
+
+    font-weight:600;
+
+}
+
+
+/*==================================
+Student Grade Dashboard
+==================================*/
+
+.grade-dashboard{
+
+    padding:35px;
+
+}
+
+/* Welcome */
+
+.welcome-card{
+
+    background:#E8F7F5;
+
+    border:1px solid #D5ECE7;
+
+    border-radius:18px;
+
+    padding:30px 40px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:35px;
+
+}
+
+.welcome-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:25px;
+
+}
+
+.student-photo img{
+
+    width:90px;
+
+    height:90px;
+
+    border-radius:50%;
+
+    border:4px solid white;
+
+    object-fit:cover;
+
+}
+
+.welcome-left h1{
+
+    font-size:52px;
+
+    color:#0D5D58;
+
+    margin-bottom:10px;
+
+}
+
+.student-badges{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+.grade-badge{
+
+    background:#E8ECFF;
+
+    color:#23498F;
+
+    padding:6px 14px;
+
+    border-radius:8px;
+
+    font-weight:600;
+
+}
+
+.track-badge{
+
+    background:#D8F4EE;
+
+    color:#0A786A;
+
+    padding:6px 14px;
+
+    border-radius:8px;
+
+    font-weight:600;
+
+}
+
+.welcome-right{
+
+    text-align:right;
+
+}
+
+.welcome-right span{
+
+    font-size:13px;
+
+    letter-spacing:1px;
+
+    color:#666;
+
+    font-weight:600;
+
+}
+
+.welcome-right h2{
+
+    color:#0A786A;
+
+    font-size:38px;
+
+    margin-top:10px;
+
+}
+
+/* Summary Cards */
+
+.summary-cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:25px;
+
+}
+
+.summary-card{
+
+    background:#fff;
+
+    border:1px solid #DCE6F0;
+
+    border-radius:16px;
+
+    padding:25px;
+
+}
+
+.summary-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+}
+
+.summary-icon{
+
+    width:50px;
+
+    height:50px;
+
+    border-radius:12px;
+
+    background:#EAF7F6;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:22px;
+
+    color:#0C7A69;
+
+}
+
+.summary-top span{
+
+    font-size:14px;
+
+    color:#0C7A69;
+
+    font-weight:600;
+
+}
+
+.summary-card h5{
+
+    color:#666;
+
+    margin-bottom:12px;
+
+    letter-spacing:1px;
+
+}
+
+.summary-card h2{
+
+    font-size:50px;
+
+    color:#1F2937;
+
+}
+
+.summary-card h2 small{
+
+    font-size:22px;
+
+    color:#666;
+
+}
+
+
+/*=========================
+Recent Performance
+==========================*/
+
+.performance-card{
+
+    margin-top:30px;
+
+    background:#fff;
+
+    border:1px solid #dbe4ef;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+}
+
+.performance-header{
+
+    padding:22px 28px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:#eef4ff;
+
+}
+
+.performance-header h2{
+
+    font-size:32px;
+
+    color:#1f2937;
+
+}
+
+.performance-header span{
+
+    color:#777;
+
+    font-size:14px;
+
+}
+
+.performance-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.performance-table th{
+
+    background:#f7f9fc;
+
+    padding:18px;
+
+    text-align:left;
+
+    font-size:14px;
+
+    color:#666;
+
+    border-bottom:1px solid #e6edf6;
+
+}
+
+.performance-table td{
+
+    padding:18px;
+
+    border-bottom:1px solid #eef2f7;
+
+}
+
+.subject-cell{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+.subject-icon{
+
+    width:42px;
+
+    height:42px;
+
+    background:#eef8f7;
+
+    border-radius:10px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#0d7b68;
+
+}
+
+.subject-cell h4{
+
+    margin-bottom:5px;
+
+    font-size:18px;
+
+}
+
+.subject-cell p{
+
+    color:#777;
+
+    font-size:13px;
+
+}
+
+.progress-box{
+
+    width:120px;
+
+    height:8px;
+
+    background:#dfe8f6;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    margin-bottom:6px;
+
+}
+
+.progress-fill{
+
+    height:100%;
+
+    background:#0d7b68;
+
+}
+
+.grade{
+
+    display:inline-block;
+
+    width:38px;
+
+    height:38px;
+
+    border-radius:8px;
+
+    text-align:center;
+
+    line-height:38px;
+
+    font-weight:700;
+
+}
+
+.grade.green{
+
+    background:#d9f7e7;
+
+    color:#1b8d46;
+
+}
+
+.grade.blue{
+
+    background:#dcecff;
+
+    color:#1769c4;
+
+}
+
+.grade.orange{
+
+    background:#ffe8c9;
+
+    color:#c96a00;
+
+}
+
+
+/*==========================
+ Bottom Statistics
+==========================*/
+
+.grade-footer{
+
+    margin-top:30px;
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:20px;
+
+}
+
+.footer-card{
+
+    background:#fff;
+
+    border:1px solid #dce6f0;
+
+    border-radius:15px;
+
+    padding:25px;
+
+    text-align:center;
+
+    transition:.3s;
+
+}
+
+.footer-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 12px 25px rgba(0,0,0,.08);
+
+}
+
+.footer-card h4{
+
+    color:#777;
+
+    margin-bottom:15px;
+
+    font-size:15px;
+
+}
+
+.footer-card h2{
+
+    font-size:34px;
+
+    color:#0B6F63;
+
+}
+
+
+/*==========================
+ Final Design
+==========================*/
+
+.summary-card,
+.performance-card,
+.footer-card{
+
+    transition:.3s;
+
+}
+
+.summary-card:hover,
+.performance-card:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.performance-table tbody tr:hover{
+
+    background:#F8FBFF;
+
+}
+
+.subject-icon{
+
+    transition:.3s;
+
+}
+
+.performance-table tbody tr:hover .subject-icon{
+
+    background:#0B7566;
+
+    color:#fff;
+
+}
+
+.progress-fill{
+
+    border-radius:20px;
+
+}
+
+.grade{
+
+    font-size:15px;
+
+    font-weight:700;
+
+}
+
+.grade.green{
+
+    background:#DDF7E6;
+
+}
+
+.grade.blue{
+
+    background:#DDEBFF;
+
+}
+
+.grade.orange{
+
+    background:#FFE8C7;
+
+}
+
+@media(max-width:1200px){
+
+    .summary-cards{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .grade-footer{
+
+        grid-template-columns:1fr 1fr;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .welcome-card{
+
+        flex-direction:column;
+
+        text-align:center;
+
+        gap:20px;
+
+    }
+
+    .welcome-left{
+
+        flex-direction:column;
+
+    }
+
+    .performance-table{
+
+        display:block;
+
+        overflow-x:auto;
+
+    }
+
+    .grade-footer{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+/*==================================
+Student Attendance
+==================================*/
+
+.attendance-page{
+
+    padding:35px;
+
+}
+
+/* Attendance Card */
+
+.attendance-card{
+
+    margin-top:30px;
+
+    background:#fff;
+
+    border:1px solid #dbe4ef;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+}
+
+.attendance-header{
+
+    padding:25px 30px;
+
+    border-bottom:1px solid #e6edf6;
+
+}
+
+.attendance-header h2{
+
+    font-size:34px;
+
+    color:#1f2937;
+
+}
+
+.attendance-filter{
+
+    padding:25px 30px;
+
+    display:flex;
+
+    align-items:end;
+
+    gap:20px;
+
+}
+
+.filter-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.filter-group label{
+
+    margin-bottom:8px;
+
+    font-size:14px;
+
+    color:#555;
+
+    font-weight:600;
+
+}
+
+.filter-group select{
+
+    width:260px;
+
+    height:48px;
+
+    border:1px solid #cfd8e3;
+
+    border-radius:12px;
+
+    padding:0 15px;
+
+    font-size:16px;
+
+    outline:none;
+
+}
+
+.filter-btn{
+
+    height:48px;
+
+    padding:0 28px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#0b8b7b;
+
+    color:#fff;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.filter-btn:hover{
+
+    background:#087365;
+
+}
+
+/*==========================
+ Attendance Table
+==========================*/
+
+.attendance-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.attendance-table thead{
+
+    background:#0B8B7B;
+
+}
+
+.attendance-table th{
+
+    padding:18px;
+
+    color:#fff;
+
+    text-align:left;
+
+    font-size:15px;
+
+    letter-spacing:1px;
+
+    font-weight:600;
+
+}
+
+.attendance-table td{
+
+    padding:18px;
+
+    border-bottom:1px solid #E6EDF6;
+
+    font-size:16px;
+
+}
+
+.attendance-table tbody tr:nth-child(even){
+
+    background:#F5F8FF;
+
+}
+
+.attendance-table tbody tr:hover{
+
+    background:#EEF7FF;
+
+}
+
+.present{
+
+    color:#2563EB;
+
+    font-weight:600;
+
+}
+
+.late{
+
+    color:#EA580C;
+
+    font-weight:600;
+
+}
+
+.absent{
+
+    color:#DC2626;
+
+    font-weight:600;
+
+}
+
+/*==============================
+ Attendance Footer
+===============================*/
+
+.attendance-footer{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:22px 28px;
+
+    background:#EEF4FF;
+
+    border-top:1px solid #DCE5F2;
+
+}
+
+.attendance-footer span{
+
+    color:#555;
+
+    font-size:15px;
+
+}
+
+.attendance-pagination{
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+.attendance-pagination button{
+
+    width:40px;
+
+    height:40px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:white;
+
+    color:#0B8B7B;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    font-size:15px;
+
+}
+
+.attendance-pagination button:hover{
+
+    background:#0B8B7B;
+
+    color:white;
+
+}
+
+
+/*================================
+ Student Attendance Final Design
+================================*/
+
+.attendance-card{
+
+    box-shadow:0 8px 20px rgba(0,0,0,.04);
+
+}
+
+.attendance-card:hover{
+
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+}
+
+.filter-btn{
+
+    transition:.3s;
+
+}
+
+.filter-btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.attendance-table td:first-child{
+
+    font-weight:500;
+
+}
+
+.attendance-table td:nth-child(2){
+
+    color:#666;
+
+}
+
+.present{
+
+    color:#2563EB;
+
+    font-weight:700;
+
+}
+
+.late{
+
+    color:#EA580C;
+
+    font-weight:700;
+
+}
+
+.absent{
+
+    color:#DC2626;
+
+    font-weight:700;
+
+}
+
+@media(max-width:992px){
+
+    .attendance-filter{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+    .filter-group{
+
+        width:100%;
+
+    }
+
+    .filter-group select{
+
+        width:100%;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .attendance-table{
+
+        display:block;
+
+        overflow-x:auto;
+
+    }
+
+    .attendance-footer{
+
+        flex-direction:column;
+
+        gap:15px;
+
+        text-align:center;
+
+    }
+
+}
+
+/*==========================
+ Student Announcement
+==========================*/
+
+.student-announcement-page{
+
+    padding:30px;
+
+}
+
+.student-banner{
+
+    background:#E8F7F5;
+
+    border:1px solid #D7ECE8;
+
+    border-radius:18px;
+
+    padding:28px 35px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+.student-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:22px;
+
+}
+
+.student-avatar{
+
+    width:92px;
+
+    height:92px;
+
+    border-radius:50%;
+
+    border:4px solid white;
+
+    background:#DDEEEE;
+
+}
+
+.student-banner h1{
+
+    font-size:52px;
+
+    color:#0F5F5B;
+
+    margin-bottom:10px;
+
+}
+
+.student-tags{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+.student-tags span{
+
+    padding:6px 14px;
+
+    border-radius:8px;
+
+    background:#D9E4F7;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.student-date{
+
+    text-align:right;
+
+}
+
+.student-date small{
+
+    color:#555;
+
+    letter-spacing:2px;
+
+}
+
+.student-date h2{
+
+    color:#0B8B7B;
+
+    margin-top:8px;
+
+}
+
+/*=========================
+ Page Header
+==========================*/
+
+.announcement-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-end;
+
+    margin-bottom:30px;
+
+}
+
+.breadcrumb{
+
+    color:#7A7A7A;
+
+    font-size:14px;
+
+    margin-bottom:10px;
+
+}
+
+.announcement-top h2{
+
+    font-size:48px;
+
+    color:#1E293B;
+
+}
+
+.announcement-filter{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:12px 18px;
+
+    border:1px solid #D9E2F1;
+
+    border-radius:12px;
+
+    background:#fff;
+
+}
+
+.announcement-filter span{
+
+    font-size:13px;
+
+    color:#666;
+
+    font-weight:600;
+
+}
+
+.announcement-filter button{
+
+    border:none;
+
+    background:none;
+
+    padding:10px 18px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.announcement-filter button.active{
+
+    background:#0B8B7B;
+
+    color:#fff;
+
+}
+
+.announcement-filter button:hover{
+
+    background:#EEF5FF;
+
+}
+
+/*=========================
+ Announcement Card
+==========================*/
+
+.announcement-card{
+
+    background:#fff;
+
+    border:1px solid #D9E2F1;
+
+    border-radius:14px;
+
+    padding:24px;
+
+    display:flex;
+
+    gap:22px;
+
+    margin-bottom:25px;
+
+}
+
+.announcement-icon{
+
+    width:70px;
+
+    height:70px;
+
+    background:#E8EEFF;
+
+    border-radius:16px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:32px;
+
+    color:#294E8A;
+
+}
+
+.announcement-content{
+
+    flex:1;
+
+}
+
+.announcement-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    margin-bottom:10px;
+
+}
+
+.announcement-title h3{
+
+    font-size:30px;
+
+    color:#19325C;
+
+}
+
+.tag{
+
+    background:#DDE7FF;
+
+    color:#203864;
+
+    padding:6px 14px;
+
+    border-radius:10px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+.priority.high{
+
+    color:#D62828;
+
+    font-weight:700;
+
+    font-size:14px;
+
+}
+
+.announcement-meta{
+
+    display:flex;
+
+    gap:25px;
+
+    color:#666;
+
+    font-size:14px;
+
+    margin-bottom:16px;
+
+}
+
+.announcement-content p{
+
+    color:#555;
+
+    line-height:1.8;
+
+    font-size:17px;
+
+}
+
+.announcement-menu{
+
+    font-size:24px;
+
+    color:#555;
+
+    cursor:pointer;
+
+}
+
+.tag.academic{
+
+    background:#E7ECFF;
+    color:#203864;
+
+}
+
+.priority.urgent{
+
+    color:#D62828;
+    font-weight:700;
+
+}
+
+.tag.general{
+
+    background:#EEF5FF;
+    color:#4A5568;
+
+}
+
+.tag.events{
+
+    background:#E8EEFF;
+    color:#294E8A;
+
+}
+
+.priority.info{
+
+    color:#2563EB;
+    font-weight:700;
+
+}
+
+.priority.normal{
+
+    color:#777;
+    font-weight:700;
+
+}
+
+/*====================================
+ Student Announcement Final Design
+====================================*/
+
+.announcement-card{
+
+    transition:.3s;
+    cursor:pointer;
+
+}
+
+.announcement-card:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+}
+
+.announcement-menu{
+
+    width:40px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:flex-start;
+
+    color:#555;
+
+    font-size:22px;
+
+}
+
+.announcement-menu:hover{
+
+    color:#0B8B7B;
+
+}
+
+@media(max-width:992px){
+
+    .announcement-top{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:20px;
+
+    }
+
+    .announcement-filter{
+
+        width:100%;
+
+        flex-wrap:wrap;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .student-banner{
+
+        flex-direction:column;
+
+        text-align:center;
+
+        gap:25px;
+
+    }
+
+    .student-left{
+
+        flex-direction:column;
+
+    }
+
+    .announcement-card{
+
+        flex-direction:column;
+
+    }
+
+    .announcement-title{
+
+        flex-wrap:wrap;
+
+    }
+
+    .announcement-meta{
+
+        flex-direction:column;
+
+        gap:8px;
+
+    }
+
+}
+
+/*=========================
+ Student Profile
+==========================*/
+
+.student-profile-page{
+
+    padding:35px;
+
+}
+
+.profile-header{
+
+    margin-bottom:25px;
+
+}
+
+.profile-header h1{
+
+    font-size:50px;
+
+    color:#1E293B;
+
+    margin-bottom:8px;
+
+}
+
+.profile-header p{
+
+    color:#666;
+
+    font-size:18px;
+
+}
+
+.student-card{
+
+    background:#F7F9FF;
+
+    border:1px solid #DDE6F5;
+
+    border-radius:18px;
+
+    padding:22px 28px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:35px;
+
+}
+
+.student-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:25px;
+
+}
+
+.student-photo{
+
+    position:relative;
+
+}
+
+.student-photo img{
+
+    width:120px;
+
+    height:120px;
+
+    border-radius:12px;
+
+    object-fit:cover;
+
+}
+
+.status-badge{
+
+    position:absolute;
+
+    bottom:-8px;
+
+    right:-8px;
+
+    background:#0B8B7B;
+
+    color:#fff;
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.student-info h2{
+
+    font-size:40px;
+
+    color:#1E293B;
+
+    margin-bottom:5px;
+
+}
+
+.student-info h4{
+
+    color:#555;
+
+    font-weight:500;
+
+    margin-bottom:18px;
+
+}
+
+.student-tags{
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+.student-tags span{
+
+    background:#E8EEFF;
+
+    padding:8px 15px;
+
+    border-radius:20px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.student-id-card{
+
+    width:250px;
+
+    background:#fff;
+
+    border:1px solid #E3E7F2;
+
+    border-radius:14px;
+
+    padding:25px;
+
+}
+
+.student-id-card small{
+
+    color:#888;
+
+    letter-spacing:2px;
+
+}
+
+.student-id-card h3{
+
+    margin-top:10px;
+
+    color:#0B8B7B;
+
+    font-size:36px;
+
+}
+
+.profile-form{
+
+    margin-top:20px;
+
+}
+
+.form-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+.form-header h2{
+
+    font-size:30px;
+
+    color:#1E293B;
+
+}
+
+.edit-btn{
+
+    padding:12px 24px;
+
+    background:#fff;
+
+    border:2px solid #3B82F6;
+
+    color:#2563EB;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+}
+
+.form-group{
+
+    margin-bottom:25px;
+
+}
+
+.form-group label{
+
+    display:block;
+
+    margin-bottom:10px;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    letter-spacing:2px;
+
+    color:#666;
+
+}
+
+.form-group input{
+
+    width:100%;
+
+    padding:18px;
+
+    border:1px solid #DDE5F4;
+
+    border-radius:8px;
+
+    background:#EEF4FF;
+
+    font-size:17px;
+
+}
+
+textarea{
+
+    width:100%;
+
+    padding:18px;
+
+    border:1px solid #DDE5F4;
+
+    border-radius:8px;
+
+    background:#EEF4FF;
+
+    resize:none;
+
+    font-size:16px;
+
+    line-height:1.7;
+
+}
+
+.profile-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:15px;
+
+    margin-top:35px;
+
+}
+
+.discard-btn{
+
+    padding:14px 28px;
+
+    background:#fff;
+
+    border:1px solid #D5DCE8;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+}
+
+.save-btn{
+
+    padding:14px 35px;
+
+    background:#123E8A;
+
+    color:white;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    font-weight:600;
+
+}
+
+/*=========================
+ Profile Hover Effects
+==========================*/
+
+.student-card{
+
+    transition:.3s;
+
+}
+
+.student-card:hover{
+
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+}
+
+.edit-btn{
+
+    transition:.3s;
+
+}
+
+.edit-btn:hover{
+
+    background:#2563EB;
+
+    color:#fff;
+
+}
+
+.discard-btn{
+
+    transition:.3s;
+
+}
+
+.discard-btn:hover{
+
+    background:#EEF2F7;
+
+}
+
+.save-btn{
+
+    transition:.3s;
+
+}
+
+.save-btn:hover{
+
+    background:#0D3270;
+
+}
+
+.form-group input:focus,
+
+.form-group textarea:focus{
+
+    outline:none;
+
+    border-color:#2563EB;
+
+    background:#fff;
+
+}
+
+/*=========================
+ Responsive
+==========================*/
+
+@media(max-width:992px){
+
+    .student-card{
+
+        flex-direction:column;
+
+        gap:30px;
+
+        align-items:flex-start;
+
+    }
+
+    .student-id-card{
+
+        width:100%;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .student-profile-page{
+
+        padding:20px;
+
+    }
+
+    .student-left{
+
+        flex-direction:column;
+
+        text-align:center;
+
+    }
+
+    .student-tags{
+
+        justify-content:center;
+
+        flex-wrap:wrap;
+
+    }
+
+    .form-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:15px;
+
+    }
+
+    .profile-actions{
+
+        flex-direction:column;
+
+    }
+
+    .profile-actions button{
+
+        width:100%;
+
+    }
+    
+
+}
