@@ -27,9 +27,3 @@ Route::get('attendance', [AttendanceController::class, 'index'])->name('attendan
 Route::post('attendance/{class}', [AttendanceController::class, 'store'])->name('attendance.store');
 Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
 Route::post('announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
-// GET method for showing the form
-Route::get('/teachers/create', [TeacherController::class, 'create'])->name('teachers.create');
-
-// POST method for processing the form submission
-Route::post('/teachers', [TeacherController::class, 'store'])->name('teachers.store');
-Route::get('/teachers/create', [TeacherController::class, 'create'])->name('teachers.create');

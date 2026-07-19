@@ -1,0 +1,1867 @@
+/* ===========================
+   Attendance Table
+=========================== */
+
+.attendance-card{
+    margin-top:30px;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+.attendance-header{
+    background:#edf3ff;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:18px 24px;
+
+    border-bottom:1px solid #dbe4f3;
+}
+
+.student-column{
+    width:45%;
+    font-size:18px;
+    font-weight:600;
+    color:#4b5563;
+    letter-spacing:1px;
+}
+
+.status-column{
+    width:45%;
+    text-align:center;
+
+    font-size:18px;
+    font-weight:600;
+    color:#4b5563;
+    letter-spacing:1px;
+}
+
+
+
+/* Student Row */
+
+.student-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:18px 30px;
+
+    border-bottom:1px solid #e5e7eb;
+}
+
+.student-info{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.student-info img{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.student-info h4{
+    margin:0;
+    font-size:18px;
+    color:#1f2937;
+}
+
+.student-info p{
+    margin-top:5px;
+    color:#6b7280;
+    font-size:14px;
+}
+
+.attendance-status{
+    display:flex;
+    gap:12px;
+}
+
+.status-btn{
+    border:none;
+    background:#dbeafe;
+    color:#1f2937;
+    padding:12px 22px;
+    border-radius:30px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.status-btn.active{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+
+/* ===========================
+   Attendance Footer
+=========================== */
+
+.attendance-footer{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:20px 30px;
+
+    background:#f9fafb;
+
+    border-top:1px solid #e5e7eb;
+
+}
+
+.attendance-summary{
+
+    display:flex;
+    align-items:center;
+    gap:18px;
+
+    font-size:16px;
+
+}
+
+.summary{
+
+    padding:8px 14px;
+
+    border-radius:20px;
+
+    font-weight:600;
+
+}
+
+.summary.present{
+
+    background:#dcfce7;
+    color:#15803d;
+
+}
+
+.summary.late{
+
+    background:#fef3c7;
+    color:#b45309;
+
+}
+
+.summary.absent{
+
+    background:#fee2e2;
+    color:#b91c1c;
+
+}
+
+.save-attendance-btn{
+
+    background:#2563eb;
+    color:#fff;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:14px 24px;
+
+    font-size:16px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.save-attendance-btn:hover{
+
+    background:#1d4ed8;
+
+}
+
+
+
+/* ==========================
+   Gradebook Page
+========================== */
+
+.gradebook-page{
+    padding:40px;
+}
+
+.gradebook-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    margin-bottom:35px;
+}
+
+.gradebook-header h1{
+    font-size:52px;
+    font-weight:700;
+    color:#1f2937;
+}
+
+.gradebook-header p{
+    font-size:20px;
+    color:#555;
+    margin-top:10px;
+}
+
+.gradebook-header span{
+    color:#0b7a74;
+    font-weight:600;
+}
+
+.header-right{
+    display:flex;
+    gap:15px;
+}
+
+.header-right select{
+    width:170px;
+    height:48px;
+
+    border:1px solid #cbd5e1;
+    border-radius:12px;
+
+    padding:0 15px;
+
+    font-size:16px;
+
+    background:#eef4ff;
+}
+
+
+/* ==========================
+   Gradebook Table
+========================== */
+
+.gradebook-card{
+
+    background:#ffffff;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    border:1px solid #d9e2ef;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
+
+}
+
+.gradebook-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.gradebook-table thead{
+
+    background:#eef4ff;
+
+}
+
+.gradebook-table th{
+
+    padding:22px;
+
+    text-align:left;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    color:#374151;
+
+}
+
+.gradebook-table td{
+
+    padding:20px;
+
+    border-top:1px solid #e5e7eb;
+
+}
+
+/* ==========================
+   Student Row
+========================== */
+
+.student-info{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.student-info img{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.student-info h4{
+    margin:0;
+    font-size:18px;
+    color:#1f2937;
+}
+
+.student-info p{
+    margin-top:4px;
+    color:#6b7280;
+    font-size:14px;
+}
+
+.subject-badge{
+    background:#e8f0ff;
+    color:#374151;
+    padding:6px 12px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.score-input{
+    width:85px;
+    height:42px;
+    border:1px solid #cbd5e1;
+    border-radius:12px;
+    text-align:center;
+    font-size:18px;
+    background:#f8fbff;
+}
+
+.grade-circle{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#fff;
+    font-weight:700;
+    margin:auto;
+}
+
+.grade-a{
+    background:#0f766e;
+}
+
+.grade-b{
+    background:#2563eb;
+}
+
+.grade-c{
+    background:#fb923c;
+}
+
+.grade-d{
+    background:#92400e;
+}
+
+.grade-f{
+    background:#dc2626;
+}
+
+.edit-btn{
+    background:#fff8dc;
+    border:1px solid #d6c27c;
+    border-radius:12px;
+    padding:10px 22px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.edit-btn:hover{
+    background:#fef3c7;
+}
+
+
+
+/* ==========================
+   Gradebook Footer
+========================== */
+
+.gradebook-footer{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:20px 24px;
+
+    background:#eef4ff;
+
+    border-top:1px solid #d9e4f3;
+
+}
+
+.footer-text{
+
+    font-size:15px;
+    color:#4b5563;
+    font-weight:500;
+
+}
+
+.footer-buttons{
+
+    display:flex;
+    gap:18px;
+
+}
+
+.discard-btn{
+
+    padding:12px 26px;
+
+    background:#ffffff;
+
+    border:1px solid #cbd5e1;
+
+    border-radius:12px;
+
+    font-size:16px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.discard-btn:hover{
+
+    background:#f3f4f6;
+
+}
+
+.save-btn{
+
+    padding:12px 28px;
+
+    background:#0f766e;
+
+    color:#ffffff;
+
+    border:none;
+
+    border-radius:12px;
+
+    font-size:16px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.save-btn:hover{
+
+    background:#0d5f59;
+
+}
+
+/* =====================================
+   Gradebook Improvements (Part 5)
+===================================== */
+
+/* Hover row */
+
+.gradebook-table tbody tr{
+    transition:0.3s;
+}
+
+.gradebook-table tbody tr:hover{
+    background:#f8fbff;
+}
+
+/* Table cell */
+
+.gradebook-table td{
+    vertical-align:middle;
+}
+
+/* Student Image */
+
+.student-info img{
+    border:2px solid #e5e7eb;
+}
+
+/* Subject Badge */
+
+.subject-badge{
+    display:inline-block;
+    min-width:110px;
+    text-align:center;
+}
+
+/* Score Input */
+
+.score-input{
+    transition:.3s;
+    outline:none;
+}
+
+.score-input:focus{
+    border-color:#0f766e;
+    box-shadow:0 0 8px rgba(15,118,110,.2);
+}
+
+/* Grade Circle */
+
+.grade-circle{
+    transition:.3s;
+}
+
+.grade-circle:hover{
+    transform:scale(1.08);
+}
+
+/* Buttons */
+
+.edit-btn,
+.discard-btn,
+.save-btn{
+    transition:.3s;
+}
+
+/* Edit */
+
+.edit-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* Save */
+
+.save-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(15,118,110,.25);
+}
+
+/* Discard */
+
+.discard-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* Select Box */
+
+.header-right select{
+    transition:.3s;
+    outline:none;
+}
+
+.header-right select:focus{
+    border-color:#0f766e;
+}
+
+/* Card */
+
+.gradebook-card{
+    margin-top:25px;
+}
+
+
+/* ==========================================
+   Part 6 - Responsive & Final Polish
+========================================== */
+
+/* Make the table scroll horizontally if needed */
+.gradebook-card{
+    overflow-x:auto;
+}
+
+/* Keep the header visible while scrolling */
+.gradebook-table thead th{
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+/* Minimum table width */
+.gradebook-table{
+    min-width:1000px;
+}
+
+/* Column widths */
+.gradebook-table th:nth-child(1),
+.gradebook-table td:nth-child(1){
+    width:35%;
+}
+
+.gradebook-table th:nth-child(2),
+.gradebook-table td:nth-child(2){
+    width:20%;
+}
+
+.gradebook-table th:nth-child(3),
+.gradebook-table td:nth-child(3){
+    width:15%;
+    text-align:center;
+}
+
+.gradebook-table th:nth-child(4),
+.gradebook-table td:nth-child(4){
+    width:15%;
+    text-align:center;
+}
+
+.gradebook-table th:nth-child(5),
+.gradebook-table td:nth-child(5){
+    width:15%;
+    text-align:center;
+}
+
+/* Zebra rows */
+.gradebook-table tbody tr:nth-child(even){
+    background:#fafbfd;
+}
+
+/* Better spacing */
+.gradebook-table td{
+    padding:22px 20px;
+}
+
+/* Rounded score input */
+.score-input{
+    border-radius:10px;
+}
+
+/* Student photo */
+.student-info img{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+/* Student name */
+.student-info h4{
+    font-size:17px;
+}
+
+.student-info p{
+    font-size:13px;
+}
+
+/* Better edit button */
+.edit-btn{
+    min-width:90px;
+}
+
+/* Footer */
+.gradebook-footer{
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+/* Mobile */
+@media(max-width:992px){
+
+    .gradebook-page{
+        padding:20px;
+    }
+
+    .gradebook-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+    }
+
+    .header-right{
+        width:100%;
+        flex-wrap:wrap;
+    }
+
+    .header-right select{
+        flex:1;
+        min-width:180px;
+    }
+
+    .gradebook-footer{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .footer-buttons{
+        width:100%;
+    }
+
+    .save-btn,
+    .discard-btn{
+        flex:1;
+    }
+
+}
+
+/* Small phones */
+@media(max-width:576px){
+
+    .student-info{
+        gap:10px;
+    }
+
+    .student-info img{
+        width:45px;
+        height:45px;
+    }
+
+    .score-input{
+        width:70px;
+    }
+
+}
+
+/* ===========================
+   Announcement Page - Part 1
+=========================== */
+
+.announcement-page{
+    padding:35px;
+}
+
+.breadcrumb{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:14px;
+    color:#888;
+    margin-bottom:20px;
+}
+
+.announcement-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.announcement-header h1{
+    font-size:46px;
+    color:#1d2b44;
+    margin-bottom:8px;
+}
+
+.announcement-header p{
+    color:#666;
+}
+
+.view-btn{
+    background:#0a7c70;
+    color:#fff;
+    border:none;
+    padding:15px 28px;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.view-btn:hover{
+    background:#08665c;
+}
+
+.filter-card{
+    background:#fff;
+    border:1px solid #dbe5f2;
+    border-radius:12px;
+    padding:15px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:25px;
+}
+
+.filter-card span{
+    font-weight:600;
+    color:#555;
+}
+
+.filter-card button{
+    padding:8px 20px;
+    border:1px solid #dbe5f2;
+    background:#fff;
+    border-radius:30px;
+    cursor:pointer;
+}
+
+.filter-card button.active{
+    background:#0a7c70;
+    color:#fff;
+    border-color:#0a7c70;
+}
+
+/*==========================
+ Announcement Card
+==========================*/
+
+.announcement-card{
+    display:flex;
+    gap:20px;
+    background:#fff;
+    border:1px solid #dce6f3;
+    border-radius:14px;
+    padding:22px;
+    margin-bottom:22px;
+}
+
+.announcement-icon{
+    width:54px;
+    height:54px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    flex-shrink:0;
+}
+
+.announcement-icon.blue{
+    background:#e8f0ff;
+    color:#184a9b;
+}
+
+.announcement-content{
+    width:100%;
+}
+
+.announcement-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:8px;
+}
+
+.announcement-top h3{
+    font-size:28px;
+    color:#20304d;
+}
+
+.announcement-top i{
+    color:#777;
+    cursor:pointer;
+}
+
+.announcement-info{
+    display:flex;
+    gap:25px;
+    color:#777;
+    font-size:14px;
+    margin-bottom:15px;
+}
+
+.announcement-info i{
+    margin-right:5px;
+}
+
+.announcement-content p{
+    color:#555;
+    line-height:1.7;
+    margin-bottom:18px;
+}
+
+.announcement-footer{
+    display:flex;
+    gap:15px;
+    align-items:center;
+}
+
+.tag{
+    padding:6px 14px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.tag.student{
+    background:#eef4ff;
+    color:#2356b3;
+}
+
+.priority{
+    font-size:13px;
+    font-weight:700;
+}
+
+.priority.high{
+    color:#d62828;
+}
+
+
+/*==========================
+ Additional Announcement Colors
+==========================*/
+
+.announcement-icon.red{
+    background:#fff0f0;
+    color:#d35454;
+}
+
+.announcement-icon.green{
+    background:#ebfff2;
+    color:#169c57;
+}
+
+.tag.teacher{
+    background:#fff1ef;
+    color:#d35454;
+}
+
+.tag.everyone{
+    background:#ebfff2;
+    color:#169c57;
+}
+
+.priority.medium{
+    color:#f39c12;
+}
+
+.priority.info{
+    color:#2563eb;
+}
+
+/*==========================
+ Announcement Card 4
+==========================*/
+
+.announcement-icon.navy{
+    background:#edf3ff;
+    color:#184a9b;
+}
+
+.tag.academic{
+    background:#eef4ff;
+    color:#1d4ed8;
+}
+
+.priority.normal{
+    color:#666;
+}
+
+
+/* ======================================
+   Announcement Page - Part 5
+====================================== */
+
+.announcement-card{
+    transition:0.3s;
+    cursor:pointer;
+}
+
+.announcement-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.announcement-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+}
+
+.announcement-top h3{
+    font-size:26px;
+    font-weight:700;
+    color:#1f2d3d;
+    margin-bottom:10px;
+}
+
+.announcement-top i{
+    color:#8a8a8a;
+    font-size:20px;
+}
+
+.announcement-info{
+    display:flex;
+    gap:18px;
+    margin-bottom:15px;
+    font-size:14px;
+    color:#777;
+    flex-wrap:wrap;
+}
+
+.announcement-info span{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.announcement-content p{
+    color:#555;
+    line-height:1.8;
+    margin:15px 0 20px;
+}
+
+.announcement-footer{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+}
+
+.tag{
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.priority{
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.3px;
+}
+
+/* Responsive */
+
+@media(max-width:900px){
+
+    .announcement-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+    }
+
+    .filter-card{
+        flex-wrap:wrap;
+    }
+
+    .announcement-card{
+        flex-direction:column;
+    }
+
+    .announcement-icon{
+        width:60px;
+        height:60px;
+    }
+
+}
+
+
+
+/*====================================
+ Announcement Pagination
+=====================================*/
+
+.announcement-pagination{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-top:35px;
+
+}
+
+.page-number{
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+.number{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#ffffff;
+
+    border:1px solid #d9e2ef;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.number:hover{
+
+    background:#eef5ff;
+
+}
+
+.number.active{
+
+    background:#0B6B60;
+
+    color:#fff;
+
+    border-color:#0B6B60;
+
+}
+
+.page-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:12px 20px;
+
+    border:1px solid #d9e2ef;
+
+    background:#ffffff;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.page-btn:hover{
+
+    background:#eef5ff;
+
+}
+
+/*==========================
+MY PROFILE
+==========================*/
+
+.profile-page{
+
+    padding:35px;
+
+}
+
+.profile-header{
+
+    margin-bottom:30px;
+
+}
+
+.profile-header h1{
+
+    font-size:48px;
+
+    color:#1d2b44;
+
+    margin-bottom:8px;
+
+}
+
+.profile-header p{
+
+    color:#666;
+
+    font-size:18px;
+
+}
+
+.profile-wrapper{
+
+    display:grid;
+
+    grid-template-columns:380px 1fr;
+
+    gap:30px;
+
+    align-items:start;
+
+}
+
+.profile-left{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:25px;
+
+
+
+/*==========================
+Profile Card
+==========================*/
+
+.profile-card{
+
+    background:#fff;
+
+    border:1px solid #dce5f1;
+
+    border-radius:15px;
+
+    padding:30px;
+
+    text-align:center;
+
+}
+
+.profile-image{
+
+    position:relative;
+
+    width:140px;
+
+    margin:auto;
+
+}
+
+.profile-image img{
+
+    width:140px;
+
+    height:140px;
+
+    object-fit:cover;
+
+    border-radius:16px;
+
+    border:4px solid #eef3ff;
+
+}
+
+.camera-btn{
+
+    position:absolute;
+
+    right:-5px;
+
+    bottom:-5px;
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#3b82f6;
+
+    color:#fff;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+
+}
+
+.profile-card h2{
+
+    margin-top:25px;
+
+    font-size:34px;
+
+    color:#1d2b44;
+
+}
+
+.role-badge{
+
+    display:inline-block;
+
+    margin-top:10px;
+
+    background:#e8f0ff;
+
+    color:#184a9b;
+
+    padding:8px 18px;
+
+    border-radius:30px;
+
+    font-weight:600;
+
+}
+
+.profile-card hr{
+
+    margin:30px 0;
+
+    border:none;
+
+    border-top:1px solid #dce5f1;
+
+}
+
+.profile-info{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    text-align:left;
+
+    margin-bottom:25px;
+
+}
+
+.profile-info label,
+.email-box label{
+
+    display:block;
+
+    font-size:12px;
+
+    color:#777;
+
+    margin-bottom:6px;
+
+    letter-spacing:1px;
+
+}
+
+.profile-info h4,
+.email-box h4{
+
+    font-size:24px;
+
+    color:#1d2b44;
+
+}
+
+.email-box{
+
+    text-align:left;
+
+}
+
+/*==========================
+Account Settings
+==========================*/
+
+.account-card{
+
+    background:#fff;
+
+    border:1px solid #dce5f1;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+}
+
+.account-card h3{
+
+    padding:22px 25px;
+
+    font-size:26px;
+
+    color:#1d2b44;
+
+    border-bottom:1px solid #e6edf7;
+
+}
+
+.setting-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:22px 25px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    border-bottom:1px solid #edf2f8;
+
+}
+
+.setting-item:last-child{
+
+    border-bottom:none;
+
+}
+
+.setting-item:hover{
+
+    background:#f7faff;
+
+}
+
+.setting-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.setting-left i{
+
+    font-size:22px;
+
+    color:#184a9b;
+
+    width:28px;
+
+}
+
+.setting-left span{
+
+    font-size:20px;
+
+    color:#1d2b44;
+
+    font-weight:500;
+
+}
+
+.setting-item .fa-angle-right{
+
+    color:#888;
+
+    font-size:18px;
+
+}
+
+
+/*==========================
+Personal Information
+==========================*/
+
+.profile-form-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+.profile-form-header h2{
+
+    font-size:30px;
+
+    color:#1d2b44;
+
+}
+
+.edit-btn{
+
+    background:#fff;
+
+    border:2px solid #3b82f6;
+
+    color:#3b82f6;
+
+    padding:10px 22px;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.edit-btn:hover{
+
+    background:#3b82f6;
+
+    color:#fff;
+
+}
+
+.form-group{
+
+    margin-bottom:22px;
+
+}
+
+.form-group label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#777;
+
+    font-size:13px;
+
+    letter-spacing:1px;
+
+    font-weight:600;
+
+}
+
+.form-group input,
+
+.form-group textarea{
+
+    width:100%;
+
+    padding:15px 16px;
+
+    border:1px solid #dbe5f1;
+
+    border-radius:10px;
+
+    background:#eef4ff;
+
+    font-size:17px;
+
+    color:#1d2b44;
+
+    resize:none;
+
+    outline:none;
+
+}
+
+.form-row{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:20px;
+
+}
+
+/*====================================
+ Profile Buttons
+====================================*/
+
+.profile-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:16px;
+
+    margin-top:35px;
+
+}
+
+.discard-profile-btn{
+
+    background:#ffffff;
+
+    color:#374151;
+
+    border:1px solid #d1d5db;
+
+    border-radius:12px;
+
+    padding:14px 24px;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.discard-profile-btn:hover{
+
+    background:#f3f4f6;
+
+}
+
+.save-profile-btn{
+
+    background:#0B6B60;
+
+    color:#ffffff;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:14px 28px;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.save-profile-btn:hover{
+
+    background:#09574E;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 8px 20px rgba(11,107,96,.25);
+
+}
+
+.profile-actions i{
+
+    margin-right:8px;
+
+}
+
+/*====================================
+  My Profile - Final Polish
+====================================*/
+
+/* Card Hover */
+
+.profile-card,
+.account-card,
+.profile-right{
+    transition:.3s;
+}
+
+.profile-card:hover,
+.account-card:hover,
+.profile-right:hover{
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+/* Input Focus */
+
+.form-group input,
+.form-group textarea{
+    transition:.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus{
+
+    border:1px solid #0B6B60;
+
+    background:#ffffff;
+
+    box-shadow:0 0 10px rgba(11,107,96,.15);
+
+}
+
+/* Camera Button */
+
+.camera-btn{
+    transition:.3s;
+}
+
+.camera-btn:hover{
+
+    transform:scale(1.1);
+
+}
+
+/* Account Setting Hover */
+
+.setting-item{
+
+    transition:.3s;
+
+}
+
+.setting-item:hover{
+
+    padding-left:32px;
+
+}
+
+/* Teacher Badge */
+
+.role-badge{
+
+    transition:.3s;
+
+}
+
+.role-badge:hover{
+
+    transform:translateY(-2px);
+
+}
+
+/* Buttons */
+
+.save-profile-btn,
+.discard-profile-btn{
+
+    transition:.3s;
+
+}
+
+.save-profile-btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.discard-profile-btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+/* Responsive */
+
+@media(max-width:992px){
+
+    .profile-wrapper{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .profile-left{
+
+        order:2;
+
+    }
+
+    .profile-right{
+
+        order:1;
+
+    }
+
+    .form-row{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .profile-page{
+
+        padding:20px;
+
+    }
+
+    .profile-header h1{
+
+        font-size:38px;
+
+    }
+
+    .profile-form-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:15px;
+
+    }
+
+    .profile-actions{
+
+        flex-direction:column;
+
+    }
+
+    .save-profile-btn,
+    .discard-profile-btn{
+
+        width:100%;
+
+    }
+
+}
+
+@media(max-width:576px){
+
+    .profile-card{
+
+        padding:20px;
+
+    }
+
+    .profile-image img{
+
+        width:110px;
+
+        height:110px;
+
+    }
+
+    .profile-card h2{
+
+        font-size:28px;
+
+    }
+
+    .profile-info{
+
+        flex-direction:column;
+
+        gap:20px;
+
+    }
+    /* Shift Selection */
+
+.shift-selection{
+    display:flex;
+    align-items:center;
+    background:#eefbf8;
+    border-radius:18px;
+    padding:8px;
+    width:260px;
+    overflow:hidden;
+}
+
+.shift-tab{
+    flex:1;
+    border:none;
+    background:transparent;
+    padding:16px 0;
+    font-size:20px;
+    font-weight:700;
+    color:#6b7280;
+    cursor:pointer;
+    transition:.3s;
+    border-radius:12px;
+}
+
+.shift-tab.active{
+    background:#fff;
+    color:#0c4da2;
+    box-shadow:0 0 0 3px #0c4da2 inset;
+}
+}
+
+
+}

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cambodia High School - Student</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style1.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/st-style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/ad-style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
@@ -22,9 +24,11 @@
                 <li><a href="/student/homework" class="{{ request()->is('student/homework*') ? 'active' : '' }}"><i class="fa-solid fa-book"></i> Homework</a></li>
                 <li><a href="/student/schedule" class="{{ request()->is('student/schedule*') ? 'active' : '' }}"><i class="fa-regular fa-calendar"></i> Schedule</a></li>
                 <li><a href="/student/attendance" class="{{ request()->is('student/attendance*') ? 'active' : '' }}"><i class="fa-solid fa-user-check"></i> Attendance</a></li>
+                <li><a href="/student/announcements" class="{{ request()->is('student/announcements*') ? 'active' : '' }}"><i class="fa-solid fa-bullhorn"></i> Announcements</a></li>
             </ul>
         </div>
         <div class="settings">
+            <a href="{{ route('student.profile.edit') }}"><i class="fa-solid fa-gear"></i> Settings</a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <a href="#" onclick="event.preventDefault(); this.closest('form').submit();"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
@@ -55,5 +59,6 @@
         @yield('content')
     </main>
 </div>
+<script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>
