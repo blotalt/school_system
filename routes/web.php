@@ -24,3 +24,10 @@ Route::get('/', function () {
 
 
 
+Route::middleware(['auth', 'role:student'])
+    ->prefix('student')
+    ->name('student.')
+    ->group(base_path('routes/student.php'));
+
+Route::get('/admin/exams', fn() => view('admin.exams'))->name('admin.exams.index');
+Route::get('/admin/exams/{id}/results', fn($id) => view('admin.exams-results'))->name('admin.exams.results');

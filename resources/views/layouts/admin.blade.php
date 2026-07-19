@@ -40,14 +40,29 @@
             <div class="top-right">
                 <div class="icon-btn"><i class="fa-regular fa-bell"></i></div>
                 <div class="icon-btn"><i class="fa-solid fa-grip"></i></div>
-                <div class="teacher">
+                <div class="teacher profile-dropdown-wrapper" onclick="toggleProfileDropdown(event)">
                     <div class="teacher-info">
                         <h4>Chann Socheat</h4>
                         <span>Senior Administrator</span>
                     </div>
-                    <a href="/myprofile">
-                        <div class="avatar-circle" style="width:40px;height:40px;">CS</div>
-                    </a>
+                    <div class="avatar-circle">CS</div>
+
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="dropdown-user-info">
+                            <div class="avatar-circle" style="width:44px;height:44px;">CS</div>
+                            <div>
+                                <strong>Chann Socheat</strong>
+                                <p>chann.socheat@cambodiahigh.edu.kh</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+                        <hr>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </x-page-header>
@@ -55,5 +70,14 @@
         @yield('content')
     </main>
 </div>
+<script>
+function toggleProfileDropdown(e) {
+    e.stopPropagation();
+    document.getElementById('profileDropdown').classList.toggle('show');
+}
+document.addEventListener('click', function() {
+    document.getElementById('profileDropdown')?.classList.remove('show');
+});
+</script>
 </body>
 </html>
