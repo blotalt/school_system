@@ -2,22 +2,41 @@
 
 @section('content')
 
+@php
+    $viewingDate = \Illuminate\Support\Carbon::parse($date);
+    $isToday = $viewingDate->isToday();
+@endphp
+
 <div class="attendance-page">
     <div class="session-card">
         <div class="session-left">
             <span class="session-label">
                 <i class="fa-solid fa-flask"></i>
-                TODAY'S SESSION
+                {{ $isToday ? "TODAY'S SESSION" : 'SESSION' }}
             </span>
             <h1>{{ $class->name }}</h1>
             <div class="session-info">
-                <span><i class="fa-regular fa-calendar"></i> {{ \Illuminate\Support\Carbon::parse($date)->format('F j, Y') }}</span>
+                <span><i class="fa-regular fa-calendar"></i> {{ $viewingDate->format('F j, Y') }}</span>
                 <span><i class="fa-regular fa-user-graduate"></i> {{ $students->count() }} students</span>
             </div>
         </div>
-        <button type="button" id="markAllPresent" class="present-btn">
-            <i class="fa-solid fa-check-double"></i> Mark All Present
-        </button>
+        <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end;">
+            <form method="GET" action="{{ route('teacher.attendance.show', $class) }}" style="display:flex;gap:8px;align-items:center;">
+                <a href="{{ route('teacher.attendance.show', ['class' => $class, 'date' => $viewingDate->copy()->subDay()->toDateString()]) }}" class="icon-only-btn" title="Previous day" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <input type="date" name="date" value="{{ $viewingDate->toDateString() }}" onchange="this.form.submit()" style="height:44px;border:1px solid #e5e9f2;border-radius:10px;padding:0 12px;">
+                <a href="{{ route('teacher.attendance.show', ['class' => $class, 'date' => $viewingDate->copy()->addDay()->toDateString()]) }}" class="icon-only-btn" title="Next day" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </form>
+            @if(!$isToday)
+                <a href="{{ route('teacher.attendance.show', $class) }}" style="font-size:13px;color:#0b3f86;">Jump to today</a>
+            @endif
+            <button type="button" id="markAllPresent" class="present-btn">
+                <i class="fa-solid fa-check-double"></i> Mark All Present
+            </button>
+        </div>
     </div>
 </div>
 
