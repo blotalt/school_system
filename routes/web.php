@@ -1,30 +1,28 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Teacher\AttendanceController;
+use App\Http\Controllers\Teacher\GradebookController;
+require __DIR__.'/auth.php';
+require __DIR__.'/admin.php';
+require __DIR__.'/teacher.php';
+require __DIR__.'/student.php';
 
 Route::get('/', function () {
+
     if (auth()->check()) {
         return match (auth()->user()->role) {
             'admin'   => redirect()->route('admin.dashboard'),
-            'teacher' => redirect()->route('teacher.dashboard'),
-            'student' => redirect()->route('student.dashboard'),
+            'teacher' => redirect('/teacher/dashboard'),
+            'student' => redirect('/student/dashboard'),
             default   => redirect()->route('login'),
         };
     }
+
     return redirect()->route('login');
 });
 
-require __DIR__ . '/auth.php';
 
-Route::middleware(['auth', 'role:admin'])
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(base_path('routes/admin.php'));
-
-Route::middleware(['auth', 'role:teacher'])
-    ->prefix('teacher')
-    ->name('teacher.')
-    ->group(base_path('routes/teacher.php'));
 
 Route::middleware(['auth', 'role:student'])
     ->prefix('student')
