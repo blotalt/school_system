@@ -103,6 +103,7 @@ class StudentController extends Controller
         $request->validate([
             'name'             => ['required', 'string', 'max:255'],
             'email'            => ['required', 'email', "unique:users,email,{$student->user_id}"],
+            'password'         => ['nullable', 'string', 'min:8'],
             'class_id'         => ['required', 'exists:classes,id'],
             'roll_no'          => ['required', 'string', "unique:students,roll_no,{$student->id}"],
             'guardian_contact' => ['nullable', 'string', 'max:255'],
@@ -110,10 +111,11 @@ class StudentController extends Controller
         ]);
 
         DB::transaction(function () use ($request, $student) {
-            $student->user->update([
-                'name'  => $request->name,
-                'email' => $request->email,
-            ]);
+            $student->user->update(array_filter([
+                'name'     => $request->name,
+                'email'    => $request->email,
+                'password' => $request->password ?: null,
+            ], fn ($value) => $value !== null));
 
             $student->update([
                 'class_id'         => $request->class_id,

@@ -5,9 +5,10 @@ use App\Http\Controllers\Teacher\DashboardController;
 use App\Http\Controllers\Teacher\ProfileController;
 use App\Http\Controllers\Teacher\ClassController;
 use App\Http\Controllers\Teacher\AttendanceController;
-// use App\Http\Controllers\Teacher\HomeworkController;
-// use App\Http\Controllers\Teacher\ExamController;
-// use App\Http\Controllers\Teacher\GradebookController;
+use App\Http\Controllers\Teacher\GradebookController;
+use App\Http\Controllers\Teacher\AnnouncementController;
+use App\Http\Controllers\Teacher\HomeworkController;
+use App\Http\Controllers\Teacher\ExamController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('dashboard', [DashboardController::class, 'index']); // alias: sidebar links to /teacher/dashboard
@@ -26,12 +27,14 @@ Route::get('attendance', function () {
         : redirect()->route('teacher.classes.index');
 })->name('attendance.index');
 
-Route::get('gradebook', fn () => view('teacher.gradebook'))->name('gradebook');
-Route::get('announcements', fn () => view('teacher.announcements'))->name('announcements');
-Route::get('myprofile', fn () => view('teacher.myprofile'))->name('myprofile');
+Route::get('gradebook', [GradebookController::class, 'index'])->name('gradebook.index');
+Route::get('gradebook/{exam}', [GradebookController::class, 'show'])->name('gradebook.show');
+Route::post('gradebook/{exam}', [GradebookController::class, 'store'])->name('gradebook.store');
 
-// Not yet built out (empty placeholder views):
-// Route::resource('homework', HomeworkController::class);
-// Route::resource('exams', ExamController::class);
-// Route::get('gradebook/{exam}', [GradebookController::class, 'show'])->name('gradebook.show');
-// Route::post('gradebook/{exam}', [GradebookController::class, 'store'])->name('gradebook.store');
+Route::resource('homework', HomeworkController::class)->except(['show']);
+Route::resource('exams', ExamController::class)->except(['show']);
+
+Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements');
+
+// myprofile duplicated the real profile page before it existed — alias it there.
+Route::redirect('myprofile', '/teacher/profile');

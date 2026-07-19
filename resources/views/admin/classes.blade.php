@@ -124,7 +124,8 @@ $subjectColors = [
         <input type="hidden" name="shift" id="modalShift">
         <div class="form-group">
             <label>Subject</label>
-            <select name="subject_id" required>
+            <select name="subject_id" id="modalSubject" required onchange="filterTeachersBySubject()">
+                <option value="">Select a subject</option>
                 @foreach($subjects as $subject)
                     <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                 @endforeach
@@ -132,11 +133,12 @@ $subjectColors = [
         </div>
         <div class="form-group">
             <label>Teacher</label>
-            <select name="teacher_id" required>
+            <select name="teacher_id" id="modalTeacher" required>
                 @foreach($teachers as $teacher)
-                    <option value="{{ $teacher->id }}">{{ $teacher->user->name }}</option>
+                    <option value="{{ $teacher->id }}" data-subjects="{{ $teacher->subjects->pluck('id')->implode(',') }}">{{ $teacher->user->name }}</option>
                 @endforeach
             </select>
+            <span id="teacherHint" style="display:none;color:#9ca3af;font-size:13px;margin-top:4px;">No teacher is assigned to this subject yet — showing everyone.</span>
         </div>
         <div class="form-actions">
             <button type="button" class="cancel-btn" onclick="closeSlotModal()">Cancel</button>
@@ -170,11 +172,42 @@ function openSlotModal(period, day, shift) {
     document.getElementById('modalDay').value = day;
     document.getElementById('modalShift').value = shift;
     document.getElementById('slotForm').action = "{{ route('admin.classes.schedule.store', $class) }}";
+    document.getElementById('modalSubject').value = '';
+    filterTeachersBySubject();
     document.getElementById('slotModal').style.display = 'flex';
 }
 
 function closeSlotModal() {
     document.getElementById('slotModal').style.display = 'none';
+}
+
+function filterTeachersBySubject() {
+    const subjectId = document.getElementById('modalSubject').value;
+    const teacherSelect = document.getElementById('modalTeacher');
+    const options = Array.from(teacherSelect.options);
+    const hint = document.getElementById('teacherHint');
+
+    if (!subjectId) {
+        options.forEach(opt => opt.hidden = false);
+        hint.style.display = 'none';
+        return;
+    }
+
+    const matching = options.filter(opt => (opt.dataset.subjects || '').split(',').includes(subjectId));
+
+    if (matching.length === 0) {
+        // No teacher assigned to this subject yet — fall back to showing everyone.
+        options.forEach(opt => opt.hidden = false);
+        hint.style.display = 'block';
+        return;
+    }
+
+    hint.style.display = 'none';
+    options.forEach(opt => opt.hidden = !matching.includes(opt));
+
+    if (matching.length >= 1 && !matching.some(opt => opt.selected)) {
+        teacherSelect.value = matching[0].value;
+    }
 }
 
 document.querySelectorAll('.shift-btn').forEach(btn => {

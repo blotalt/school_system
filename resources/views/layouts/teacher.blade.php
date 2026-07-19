@@ -22,6 +22,8 @@
                 <li><a href="/teacher/dashboard" class="{{ request()->is('teacher/dashboard') || request()->is('teacher') ? 'active' : '' }}"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
                 <li><a href="/teacher/classes" class="{{ request()->is('teacher/classes*') ? 'active' : '' }}"><i class="fa-solid fa-school"></i> Classes</a></li>
                 <li><a href="/teacher/attendance" class="{{ request()->is('teacher/attendance*') ? 'active' : '' }}"><i class="fa-solid fa-user-check"></i> Attendance</a></li>
+                <li><a href="/teacher/homework" class="{{ request()->is('teacher/homework*') ? 'active' : '' }}"><i class="fa-solid fa-book"></i> Homework</a></li>
+                <li><a href="/teacher/exams" class="{{ request()->is('teacher/exams*') ? 'active' : '' }}"><i class="fa-solid fa-file-lines"></i> Exams</a></li>
                 <li><a href="/teacher/gradebook" class="{{ request()->is('teacher/gradebook*') ? 'active' : '' }}"><i class="fa-regular fa-clipboard"></i> Gradebook</a></li>
                 <li><a href="/teacher/announcements" class="{{ request()->is('teacher/announcements*') ? 'active' : '' }}"><i class="fa-solid fa-bullhorn"></i> Announcements</a></li>
             </ul>

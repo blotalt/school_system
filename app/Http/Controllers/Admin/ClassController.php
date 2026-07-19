@@ -35,7 +35,7 @@ class ClassController extends Controller
         $class = $classes->firstWhere('id', (int) $request->query('class')) ?? $classes->first();
 
         $subjects = Subject::orderBy('name')->get();
-        $teachers = Teacher::with('user')->get()->sortBy(fn (Teacher $t) => $t->user->name)->values();
+        $teachers = Teacher::with(['user', 'subjects'])->get()->sortBy(fn (Teacher $t) => $t->user->name)->values();
 
         $schedules = collect();
         if ($class) {

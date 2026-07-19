@@ -17,7 +17,7 @@ class AttendanceController extends Controller
         $this->ensureTeacherOwnsClass($class->id);
 
         $date = $request->query('date', now()->toDateString());
-        $students = $class->students;
+        $students = $class->students()->with('user')->orderBy('roll_no')->get();
         $records = Attendance::where('class_id', $class->id)
             ->where('date', $date)
             ->get()
@@ -33,10 +33,14 @@ class AttendanceController extends Controller
         $validated = $request->validate([
             'date' => 'required|date',
             'attendance' => 'required|array',
-            'attendance.*' => 'required|in:present,absent,late',
+            'attendance.*' => 'nullable|in:present,absent,late',
         ]);
 
         foreach ($validated['attendance'] as $studentId => $status) {
+            if (! $status) {
+                continue;
+            }
+
             Attendance::updateOrCreate(
                 [
                     'student_id' => $studentId,
@@ -47,7 +51,6 @@ class AttendanceController extends Controller
             );
         }
 
-        return redirect()->back()->with('success', 'Attendance saved.');
+        return redirect()->route('teacher.attendance.show', $class)->with('success', 'Attendance saved.');
     }
-    
 }

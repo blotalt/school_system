@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use App\Models\SchoolClass;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class ExamController extends Controller
@@ -15,9 +16,28 @@ class ExamController extends Controller
 
         $exams = Exam::where('teacher_id', $teacherId)
             ->with(['schoolClass', 'subject'])
+            ->withCount('results')
+            ->orderByDesc('exam_date')
             ->get();
 
         return view('teacher.exams', compact('exams'));
+    }
+
+    public function create()
+    {
+        $teacher = auth()->user()->teacher;
+
+        return view('teacher.exams-create', [
+            'classes'  => $teacher->classes,
+            'subjects' => Subject::orderBy('name')->get(),
+        ]);
+    }
+
+    public function edit(Exam $exam)
+    {
+        abort_unless($exam->teacher_id === auth()->user()->teacher->id, 403);
+
+        return view('teacher.exams-edit', ['exam' => $exam]);
     }
 
     public function store(Request $request)

@@ -44,6 +44,12 @@
         </div>
     </div>
 
+    <div class="form-group" style="max-width:400px;">
+        <label>System Password</label>
+        <input type="password" name="password" placeholder="Leave blank to keep current password">
+        @error('password') <span class="field-error">{{ $message }}</span> @enderror
+    </div>
+
     <div class="form-group">
         <label>Guardian Contact</label>
         <input type="text" name="guardian_contact" value="{{ old('guardian_contact', $student->guardian_contact) }}">

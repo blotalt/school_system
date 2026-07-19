@@ -7,6 +7,7 @@ use App\Http\Controllers\Student\HomeworkController;
 use App\Http\Controllers\Student\ScheduleController;
 use App\Http\Controllers\Student\AttendanceController;
 use App\Http\Controllers\Student\ProfileController;
+use App\Http\Controllers\Student\AnnouncementController;
 
 // Student portal is READ-ONLY: GET routes only. No POST/PUT/DELETE exist,
 // so a student physically cannot submit anything (rule enforced by absence).
@@ -17,8 +18,10 @@ Route::get('homework', [HomeworkController::class, 'index'])->name('homework.ind
 Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule.index');
 Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
 Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements');
 
-Route::get('announcements', fn () => view('student.announcements'))->name('announcements');
-Route::get('myprofile', fn () => view('student.myprofile'))->name('myprofile');
+// myprofile duplicated the real profile page before it existed — alias it there.
+Route::redirect('myprofile', '/student/profile');
+
 Route::get('view-class', fn () => view('student.view-class'))->name('view-class');
 Route::get('view-task', fn () => view('student.view-task'))->name('view-task');

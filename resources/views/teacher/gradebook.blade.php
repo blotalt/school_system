@@ -2,273 +2,52 @@
 
 @section('content')
 
-<div class="gradebook-page">
-
-    <div class="gradebook-header">
-
-        <div class="header-left">
-
-            <h1>Gradebook</h1>
-
-            <p>
-    Manage and evaluate academic performance for
-    <span>Grade 10 - A</span>
-</p>
-
-        </div>
-
-        <div class="header-right">
-
-            <select>
-                <option>Grade 12 - A</option>
-                <option>Grade 11 - A</option>
-                <option>Grade 10 - A</option>
-            </select>
-
-            <select>
-                <option>Mathematics</option>
-                <option>Physics</option>
-                <option>Chemistry</option>
-                <option>English</option>
-            </select>
-
-            <select>
-                <option>Exam</option>
-                <option>Homework</option>
-            </select>
-
-        </div>
-
+<x-page-header>
+    <div>
+        <h1>Gradebook</h1>
+        <p>Select an exam to view or enter student scores.</p>
     </div>
+</x-page-header>
 
+@if (session('success'))
+    <div class="alert alert-success" style="margin-bottom:16px;padding:12px 16px;background:#e6f9f0;border:1px solid #10b981;border-radius:10px;color:#0a7a4d;">
+        {{ session('success') }}
+    </div>
+@endif
 
-
-
-<!-- Gradebook Table -->
-
-<div class="gradebook-card">
-
-    <table class="gradebook-table">
-
+<div class="data-card">
+    <table class="data-table">
         <thead>
-
             <tr>
-
-                <th>Student Name</th>
-
+                <th>Exam</th>
+                <th>Class</th>
                 <th>Subject</th>
-
-                <th>Score (0-100)</th>
-
-                <th>Grade</th>
-
-                
-
+                <th>Type</th>
+                <th>Date</th>
+                <th>Scored</th>
+                <th></th>
             </tr>
-
         </thead>
-
-       <tbody>
-
-<tbody>
-
-<tr>
-
-    <td>
-        <div class="student-info">
-            <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-            <div>
-                <h4>Kalyan Bopha</h4>
-                <p>ID: 2023XXXX</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="95">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-a">A</span>
-    </td>
-
-</tr>
-
-<tr>
-
-    <td>
-        <div class="student-info">
-            <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-            <div>
-                <h4>Dara Phirun</h4>
-                <p>ID: 2023XXXX</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="86">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-b">B</span>
-    </td>
-
-</tr>
-
-<tr>
-
-    <td>
-        <div class="student-info">
-            <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-            <div>
-                <h4>Vannak Chantrea</h4>
-                <p>ID: 2023XXXX</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="78">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-c">C</span>
-    </td>
-
-</tr>
-
-<tr>
-
-    <td>
-        <div class="student-info">
-            <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-            <div>
-                <h4>Visal Rattanak</h4>
-                <p>ID: 2023XXXX</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="67">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-d">D</span>
-    </td>
-
-</tr>
-
-<tr>
-
-    <td>
-        <div class="student-info">
-            <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-            <div>
-                <h4>Serey Sokha</h4>
-                <p>ID: 2023XXXX</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="52">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-f">F</span>
-    </td>
-
-</tr>
-
-<tr>
-
-    <td>
-        <div class="student-info">
-            <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-            <div>
-                <h4>Bruno Mars</h4>
-                <p>ID: 2023XXXX</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="91">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-a">A</span>
-    </td>
-
-</tr>
-
-</tbody>
-
-</tbody>
-
+        <tbody>
+            @forelse($exams as $exam)
+                <tr>
+                    <td>{{ $exam->title }}</td>
+                    <td>{{ $exam->schoolClass->name ?? '—' }}</td>
+                    <td>{{ $exam->subject->name ?? '—' }}</td>
+                    <td><span class="badge badge-subject">{{ ucfirst($exam->exam_type) }}</span></td>
+                    <td>{{ \Illuminate\Support\Carbon::parse($exam->exam_date)->format('M j, Y') }}</td>
+                    <td>{{ $exam->results_count }}</td>
+                    <td>
+                        <a href="{{ route('teacher.gradebook.show', $exam) }}" class="add-btn">
+                            <i class="fa-solid fa-pen-to-square"></i> Enter Scores
+                        </a>
+                    </td>
+                </tr>
+            @empty
+                <tr><td colspan="7" style="text-align:center;color:#8a94a6;">You haven't created any exams yet.</td></tr>
+            @endforelse
+        </tbody>
     </table>
-
 </div>
-
-<div class="gradebook-footer">
-
-    <div class="footer-text">
-        Showing 1-5 of 32 students in Grade 12 - A
-    </div>
-
-    <div class="footer-buttons">
-
-        <button class="discard-btn">
-            Discard Changes
-        </button>
-
-        <button class="save-btn">
-            Save All Changes
-        </button>
-
-    </div>
-
-</div>
-
-</div>
-
 
 @endsection

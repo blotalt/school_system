@@ -2,321 +2,76 @@
 
 @section('content')
 
-<div class="student-dashboard">
-
-    <!-- Welcome Card -->
-
-    <div class="welcome-card">
-
-        <div class="welcome-left">
-
-            <div class="student-photo">
-
-                <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-            </div>
-
-            <div>
-
-                <h1>Hello, John Doe</h1>
-
-                <div class="student-badge">
-
-                    <span class="grade-badge">
-                        Grade 10-A
-                    </span>
-
-                    <span class="track-badge">
-                        Science
-                    </span>
-
-                </div>
-
-            </div>
-
+<div class="welcome-card">
+    <div class="welcome-left">
+        <div class="avatar-circle" style="width:64px;height:64px;font-size:20px;">
+            {{ collect(explode(' ', $student?->user->name ?? auth()->user()->name))->map(fn ($n) => mb_substr($n, 0, 1))->take(2)->implode('') }}
         </div>
-
-        <div class="welcome-right">
-
-            <span></span>
-
-            <h2></h2>
-
+        <div>
+            <h1>Hello, {{ $student?->user->name ?? auth()->user()->name }}</h1>
+            <div class="student-badge">
+                <span class="grade-badge">{{ $class->name ?? 'Unassigned' }}</span>
+                @if($class?->track)
+                    <span class="track-badge">{{ $class->track }}</span>
+                @endif
+            </div>
         </div>
-
     </div>
-
 </div>
 
-
-<!-- Weekly Schedule -->
-
-<div class="student-timetable">
-
-    <table class="schedule-table">
-
-        <thead>
-
-            <tr>
-
-                <th>
-                    <i class="fa-regular fa-clock"></i>
-                </th>
-
-                <th>Monday</th>
-                <th>Tuesday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-            <!-- Period 1 -->
-
-            <tr>
-
-                <td class="time-column">
-                    07:00<br>07:50
-                </td>
-
-                <td>
-                    <a href="/student/view-class">
-                    <div class="lesson green">
-                        <h4>Mathematics</h4>
-                        <p>Room 302</p>
-                        <span>SM</span>
-                    </div>
-                    </a>
-                </td>
-
-                <td></td>
-
-                <td>
-                    <a href="/student/view-class">
-                    <div class="lesson orange">
-                        <h4 >Khmer Lit</h4>
-                        <p>Library Hall</p>
-                        <span>CR</span>
-                    </div>
-                </a>
-                </td>
-
-                <td></td>
-
-                <td>
-                    <a href="/student/view-class">
-                    <div class="lesson blue">
-                        <h4 >Physics</h4>
-                        <p>Lab B</p>
-                        <span>NT</span>
-                    </div>
-                </a>
-                </td>
-
-            </tr>
-
-            <!-- Period 2 -->
-
-            <tr>
-
-                <td class="time-column">
-                    08:00<br>08:50
-                </td>
-
-                <td>
-                    <a href="/student/view-class">
-                    <div class="lesson blue">
-                        <h4>Chemistry</h4>
-                        <p>Lab A</p>
-                        <span>PK</span>
-                    </div>
-                </a>
-                </td>
-
-                <td>
-                    <a href="/student/view-class">
-                    <div class="lesson green">
-                        <h4>Mathematics</h4>
-                        <p>Room 302</p>
-                        <span>SM</span>
-                    </div>
-                </a>
-                </td>
-
-                <td></td>
-
-                <td>
-                    <a href="/student/view-class">
-                    <div class="lesson orange">
-                        <h4>History</h4>
-                        <p>Room 201</p>
-                        <span>LY</span>
-                    </div>
-                </a>
-                </td>
-
-                <td></td>
-
-            </tr>
-
-            <!-- Break -->
-
-            <tr>
-
-                <td class="time-column">
-                    08:50<br>09:10
-                </td>
-
-                <td colspan="5" class="break-row">
-
-                    MORNING BREAK & SOCIAL TIME
-
-                </td>
-
-            </tr>
-
-            <!-- Period 3 -->
-
-            <tr>
-
-                <td class="time-column">
-                    09:10<br>10:00
-                </td>
-
-                <td></td>
-
-                <td>
-                    <a href="/student/view-class">
-                    <div class="lesson blue">
-                        <h4 >English</h4>
-                        <p>Room 105</p>
-                        <span>JD</span>
-                    </div>
-                </a>
-                </td>
-
-                <td>
-                    <a href="/student/view-class">
-                    <div class="lesson green">
-                        <h4>Mathematics</h4>
-                        <p>Room 302</p>
-                        <span>SM</span>
-                    </div>
-                </a>
-                </td>
-
-                <td></td>
-
-                <td>
-                    <a href="/student/view-class">
-                    <div class="lesson orange">
-                        <h4>Geography</h4>
-                        <p>Room 204</p>
-                        <span>VN</span>
-                    </div>
-                </a>
-                </td>
-
-            </tr>
-
-        </tbody>
-
-    </table>
-
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="stat-value">{{ $attendanceRate }}%</div>
+        <div class="stat-label">Attendance Rate</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fa-regular fa-clipboard"></i></div>
+        <div class="stat-value">{{ number_format($examCount) }}</div>
+        <div class="stat-label">Exam Results</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-book"></i></div>
+        <div class="stat-value">{{ number_format($homeworkCount) }}</div>
+        <div class="stat-label">Homework Assigned</div>
+    </div>
 </div>
-
-
-<!-- Today's Schedule -->
 
 <div class="today-card">
-
     <div class="today-header">
-
         <h2>Today's Schedule</h2>
-
-        <a href="#">View All</a>
-
     </div>
 
-    <!-- Item 1 -->
-
-    <div class="today-item">
-
-        <div class="today-left">
-
-            <span class="today-time">
-                08:00 - 09:30
-            </span>
-
-            <h3>Advanced Physics</h3>
-
-            <p>
-                <i class="fa-regular fa-user"></i>
-                Dr. Sophal Meas
-            </p>
-
+    @forelse($todaySchedule as $slot)
+        <div class="today-item">
+            <div class="today-left">
+                <span class="today-time">{{ $slot->time }}</span>
+                <h3>{{ $slot->subject }}</h3>
+                <p><i class="fa-regular fa-user"></i> {{ $slot->teacher }}</p>
+            </div>
         </div>
+    @empty
+        <div class="today-item"><div class="today-left"><p>No classes scheduled today.</p></div></div>
+    @endforelse
+</div>
 
-        <div class="today-room">
-            Room 402
-        </div>
-
+<div class="today-card" style="margin-top:20px;">
+    <div class="today-header">
+        <h2>Recent Announcements</h2>
+        <a href="/student/announcements">View All</a>
     </div>
 
-    <!-- Item 2 -->
-
-    <div class="today-item">
-
-        <div class="today-left">
-
-            <span class="today-time">
-                10:00 - 11:30
-            </span>
-
-            <h3>Molecular Biology</h3>
-
-            <p>
-                <i class="fa-regular fa-user"></i>
-                Ms. Chanthea Van
-            </p>
-
+    @forelse($announcements as $announcement)
+        <div class="today-item">
+            <div class="today-left">
+                <span class="today-time">{{ $announcement->created_at->format('M j, Y') }}</span>
+                <h3>{{ $announcement->title }}</h3>
+                <p>{{ $announcement->author->name ?? 'School' }}</p>
+            </div>
         </div>
-
-        <div class="today-room">
-            Lab 2A
-        </div>
-
-    </div>
-
-    <!-- Item 3 -->
-
-    <div class="today-item">
-
-        <div class="today-left">
-
-            <span class="today-time">
-                13:30 - 15:00
-            </span>
-
-            <h3>Advanced Mathematics</h3>
-
-            <p>
-                <i class="fa-regular fa-user"></i>
-                Mr. Dara Sok
-            </p>
-
-        </div>
-
-        <div class="today-room">
-            Math Hall
-        </div>
-
-    </div>
-
+    @empty
+        <div class="today-item"><div class="today-left"><p>No announcements yet.</p></div></div>
+    @endforelse
 </div>
 
 @endsection

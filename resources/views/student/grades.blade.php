@@ -2,390 +2,117 @@
 
 @section('content')
 
+@php
+$subjectIcons = [
+    'Mathematics' => 'fa-square-root-variable', 'Physics' => 'fa-flask',
+    'Chemistry' => 'fa-vial', 'Biology' => 'fa-dna', 'English' => 'fa-globe',
+    'History' => 'fa-landmark', 'Geography' => 'fa-earth-asia', 'Computer Science' => 'fa-laptop-code',
+];
+
+$gradeLetter = function (?float $pct): string {
+    if ($pct === null) return '—';
+    return match(true) {
+        $pct >= 90 => 'A', $pct >= 80 => 'B', $pct >= 70 => 'C', $pct >= 60 => 'D', default => 'F',
+    };
+};
+
+$gradeColor = function (?float $pct): string {
+    if ($pct === null) return 'blue';
+    return match(true) {
+        $pct >= 90 => 'green', $pct >= 70 => 'blue', default => 'orange',
+    };
+};
+@endphp
+
 <div class="grade-dashboard">
-
-    <!-- Welcome Card -->
-
     <div class="welcome-card">
-
         <div class="welcome-left">
-
-            <div class="student-photo">
-
-                <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
+            <div class="avatar-circle" style="width:64px;height:64px;font-size:20px;">
+                {{ collect(explode(' ', $student?->user->name ?? auth()->user()->name))->map(fn ($n) => mb_substr($n, 0, 1))->take(2)->implode('') }}
             </div>
-
             <div>
-
-                <h1>Hello, Bruno Mars</h1>
-
+                <h1>Hello, {{ $student?->user->name ?? auth()->user()->name }}</h1>
                 <div class="student-badges">
-
-                    <span class="grade-badge">
-                        Grade 12 - A
-                    </span>
-
-                    <span class="track-badge">
-                        Science Track
-                    </span>
-
+                    <span class="grade-badge">{{ $class->name ?? 'Unassigned' }}</span>
+                    @if($class?->track)
+                        <span class="track-badge">{{ $class->track }} Track</span>
+                    @endif
                 </div>
-
             </div>
-
         </div>
-
-        <div class="welcome-right">
-
-            <span></span>
-
-            <h2></h2>
-
-        </div>
-
     </div>
-
-        <!-- Summary Cards -->
 
     <div class="summary-cards">
-
-        <!-- Attendance -->
-
         <div class="summary-card">
-
             <div class="summary-top">
-
-                <div class="summary-icon">
-                    <i class="fa-regular fa-calendar-check"></i>
-                </div>
-
-                <span>+2% from last month</span>
-
+                <div class="summary-icon"><i class="fa-regular fa-calendar-check"></i></div>
             </div>
-
             <h5>ATTENDANCE RATE</h5>
-
-            <h2>98%</h2>
-
+            <h2>{{ $attendanceRate }}%</h2>
         </div>
 
-        <!-- Grade -->
-
         <div class="summary-card">
-
             <div class="summary-top">
-
-                <div class="summary-icon">
-                    <i class="fa-solid fa-book"></i>
-                </div>
-
-                <span>Academic Year 2025-2026</span>
-
+                <div class="summary-icon"><i class="fa-solid fa-book"></i></div>
             </div>
-
-            <h5>GRADE / REPORT CARD</h5>
-
-            <h2>A</h2>
-
+            <h5>OVERALL GRADE</h5>
+            <h2>{{ $gradeLetter($averageScore) }}</h2>
         </div>
 
-        <!-- Average -->
-
         <div class="summary-card">
-
             <div class="summary-top">
-
-                <div class="summary-icon">
-                    <i class="fa-regular fa-star"></i>
-                </div>
-
-                <span>Top 5% in Class</span>
-
+                <div class="summary-icon"><i class="fa-regular fa-star"></i></div>
             </div>
-
             <h5>AVERAGE SCORE</h5>
-
-            <h2>88.5<small>/100</small></h2>
-
+            <h2>{{ $averageScore ?? '—' }}<small>/100</small></h2>
         </div>
-
     </div>
-
 </div>
 
-
-<!-- Recent Academic Performance -->
-
 <div class="performance-card">
-
     <div class="performance-header">
-
         <h2>Recent Academic Performance</h2>
-
-        <span></span>
-
     </div>
 
     <table class="performance-table">
-
         <thead>
-
             <tr>
-
                 <th>SUBJECT</th>
-
-                
-
                 <th>SCORE</th>
-
                 <th>GRADE</th>
-
             </tr>
-
         </thead>
-
         <tbody>
-
-
-            <tr>
-
-    <td>
-
-        <div class="subject-cell">
-
-            <div class="subject-icon">
-
-                <i class="fa-solid fa-book-open"></i>
-
-            </div>
-
-            <div>
-
-                <h4>Khmer Literature</h4>
-
-                <p>Advanced Composition</p>
-
-            </div>
-
-        </div>
-
-    </td>
-
-   
-
-    <td>
-
-        <div class="progress-box">
-
-            <div class="progress-fill" style="width:92%;"></div>
-
-        </div>
-
-        <span>92.0</span>
-
-    </td>
-
-    <td>
-
-        <span class="grade green">A</span>
-
-    </td>
-
-</tr>
-
-<tr>
-
-    <td>
-
-        <div class="subject-cell">
-
-            <div class="subject-icon">
-
-                <i class="fa-solid fa-square-root-variable"></i>
-
-            </div>
-
-            <div>
-
-                <h4>Mathematics</h4>
-
-                <p>Calculus & Trigonometry</p>
-
-            </div>
-
-        </div>
-
-    </td>
-
-  
-
-    <td>
-
-        <div class="progress-box">
-
-            <div class="progress-fill" style="width:88%;"></div>
-
-        </div>
-
-        <span>88.5</span>
-
-    </td>
-
-    <td>
-
-        <span class="grade blue">B</span>
-
-    </td>
-
-</tr>
-
-<tr>
-
-    <td>
-
-        <div class="subject-cell">
-
-            <div class="subject-icon">
-
-                <i class="fa-solid fa-flask"></i>
-
-            </div>
-
-            <div>
-
-                <h4>Physics</h4>
-
-                <p>Quantum Mechanics Basics</p>
-
-            </div>
-
-        </div>
-
-    </td>
-
-
-
-    <td>
-
-        <div class="progress-box">
-
-            <div class="progress-fill" style="width:85%;"></div>
-
-        </div>
-
-        <span>85.0</span>
-
-    </td>
-
-    <td>
-
-        <span class="grade blue">B</span>
-
-    </td>
-
-</tr>
-
-<tr>
-
-    <td>
-
-        <div class="subject-cell">
-
-            <div class="subject-icon">
-
-                <i class="fa-solid fa-vial"></i>
-
-            </div>
-
-            <div>
-
-                <h4>Chemistry</h4>
-
-                <p>Organic Chemistry</p>
-
-            </div>
-
-        </div>
-
-    </td>
-
-
-
-    <td>
-
-        <div class="progress-box">
-
-            <div class="progress-fill" style="width:74%;"></div>
-
-        </div>
-
-        <span>74.2</span>
-
-    </td>
-
-    <td>
-
-        <span class="grade orange">C</span>
-
-    </td>
-
-</tr>
-
-<tr>
-
-    <td>
-
-        <div class="subject-cell">
-
-            <div class="subject-icon">
-
-                <i class="fa-solid fa-globe"></i>
-
-            </div>
-
-            <div>
-
-                <h4>English</h4>
-
-                <p>IELTS Preparation Track</p>
-
-            </div>
-
-        </div>
-
-    </td>
-
-
-
-    <td>
-
-        <div class="progress-box">
-
-            <div class="progress-fill" style="width:96%;"></div>
-
-        </div>
-
-        <span>95.8</span>
-
-    </td>
-
-    <td>
-
-        <span class="grade green">A</span>
-
-    </td>
-
-</tr>
-
-</tbody>
-
-</table>
-
+            @forelse($results as $result)
+                @php
+                    $pct = $result->exam->max_score > 0 ? round($result->score / $result->exam->max_score * 100, 1) : null;
+                    $icon = $subjectIcons[$result->exam->subject->name ?? ''] ?? 'fa-book-open';
+                @endphp
+                <tr>
+                    <td>
+                        <div class="subject-cell">
+                            <div class="subject-icon"><i class="fa-solid {{ $icon }}"></i></div>
+                            <div>
+                                <h4>{{ $result->exam->subject->name ?? '—' }}</h4>
+                                <p>{{ $result->exam->title }}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="progress-box">
+                            <div class="progress-fill" style="width:{{ $pct ?? 0 }}%;"></div>
+                        </div>
+                        <span>{{ $result->score }}/{{ $result->exam->max_score }}</span>
+                    </td>
+                    <td>
+                        <span class="grade {{ $gradeColor($pct) }}">{{ $gradeLetter($pct) }}</span>
+                    </td>
+                </tr>
+            @empty
+                <tr><td colspan="3" style="text-align:center;color:#8a94a6;">No exam results yet.</td></tr>
+            @endforelse
+        </tbody>
+    </table>
 </div>
-
-
-
-
 
 @endsection
