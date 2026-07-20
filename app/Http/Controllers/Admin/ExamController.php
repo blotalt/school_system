@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\ExportsExamScores;
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use App\Models\ExamResult;
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\DB;
 
 class ExamController extends Controller
 {
+    use ExportsExamScores;
+
     public function index(Request $request)
     {
         $classId = $request->query('class');
@@ -135,5 +138,10 @@ class ExamController extends Controller
         }
 
         return redirect()->route('admin.exams.results.index', $exam)->with('success', 'Scores saved.');
+    }
+
+    public function exportResults(Exam $exam)
+    {
+        return $this->exportExamScoresCsv($exam);
     }
 }

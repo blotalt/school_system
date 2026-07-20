@@ -23,6 +23,7 @@ Route::delete('classes/{class}/schedule/{schedule}', [ClassController::class, 'd
 Route::resource('exams', ExamController::class);
 Route::get('exams/{exam}/results', [ExamController::class, 'results'])->name('exams.results.index');
 Route::post('exams/{exam}/results', [ExamController::class, 'storeResults'])->name('exams.results.store');
+Route::get('exams/{exam}/results/export', [ExamController::class, 'exportResults'])->name('exams.results.export');
 Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
 Route::post('attendance/{class}', [AttendanceController::class, 'store'])->name('attendance.store');
 Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements.index');

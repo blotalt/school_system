@@ -12,6 +12,9 @@
         <h1>{{ $exam->title }}</h1>
         <p>{{ $exam->schoolClass->name ?? 'Unassigned' }} &middot; {{ $exam->subject->name ?? '—' }} &middot; Max Score {{ $exam->max_score }}</p>
     </div>
+    <a href="{{ route('admin.exams.results.export', $exam) }}" class="add-btn">
+        <i class="fa-solid fa-file-excel"></i> Export
+    </a>
 </x-page-header>
 
 @if (session('success'))
