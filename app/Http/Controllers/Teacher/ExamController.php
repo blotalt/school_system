@@ -5,19 +5,24 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use App\Models\SchoolClass;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class ExamController extends Controller
 {
     public function index()
     {
-        $teacherId = auth()->user()->teacher->id;
+        $teacher = auth()->user()->teacher;
 
-        $exams = Exam::where('teacher_id', $teacherId)
+        $exams = Exam::where('teacher_id', $teacher->id)
             ->with(['schoolClass', 'subject'])
+            ->latest()
             ->get();
 
-        return view('teacher.exams', compact('exams'));
+        $classes  = SchoolClass::where('teacher_id', $teacher->id)->get();
+        $subjects = Subject::orderBy('name')->get();
+
+        return view('teacher.exams', compact('exams', 'classes', 'subjects'));
     }
 
     public function store(Request $request)

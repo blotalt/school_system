@@ -17,13 +17,14 @@
                 <p>Academic Year 2025-2026</p>
             </div>
             <ul class="menu">
-                <li><a href="/teacher/dashboard" class="{{ request()->is('teacher/dashboard') || request()->is('teacher') ? 'active' : '' }}"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a href="{{ route('teacher.dashboard') }}" class="{{ request()->is('teacher') ? 'active' : '' }}"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
                 <li><a href="/teacher/classes" class="{{ request()->is('teacher/classes*') ? 'active' : '' }}"><i class="fa-solid fa-school"></i> Classes</a></li>
                 <li><a href="/teacher/homework" class="{{ request()->is('teacher/homework*') ? 'active' : '' }}"><i class="fa-solid fa-book"></i> Homework</a></li>
                 <li><a href="/teacher/exams" class="{{ request()->is('teacher/exams*') ? 'active' : '' }}"><i class="fa-regular fa-clipboard"></i> Exams</a></li>
+                <li><a href="/teacher/announcements" class="{{ request()->is('teacher/announcements*') ? 'active' : '' }}"><i class="fa-solid fa-bullhorn"></i> Announcements</a></li>
             </ul>
         </div>
-        <div class="settings">
+        <div class="settings" style="position:sticky;bottom:0;background:#0b3f86;padding:16px;">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <a href="#" onclick="event.preventDefault(); this.closest('form').submit();"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
@@ -33,10 +34,7 @@
 
     <main class="main">
         <x-page-header>
-            <div class="search-box">
-                <input type="text" placeholder="Search">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </div>
+
             <div class="top-right">
                 <div class="icon-btn"><i class="fa-regular fa-bell"></i></div>
                 <div class="teacher">
@@ -44,9 +42,7 @@
                         <h4>{{ auth()->user()->name }}</h4>
                         <span>Teacher</span>
                     </div>
-                    <a href="/myprofile">
-                        <div class="avatar-circle" style="width:40px;height:40px;">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</div>
-                    </a>
+                    <div class="avatar-circle" style="width:40px;height:40px;">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</div>
                 </div>
             </div>
         </x-page-header>

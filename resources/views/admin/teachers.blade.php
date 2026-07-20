@@ -1,41 +1,24 @@
 @extends('layouts.admin')
 
 @section('content')
-<x-page-header>
-    <div>
-        <h1>Teacher Management</h1>
-        <p>Managing 124 teachers for the current semester.</p>
-    </div>
-</x-page-header>
+<div class="page-title">
+    <h1>Teacher Management</h1>
+    <p>All registered faculty members for the current semester.</p>
+</div>
 
-@php
-$teachers = [
-    (object)['id' => 'EMP-2023-01', 'name' => 'Mr. Sophea Rath', 'subjects' => ['Physics','Maths'], 'classes' => 'Grade 11-A, Grade 12-B', 'contact' => '+855 12 345 678', 'status' => 'Active'],
-    (object)['id' => 'EMP-2023-08', 'name' => 'Ms. Sreyneang Kim', 'subjects' => ['Biology'], 'classes' => 'Grade 10-C, Grade 11-B', 'contact' => '+855 99 876 543', 'status' => 'Active'],
-    (object)['id' => 'EMP-2020-05', 'name' => 'Dr. Chan Dara', 'subjects' => ['History'], 'classes' => 'N/A (On Leave)', 'contact' => '+855 10 222 333', 'status' => 'Inactive'],
-];
-@endphp
+@if(session('success'))
+    <div class="filter-card" style="color:#1a7f37;margin-bottom:8px;">{{ session('success') }}</div>
+@endif
 
 <div class="data-card-header" style="background:#fff;border-radius:16px 16px 0 0;border:1px solid #e5e9f2;border-bottom:none;padding:20px 24px;">
     <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:space-between;">
         <div class="search-box" style="width:320px;">
-            <input type="text" placeholder="e.g. Sophea Rath">
+            <input type="text" id="teacherSearch" placeholder="e.g. Sophea Rath" onkeyup="liveSearch('teacherSearch','teacherTable')">
             <i class="fa-solid fa-magnifying-glass"></i>
         </div>
         <div style="display:flex;gap:15px;align-items:center;">
-            <select class="filter-select">
-                <option>All</option>
-                <option>Physics</option>
-                <option>Biology</option>
-                <option>History</option>
-            </select>
-            <select class="filter-select">
-                <option>All</option>
-                <option>Active</option>
-                <option>Inactive</option>
-            </select>
             <a href="{{ route('admin.teachers.create') }}" class="add-btn">
-                <i class="fa-solid fa-user-plus"></i> Add
+                <i class="fa-solid fa-user-plus"></i> Add Teacher
             </a>
         </div>
     </div>
@@ -45,36 +28,58 @@ $teachers = [
     <table class="data-table">
         <thead>
             <tr>
-                <th>Teacher Name</th>
-                <th>Subject(s)</th>
+                <th>Teacher</th>
+                <th>Subject Specialty</th>
                 <th>Assigned Classes</th>
-                <th>Contact</th>
-                <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach($teachers as $teacher)
+        <tbody id="teacherTable">
+            @forelse($teachers as $teacher)
                 <tr>
                     <td>
-                        <strong>{{ $teacher->name }}</strong><br>
-                        <span style="color:#9ca3af;font-size:13px;">{{ $teacher->id }}</span>
+                        <strong>{{ $teacher->user->name }}</strong><br>
+                        <span style="color:#9ca3af;font-size:13px;">{{ $teacher->user->email }}</span>
                     </td>
                     <td>
-                        @foreach($teacher->subjects as $subject)
-                            <span class="badge badge-subject">{{ $subject }}</span>
-                        @endforeach
+                        @if($teacher->subject_specialty)
+                            <span class="badge badge-subject">{{ $teacher->subject_specialty }}</span>
+                        @else
+                            <span style="color:#9ca3af;">—</span>
+                        @endif
                     </td>
-                    <td>{{ $teacher->classes }}</td>
-                    <td>{{ $teacher->contact }}</td>
-                    <td><span class="badge badge-{{ $teacher->status === 'Active' ? 'active' : 'inactive' }}">{{ strtoupper($teacher->status) }}</span></td>
                     <td>
-                        <a href="#" title="View"><i class="fa-regular fa-eye"></i></a>
-                        <a href="#" title="Edit" style="margin-left:12px;"><i class="fa-solid fa-pen"></i></a>
+                        @if($teacher->classes->isNotEmpty())
+                            {{ $teacher->classes->pluck('name')->join(', ') }}
+                        @else
+                            <span style="color:#9ca3af;">None assigned</span>
+                        @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('admin.teachers.edit', $teacher) }}" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                        <form method="POST" action="{{ route('admin.teachers.destroy', $teacher) }}" style="display:inline;margin-left:12px;" onsubmit="return confirm('Delete this teacher?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" style="background:none;border:none;cursor:pointer;color:#ef4444;" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                        </form>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr><td colspan="4" style="text-align:center;color:#8a94a6;">No teachers yet.</td></tr>
+            @endforelse
         </tbody>
     </table>
+    <div style="padding:16px;">{{ $teachers->links() }}</div>
 </div>
+
+<script>
+function liveSearch(inputId, tableId) {
+    var filter = document.getElementById(inputId).value.toLowerCase();
+    var rows = document.getElementById(tableId).getElementsByTagName('tr');
+    for (var i = 0; i < rows.length; i++) {
+        var text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(filter) ? '' : 'none';
+    }
+}
+</script>
 @endsection

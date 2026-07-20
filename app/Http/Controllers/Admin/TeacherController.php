@@ -12,7 +12,7 @@ class TeacherController extends Controller
 {
     public function index()
     {
-        $teachers = Teacher::with('user')->paginate(20);
+        $teachers = Teacher::with(['user', 'classes'])->paginate(20);
 
         return view('admin.teachers', compact('teachers'));
     }
@@ -31,7 +31,6 @@ class TeacherController extends Controller
             'subject_specialty' => ['nullable', 'string', 'max:255'],
         ]);
 
-        // NOTE: User model casts password as 'hashed' automatically — no Hash::make() needed
         DB::transaction(function () use ($request) {
             $user = User::create([
                 'name'     => $request->name,

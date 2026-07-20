@@ -17,46 +17,42 @@
                 <p>Academic Year 2025-2026</p>
             </div>
             <ul class="menu">
-                <li><a href="/admin/dashboard" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
-                <li><a href="/admin/students" class="{{ request()->is('admin/students*') ? 'active' : '' }}"><i class="fa-solid fa-user-graduate"></i> Students</a></li>
-                <li><a href="/admin/teachers" class="{{ request()->is('admin/teachers*') ? 'active' : '' }}"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a></li>
-                <li><a href="/admin/classes" class="{{ request()->is('admin/classes*') ? 'active' : '' }}"><i class="fa-solid fa-school"></i> Classes</a></li>
-                <li><a href="/admin/attendance" class="{{ request()->is('admin/attendance*') ? 'active' : '' }}"><i class="fa-solid fa-user-check"></i> Attendance</a></li>
-                <li><a href="/admin/exams" class="{{ request()->is('admin/exams*') ? 'active' : '' }}"><i class="fa-regular fa-clipboard"></i> Exams</a></li>
-                <li><a href="/admin/announcements" class="{{ request()->is('admin/announcements*') ? 'active' : '' }}"><i class="fa-solid fa-bullhorn"></i> Announcements</a></li>
+                <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->is('admin') ? 'active' : '' }}"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a href="{{ route('admin.students.index') }}" class="{{ request()->is('admin/students*') ? 'active' : '' }}"><i class="fa-solid fa-user-graduate"></i> Students</a></li>
+                <li><a href="{{ route('admin.teachers.index') }}" class="{{ request()->is('admin/teachers*') ? 'active' : '' }}"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a></li>
+                <li><a href="{{ route('admin.classes.index') }}" class="{{ request()->is('admin/classes*') ? 'active' : '' }}"><i class="fa-solid fa-school"></i> Classes</a></li>
+                <li><a href="{{ route('admin.attendance.index') }}" class="{{ request()->is('admin/attendance*') ? 'active' : '' }}"><i class="fa-solid fa-user-check"></i> Attendance</a></li>
+                <li><a href="{{ route('admin.exams.index') }}" class="{{ request()->is('admin/exams*') ? 'active' : '' }}"><i class="fa-regular fa-clipboard"></i> Exams</a></li>
+                <li><a href="{{ route('admin.announcements.index') }}" class="{{ request()->is('admin/announcements*') ? 'active' : '' }}"><i class="fa-solid fa-bullhorn"></i> Announcements</a></li>
             </ul>
         </div>
-        <div class="settings">
-            <a href="/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+        <div class="settings" style="position:sticky;bottom:0;background:#0b3f86;padding:16px;">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <a href="#" onclick="event.preventDefault(); this.closest('form').submit();"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
+            </form>
         </div>
     </x-sidebar>
 
     <main class="main">
         <x-page-header>
-            <div class="search-box">
-                <input type="text" placeholder="Search">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </div>
             <div class="top-right">
                 <div class="icon-btn"><i class="fa-regular fa-bell"></i></div>
                 <div class="icon-btn"><i class="fa-solid fa-grip"></i></div>
                 <div class="teacher profile-dropdown-wrapper" onclick="toggleProfileDropdown(event)">
                     <div class="teacher-info">
-                        <h4>Chann Socheat</h4>
-                        <span>Senior Administrator</span>
+                        <h4>{{ auth()->user()->name }}</h4>
+                        <span>Administrator</span>
                     </div>
-                    <div class="avatar-circle">CS</div>
-
+                    <div class="avatar-circle">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</div>
                     <div class="profile-dropdown" id="profileDropdown">
                         <div class="dropdown-user-info">
-                            <div class="avatar-circle" style="width:44px;height:44px;">CS</div>
+                            <div class="avatar-circle" style="width:44px;height:44px;">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</div>
                             <div>
-                                <strong>Chann Socheat</strong>
-                                <p>chann.socheat@cambodiahigh.edu.kh</p>
+                                <strong>{{ auth()->user()->name }}</strong>
+                                <p>{{ auth()->user()->email }}</p>
                             </div>
                         </div>
-                        <hr>
-                        <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
                         <hr>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

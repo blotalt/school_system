@@ -1,12 +1,10 @@
 @extends('layouts.student')
 
 @section('content')
-<x-page-header>
-    <div>
-        <h1>My Schedule</h1>
+<div class="page-title">
+<h1>My Schedule</h1>
         <p>Your class and upcoming exams.</p>
-    </div>
-</x-page-header>
+</div>
 
 <div class="stat-grid">
     <div class="stat-card">

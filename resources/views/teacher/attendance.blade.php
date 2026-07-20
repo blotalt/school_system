@@ -1,336 +1,90 @@
 @extends('layouts.teacher')
 
 @section('content')
-
-
-
-<div class="attendance-page">
-
-    <!-- Ongoing Session -->
-    <div class="session-card">
-
-        <div class="session-left">
-
-            <span class="session-label">
-                <i class="fa-solid fa-flask"></i>
-                ONGOING SESSION
-            </span>
-
-            <h1>Grade 10-A - Mathematics</h1>
-
-            <div class="session-info">
-
-                <span>
-                    <i class="fa-regular fa-clock"></i>
-                    10:00 AM - 11:30 AM
-                </span>
-
-                <span>
-                    <i class="fa-solid fa-location-dot"></i>
-                    Lab 4
-                </span>
-
-            </div>
-
-        </div>
-
-        <button id="markAllPresent" class="present-btn">
-            <i class="fa-solid fa-check-double"></i>
-            Mark All Present
-        </button>
-
-    </div>
+<div class="breadcrumb">
+    <a href="{{ route('teacher.classes.index') }}">Classes</a> &gt;
+    <span>Attendance</span>
 </div>
 
-   <div class="header-action">
+<form method="POST" action="{{ route('teacher.attendance.store', $class) }}">
+    @csrf
 
-            <div class="class-select">
+    <input type="hidden" name="date" value="{{ $date }}">
 
-                <label>Select Class</label>
-
-                <select>
-                    <option>Grade 12 - ALL</option>
-                    <option>Grade 11 - A</option>
-                    <option>Grade 10 - A</option>
-                </select>
-
+    <div class="session-card">
+        <div class="session-left">
+            <span class="session-label"><i class="fa-solid fa-user-check"></i> ATTENDANCE</span>
+            <h1>{{ $class->name }}</h1>
+            <div class="session-info">
+                <span><i class="fa-regular fa-calendar"></i>
+                    <input type="date" name="date" value="{{ $date }}"
+                           style="border:none;background:transparent;font-size:inherit;cursor:pointer;"
+                           onchange="this.form.submit()">
+                </span>
             </div>
-
-            
-
         </div>
-    <!-- Attendance Table -->
+        <button type="button" id="markAllPresent" class="present-btn" onclick="markAll('present')">
+            <i class="fa-solid fa-check-double"></i> Mark All Present
+        </button>
+    </div>
+
+    @if(session('success'))
+        <div class="filter-card" style="color:#1a7f37;margin-bottom:8px;">{{ session('success') }}</div>
+    @endif
 
     <div class="attendance-card">
-
         <div class="attendance-header">
+            <div class="student-column">STUDENT NAME & ID</div>
+            <div class="status-column">ATTENDANCE STATUS</div>
+        </div>
 
-            <div class="student-column">
-                STUDENT NAME & ID
+        @forelse($students as $student)
+            @php $currentStatus = $records->get($student->id)?->status ?? 'present'; @endphp
+            <div class="student-row">
+                <div class="student-info">
+                    <div class="avatar-circle">{{ strtoupper(substr($student->user->name, 0, 1)) }}</div>
+                    <div>
+                        <h4>{{ $student->user->name }}</h4>
+                        <p>{{ $student->roll_no }}</p>
+                    </div>
+                </div>
+                <div class="teacher-attendance-status" data-student="{{ $student->id }}">
+                    <input type="hidden" name="attendance[{{ $student->id }}]" value="{{ $currentStatus }}" class="status-value">
+                    <button type="button" class="teacher-status-btn {{ $currentStatus === 'present' ? 'active' : '' }}" data-status="present">Present</button>
+                    <button type="button" class="teacher-status-btn {{ $currentStatus === 'late' ? 'active' : '' }}" data-status="late">Late</button>
+                    <button type="button" class="teacher-status-btn {{ $currentStatus === 'absent' ? 'active' : '' }}" data-status="absent">Absent</button>
+                </div>
             </div>
+        @empty
+            <div style="padding:20px;color:#8a94a6;text-align:center;">No students in this class.</div>
+        @endforelse
 
-            <div class="status-column">
-                ATTENDANCE STATUS
+        <div class="attendance-footer">
+            <div class="attendance-summary">
+                <span><strong>Total:</strong> {{ $students->count() }}</span>
             </div>
-
+            <button type="submit" class="save-attendance-btn"><i class="fa-solid fa-floppy-disk"></i> Save Attendance</button>
         </div>
-
-   <div class="student-row">
-
-    <div class="student-info">
-
-        <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-        <div>
-            <h4>Kalyan Bopha</h4>
-            <p>ID: 2023XXXX</p>
-        </div>
-
     </div>
-
-   <div class="teacher-attendance-status">
-
-    <button
-        type="button"
-        class="teacher-status-btn active"
-        data-status="present">
-        Present
-    </button>
-
-    <button
-        type="button"
-        class="teacher-status-btn"
-        data-status="late">
-        Late
-    </button>
-
-    <button
-        type="button"
-        class="teacher-status-btn"
-        data-status="absent">
-        Absent
-    </button>
-
-</div>
-
-</div>
-
-<div class="student-row">
-
-    <div class="student-info">
-
-        <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-        <div>
-            <h4>Dara Phirun</h4>
-            <p>ID: 2023XXXX</p>
-        </div>
-
-    </div>
-
-    <div class="teacher-attendance-status">
-
-    <button
-        type="button"
-        class="teacher-status-btn active"
-        data-status="present">
-        Present
-    </button>
-
-    <button
-        type="button"
-        class="teacher-status-btn"
-        data-status="late">
-        Late
-    </button>
-
-    <button
-        type="button"
-        class="teacher-status-btn"
-        data-status="absent">
-        Absent
-    </button>
-
-</div>
-
-</div>
-
-<div class="student-row">
-
-    <div class="student-info">
-
-        <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-        <div>
-            <h4>Vannak Chantrea</h4>
-            <p>ID: 2023XXXX</p>
-        </div>
-
-    </div>
-
-    <div class="teacher-attendance-status">
-
-    <button
-        type="button"
-        class="teacher-status-btn active"
-        data-status="present">
-        Present
-    </button>
-
-    <button
-        type="button"
-        class="teacher-status-btn"
-        data-status="late">
-        Late
-    </button>
-
-    <button
-        type="button"
-        class="teacher-status-btn"
-        data-status="absent">
-        Absent
-    </button>
-
-</div>
-
-</div>
-
-<div class="student-row">
-
-    <div class="student-info">
-
-        <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-        <div>
-            <h4>Visal Rattanak</h4>
-            <p>ID: 2023XXXX</p>
-        </div>
-
-    </div>
-
-    <div class="teacher-attendance-status">
-
-    <button
-        type="button"
-        class="teacher-status-btn active"
-        data-status="present">
-        Present
-    </button>
-
-    <button
-        type="button"
-        class="teacher-status-btn"
-        data-status="late">
-        Late
-    </button>
-
-    <button
-        type="button"
-        class="teacher-status-btn"
-        data-status="absent">
-        Absent
-    </button>
-
-</div>
-
-</div>
-
-<div class="student-row">
-
-    <div class="student-info">
-
-        <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-        <div>
-            <h4>Serey Sokha</h4>
-            <p>ID: 2023XXXX</p>
-        </div>
-
-    </div>
-
-    <div class="teacher-attendance-status">
-
-    <button
-        type="button"
-        class="teacher-status-btn active"
-        data-status="present">
-        Present
-    </button>
-
-    <button
-        type="button"
-        class="teacher-status-btn"
-        data-status="late">
-        Late
-    </button>
-
-    <button
-        type="button"
-        class="teacher-status-btn"
-        data-status="absent">
-        Absent
-    </button>
-
-</div>
-
-</div>
-
-<div class="student-row">
-
-    <div class="student-info">
-
-        <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-        <div>
-            <h4>Bruno Mars</h4>
-            <p>ID: 2023XXXX</p>
-        </div>
-
-    </div>
-
-    <div class="teacher-attendance-status">
-
-    <button
-        type="button"
-        class="teacher-status-btn active"
-        data-status="present">
-        Present
-    </button>
-
-    <button
-        type="button"
-        class="teacher-status-btn"
-        data-status="late">
-        Late
-    </button>
-
-    <button
-        type="button"
-        class="teacher-status-btn"
-        data-status="absent">
-        Absent
-    </button>
-
-</div>
-
-</div>
-</div>
-<div class="attendance-footer">
-    <div class="attendance-summary">
-        <span>
-    <strong>Total Students:</strong>
-    
-</span>
-
-        <span class="summary present">Present: 10</span>
-        <span class="summary late"> Late: 1</span>
-        <span class="summary absent">Absent: 1</span>
-    </div>
-    <button type="submit" class="save-attendance-btn"><i class="fa-solid fa-floppy-disk"></i> Save Attendance</button>
-
-</div>
-</div>
-</div>
-
-
+</form>
+
+<script>
+document.querySelectorAll('.teacher-attendance-status').forEach(function(group) {
+    group.querySelectorAll('.teacher-status-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            group.querySelectorAll('.teacher-status-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            group.querySelector('.status-value').value = this.dataset.status;
+        });
+    });
+});
+
+function markAll(status) {
+    document.querySelectorAll('.teacher-attendance-status').forEach(function(group) {
+        group.querySelectorAll('.teacher-status-btn').forEach(b => b.classList.remove('active'));
+        group.querySelector('[data-status="' + status + '"]').classList.add('active');
+        group.querySelector('.status-value').value = status;
+    });
+}
+</script>
 @endsection

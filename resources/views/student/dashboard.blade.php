@@ -1,9 +1,8 @@
 @extends('layouts.student')
 
 @section('content')
-<x-page-header>
-    <div>
-        <h1>Welcome back{{ $student ? ', ' . auth()->user()->name : '' }}</h1>
+<div class="page-title">
+<h1>Welcome back{{ $student ? ', ' . auth()->user()->name : '' }}</h1>
         <p>
             @if($class)
                 {{ $class->name }}{{ $class->track ? ' • ' . $class->track : '' }} • Academic Session 2025-2026
@@ -11,8 +10,7 @@
                 Your student profile is not set up yet. Please contact the administrator.
             @endif
         </p>
-    </div>
-</x-page-header>
+</div>
 
 <div class="stat-grid">
     <div class="stat-card">

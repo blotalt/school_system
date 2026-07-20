@@ -1,20 +1,14 @@
 @extends('layouts.admin')
 
 @section('content')
-<x-page-header>
-    <div>
-        <h1>Exam Management</h1>
-        <p>Manage monthly and semester exams across all classes.</p>
-    </div>
-</x-page-header>
+<div class="page-title">
+<h1>Exam Management</h1>
+        <p>All exams across the school, created by teachers.</p>
+</div>
 
-@php
-$exams = [
-    (object)['id'=>1,'title'=>'Mid-Term Mathematics','class'=>'Grade 12 - A','subject'=>'Math','teacher'=>'Mr. Sophea Rath','type'=>'monthly','date'=>'2026-07-25','max_score'=>100],
-    (object)['id'=>2,'title'=>'Semester Biology Final','class'=>'Grade 11 - B','subject'=>'Biology','teacher'=>'Ms. Sreyneang Kim','type'=>'semester','date'=>'2026-08-10','max_score'=>100],
-    (object)['id'=>3,'title'=>'Monthly History Quiz','class'=>'Grade 10 - C','subject'=>'History','teacher'=>'Dr. Chan Dara','type'=>'monthly','date'=>'2026-07-20','max_score'=>50],
-];
-@endphp
+@if(session('success'))
+    <div class="filter-card" style="color:#1a7f37;margin-bottom:8px;">{{ session('success') }}</div>
+@endif
 
 <div class="data-card">
     <table class="data-table">
@@ -30,20 +24,28 @@ $exams = [
             </tr>
         </thead>
         <tbody>
-            @foreach($exams as $exam)
+            @forelse($exams as $exam)
                 <tr>
                     <td><strong>{{ $exam->title }}</strong></td>
-                    <td>{{ $exam->class }}</td>
-                    <td>{{ $exam->subject }}</td>
-                    <td>{{ $exam->teacher }}</td>
-                    <td><span class="badge {{ $exam->type === 'monthly' ? 'badge-science' : 'badge-geography' }}">{{ ucfirst($exam->type) }}</span></td>
-                    <td>{{ $exam->date }}</td>
+                    <td>{{ $exam->schoolClass->name ?? '—' }}</td>
+                    <td>{{ $exam->subject->name ?? '—' }}</td>
+                    <td>{{ $exam->teacher?->user?->name ?? '—' }}</td>
+                    <td><span class="badge {{ $exam->exam_type === 'monthly' ? 'badge-science' : 'badge-geography' }}">{{ ucfirst($exam->exam_type) }}</span></td>
+                    <td>{{ \Carbon\Carbon::parse($exam->exam_date)->format('M d, Y') }}</td>
                     <td>
-                        <a href="{{ route('admin.exams.results', $exam->id) }}">View Results</a>
+                        <a href="{{ route('admin.exams.show', $exam) }}" title="View Results"><i class="fa-regular fa-eye"></i></a>
+                        <form method="POST" action="{{ route('admin.exams.destroy', $exam) }}" style="display:inline;margin-left:12px;" onsubmit="return confirm('Delete this exam?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" style="background:none;border:none;cursor:pointer;color:#ef4444;" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                        </form>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr><td colspan="7" style="text-align:center;color:#8a94a6;">No exams yet. Teachers create exams from their portal.</td></tr>
+            @endforelse
         </tbody>
     </table>
+    <div style="padding:16px;">{{ $exams->links() }}</div>
 </div>
 @endsection

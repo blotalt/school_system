@@ -1,274 +1,87 @@
 @extends('layouts.teacher')
 
 @section('content')
-
-<div class="gradebook-page">
-
-    <div class="gradebook-header">
-
-        <div class="header-left">
-
-            <h1>Gradebook</h1>
-
-            <p>
-    Manage and evaluate academic performance for
-    <span>Grade 10 - A</span>
-</p>
-
-        </div>
-
-        <div class="header-right">
-
-            <select>
-                <option>Grade 12 - A</option>
-                <option>Grade 11 - A</option>
-                <option>Grade 10 - A</option>
-            </select>
-
-            <select>
-                <option>Mathematics</option>
-                <option>Physics</option>
-                <option>Chemistry</option>
-                <option>English</option>
-            </select>
-
-            <select>
-                <option>Exam</option>
-                <option>Homework</option>
-            </select>
-
-        </div>
-
-    </div>
-
-
-
-
-<!-- Gradebook Table -->
-
-<div class="gradebook-card">
-
-    <table class="gradebook-table">
-
-        <thead>
-
-            <tr>
-
-                <th>Student Name</th>
-
-                <th>Subject</th>
-
-                <th>Score (0-100)</th>
-
-                <th>Grade</th>
-
-                
-
-            </tr>
-
-        </thead>
-
-       <tbody>
-
-<tbody>
-
-<tr>
-
-    <td>
-        <div class="student-info">
-            <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-            <div>
-                <h4>Kalyan Bopha</h4>
-                <p>ID: 2023XXXX</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="95">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-a">A</span>
-    </td>
-
-</tr>
-
-<tr>
-
-    <td>
-        <div class="student-info">
-            <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-            <div>
-                <h4>Dara Phirun</h4>
-                <p>ID: 2023XXXX</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="86">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-b">B</span>
-    </td>
-
-</tr>
-
-<tr>
-
-    <td>
-        <div class="student-info">
-            <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-            <div>
-                <h4>Vannak Chantrea</h4>
-                <p>ID: 2023XXXX</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="78">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-c">C</span>
-    </td>
-
-</tr>
-
-<tr>
-
-    <td>
-        <div class="student-info">
-            <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-            <div>
-                <h4>Visal Rattanak</h4>
-                <p>ID: 2023XXXX</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="67">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-d">D</span>
-    </td>
-
-</tr>
-
-<tr>
-
-    <td>
-        <div class="student-info">
-            <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-            <div>
-                <h4>Serey Sokha</h4>
-                <p>ID: 2023XXXX</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="52">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-f">F</span>
-    </td>
-
-</tr>
-
-<tr>
-
-    <td>
-        <div class="student-info">
-            <img src="{{ asset('images/avatar.png') }}" alt="Student">
-
-            <div>
-                <h4>Bruno Mars</h4>
-                <p>ID: 2023XXXX</p>
-            </div>
-
-        </div>
-    </td>
-
-    <td>
-        <span class="subject-badge">Mathematics</span>
-    </td>
-
-    <td>
-        <input type="number" class="score-input" value="91">
-    </td>
-
-    <td>
-        <span class="grade-circle grade-a">A</span>
-    </td>
-
-</tr>
-
-</tbody>
-
-</tbody>
-
-    </table>
-
+<div class="breadcrumb">
+    <a href="{{ route('teacher.exams.index') }}">Exams</a> &gt;
+    <span>Gradebook</span>
 </div>
 
-<div class="gradebook-footer">
-
-    <div class="footer-text">
-        Showing 1-5 of 32 students in Grade 12 - A
-    </div>
-
-    <div class="footer-buttons">
-
-        <button class="discard-btn">
-            Discard Changes
-        </button>
-
-        <button class="save-btn">
-            Save All Changes
-        </button>
-
-    </div>
-
+<div class="page-title">
+<h1>Gradebook</h1>
+        <p>{{ $exam->title }} — {{ $class->name }} — Max: {{ $exam->max_score }}</p>
 </div>
 
-</div>
+@if(session('success'))
+    <div class="filter-card" style="color:#1a7f37;margin-bottom:8px;">{{ session('success') }}</div>
+@endif
 
+<form method="POST" action="{{ route('teacher.gradebook.store', $exam) }}">
+    @csrf
 
+    <div class="gradebook-card">
+        <table class="gradebook-table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Score (0 – {{ $exam->max_score }})</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($students as $student)
+                    @php
+                        $score = $results->get($student->id)?->score ?? null;
+                        $pct = ($score !== null && $exam->max_score > 0) ? round($score / $exam->max_score * 100) : null;
+                        $grade = match(true) {
+                            $pct === null => '—',
+                            $pct >= 90   => 'A',
+                            $pct >= 80   => 'B',
+                            $pct >= 70   => 'C',
+                            $pct >= 60   => 'D',
+                            default      => 'F',
+                        };
+                        $gradeClass = match($grade) {
+                            'A' => 'grade-a', 'B' => 'grade-b', 'C' => 'grade-c',
+                            'D' => 'grade-d', 'F' => 'grade-f', default => '',
+                        };
+                    @endphp
+                    <tr>
+                        <td>
+                            <div class="student-info">
+                                <div>
+                                    <h4>{{ $student->user->name }}</h4>
+                                    <p>{{ $student->roll_no }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="number" class="score-input" name="scores[{{ $student->id }}]"
+                                   value="{{ $score }}" min="0" max="{{ $exam->max_score }}"
+                                   placeholder="—">
+                        </td>
+                        <td>
+                            @if($grade !== '—')
+                                <span class="grade-circle {{ $gradeClass }}">{{ $grade }}</span>
+                            @else
+                                <span style="color:#9ca3af;">—</span>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr><td colspan="3" style="text-align:center;color:#8a94a6;">No students in this class.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    <div class="gradebook-footer">
+        <div class="footer-text">
+            {{ $students->count() }} student(s) in {{ $class->name }}
+        </div>
+        <div class="footer-buttons">
+            <a href="{{ route('teacher.exams.index') }}" class="discard-btn">Back to Exams</a>
+            <button type="submit" class="save-btn">Save All Changes</button>
+        </div>
+    </div>
+</form>
 @endsection

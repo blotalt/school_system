@@ -1,12 +1,10 @@
 @extends('layouts.admin')
 
 @section('content')
-<x-page-header>
-    <div>
-        <h1>Institutional Dashboard</h1>
-        <p>Academic Session: 2025-2026 • Senior Secondary Department</p>
-    </div>
-</x-page-header>
+<div class="page-title">
+    <h1>Institutional Dashboard</h1>
+    <p>Academic Session: 2025-2026 · Senior Secondary Department</p>
+</div>
 
 <div class="stat-grid">
     @foreach($stats as $stat)
@@ -21,7 +19,7 @@
 <div class="data-card">
     <div class="data-card-header">
         <h3>Classes Overview</h3>
-        <a href="/admin/classes">View All Classes</a>
+        <a href="{{ route('admin.classes.index') }}">View All Classes</a>
     </div>
     <table class="data-table">
         <thead>
@@ -36,7 +34,7 @@
             @forelse($classes as $class)
                 <tr>
                     <td>{{ $class->name }}</td>
-                    <td><span class="badge badge-{{ strtolower($class->track) }}">{{ strtoupper($class->track) }}</span></td>
+                    <td><span class="badge badge-{{ strtolower($class->track ?? 'general') }}">{{ strtoupper($class->track ?? 'General') }}</span></td>
                     <td>{{ $class->students }}</td>
                     <td>{{ $class->attendance }}%</td>
                 </tr>

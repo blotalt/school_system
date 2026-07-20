@@ -1,12 +1,10 @@
 @extends('layouts.student')
 
 @section('content')
-<x-page-header>
-    <div>
-        <h1>My Attendance</h1>
+<div class="page-title">
+<h1>My Attendance</h1>
         <p>Your attendance history, read-only.</p>
-    </div>
-</x-page-header>
+</div>
 
 <div class="stat-grid">
     <div class="stat-card">
