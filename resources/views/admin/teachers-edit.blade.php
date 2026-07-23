@@ -90,7 +90,7 @@
 
     <div class="info-box">
         <i class="fa-solid fa-circle-info"></i>
-        <span>Assigning a class here reassigns it from any teacher currently teaching it.</span>
+        <span>Multiple teachers can be assigned to the same class for different subjects.</span>
     </div>
 
     <div class="form-actions">

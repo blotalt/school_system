@@ -53,7 +53,7 @@
                             <span style="color:#9ca3af;">&mdash;</span>
                         @endforelse
                     </td>
-                    <td>{{ $teacher->classes->pluck('name')->implode(', ') ?: 'N/A' }}</td>
+                    <td>{{ $teacher->assignedClasses->pluck('name')->join(', ') }}</td>
                     <td>{{ $teacher->user->email }}</td>
                     <td>
                         <a href="{{ route('admin.teachers.edit', $teacher) }}" title="Edit"><i class="fa-solid fa-pen"></i></a>
