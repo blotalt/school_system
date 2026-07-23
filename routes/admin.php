@@ -12,8 +12,10 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ScheduleController;
 
 
+use App\Http\Controllers\Admin\SearchController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('search', [SearchController::class, 'search'])->name('search');
 Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
