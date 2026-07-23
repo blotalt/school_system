@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
-use App\Models\SchoolClass;
 use Illuminate\Support\Facades\Auth;
 
 class ClassController extends Controller
@@ -12,7 +11,9 @@ class ClassController extends Controller
     {
         $teacher = Auth::user()->teacher;
 
-        $classes = SchoolClass::where('teacher_id', $teacher->id)->get();
+        $classes = $teacher
+            ? $teacher->assignedClasses()->withCount('students')->get()
+            : collect();
 
         return view('teacher.classes', compact('classes'));
     }

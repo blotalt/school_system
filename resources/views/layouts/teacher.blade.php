@@ -20,6 +20,7 @@
             </div>
             <ul class="menu">
                 <li><a href="/teacher/dashboard" class="{{ request()->is('teacher/dashboard') || request()->is('teacher') ? 'active' : '' }}"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a href="/teacher/schedule" class="{{ request()->is('teacher/schedule*') ? 'active' : '' }}"><i class="fa-regular fa-calendar"></i> Schedule</a></li>
                 <li><a href="/teacher/classes" class="{{ request()->is('teacher/classes*') ? 'active' : '' }}"><i class="fa-solid fa-school"></i> Classes</a></li>
                 <li><a href="/teacher/attendance" class="{{ request()->is('teacher/attendance*') ? 'active' : '' }}"><i class="fa-solid fa-user-check"></i> Attendance</a></li>
                 <li><a href="/teacher/homework" class="{{ request()->is('teacher/homework*') ? 'active' : '' }}"><i class="fa-solid fa-book"></i> Homework</a></li>

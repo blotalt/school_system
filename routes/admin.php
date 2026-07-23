@@ -9,6 +9,9 @@ use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\AttendanceController; // B4
 use App\Http\Controllers\Admin\AnnouncementController; // B4
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\ScheduleController;
+
+
 use App\Http\Controllers\Admin\SearchController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -19,8 +22,6 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::resource('students', StudentController::class);
 Route::resource('teachers', TeacherController::class);
 Route::resource('classes', ClassController::class);
-Route::post('classes/{class}/schedule', [ClassController::class, 'storeSchedule'])->name('classes.schedule.store');
-Route::delete('classes/{class}/schedule/{schedule}', [ClassController::class, 'destroySchedule'])->name('classes.schedule.destroy');
 
 Route::resource('exams', ExamController::class);
 Route::get('exams/{exam}/results', [ExamController::class, 'results'])->name('exams.results.index');
@@ -30,3 +31,11 @@ Route::get('attendance', [AttendanceController::class, 'index'])->name('attendan
 Route::post('attendance/{class}', [AttendanceController::class, 'store'])->name('attendance.store');
 Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
 Route::post('announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
+
+
+
+Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule.index');
+Route::post('schedule/{schedule}/approve', [ScheduleController::class, 'approve'])->name('schedule.approve');
+Route::post('schedule/{schedule}/reject', [ScheduleController::class, 'reject'])->name('schedule.reject');
+
+Route::delete('schedule/{schedule}', [ScheduleController::class, 'destroy'])->name('schedule.destroy');

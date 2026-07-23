@@ -18,6 +18,7 @@
             </div>
             <ul class="menu">
                 <li><a href="/admin/dashboard" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a href="/admin/schedule" class="{{ request()->is('admin/schedule*') ? 'active' : '' }}"><i class="fa-regular fa-calendar"></i> Schedule</a></li>
                 <li><a href="/admin/students" class="{{ request()->is('admin/students*') ? 'active' : '' }}"><i class="fa-solid fa-user-graduate"></i> Students</a></li>
                 <li><a href="/admin/teachers" class="{{ request()->is('admin/teachers*') ? 'active' : '' }}"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a></li>
                 <li><a href="/admin/classes" class="{{ request()->is('admin/classes*') ? 'active' : '' }}"><i class="fa-solid fa-school"></i> Classes</a></li>
@@ -43,36 +44,26 @@
                 </div>
                 <div class="search-results" id="globalSearchResults"></div>
             </div>
-            <div class="top-right">
-                <x-notifications-bell />
-                <div class="icon-btn"><i class="fa-solid fa-grip"></i></div>
-                @php $initials = collect(explode(' ', auth()->user()->name))->map(fn ($n) => mb_substr($n, 0, 1))->take(2)->implode(''); @endphp
-                <div class="teacher profile-dropdown-wrapper" onclick="toggleProfileDropdown(event)">
-                    <div class="teacher-info">
-                        <h4>{{ auth()->user()->name }}</h4>
-                        <span>Administrator</span>
-                    </div>
-                    <div class="avatar-circle">{{ $initials }}</div>
-
-                    <div class="profile-dropdown" id="profileDropdown">
-                        <div class="dropdown-user-info">
-                            <div class="avatar-circle" style="width:44px;height:44px;">{{ $initials }}</div>
-                            <div>
-                                <strong>{{ auth()->user()->name }}</strong>
-                                <p>{{ auth()->user()->email }}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <a href="{{ route('admin.profile.edit') }}"><i class="fa-solid fa-gear"></i> Settings</a>
-                        <hr>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
-                        </form>
+            <div class="avatar-circle">{{ $initials }}</div>
+            <div class="profile-dropdown" id="profileDropdown">
+                <div class="dropdown-user-info">
+                    <div class="avatar-circle" style="width:44px;height:44px;">{{ $initials }}</div>
+                    <div>
+                        <strong>{{ auth()->user()->name }}</strong>
+                        <p>{{ auth()->user()->email }}</p>
                     </div>
                 </div>
+                <hr>
+                <a href="{{ route('admin.profile.edit') }}"><i class="fa-solid fa-gear"></i> Settings</a>
+                <hr>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+                </form>
             </div>
-        </x-page-header>
+        </div>
+    </div>
+</header>
 
         @yield('content')
     </main>

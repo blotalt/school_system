@@ -14,6 +14,8 @@ class ClassSchedule extends Model
         'day_of_week',
         'period',
         'shift',
+        'status',
+        'rejection_note',
     ];
 
     public function schoolClass(): BelongsTo
@@ -29,5 +31,15 @@ class ClassSchedule extends Model
     public function teacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class);
+    }
+
+    public function scopeApproved($query)
+    {
+        return $query->where('status', 'approved');
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
     }
 }

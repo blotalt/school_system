@@ -9,14 +9,37 @@ use App\Models\Student;
 
 class ScheduleController extends Controller
 {
+    private const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
+    private const PERIOD_TIMES = [
+        'morning' => [
+            1 => '7:10 - 8:00',
+            2 => '8:10 - 9:00',
+            3 => '9:10 - 10:00',
+            4 => '10:10 - 11:00',
+        ],
+        'afternoon' => [
+            1 => '1:10 - 2:00',
+            2 => '2:10 - 3:00',
+            3 => '3:10 - 4:00',
+            4 => '4:10 - 5:00',
+        ],
+    ];
+
     public function index()
     {
         $student = auth()->user()->student;
+        $class   = $student?->schoolClass()->with('teacher.user')->first();
 
-        // The student's class (with its homeroom teacher) is their schedule anchor.
-        $class = $student?->schoolClass()->with('teacher.user')->first();
+        $schedules = collect();
+        if ($class) {
+            $schedules = ClassSchedule::with(['subject', 'teacher.user'])
+                ->where('class_id', $class->id)
+                ->where('status', 'approved')
+                ->get()
+                ->keyBy(fn($s) => "{$s->shift}-{$s->day_of_week}-{$s->period}");
+        }
 
-        // Upcoming exams for the student's class, read-only and self-scoped by class.
         $exams = $student
             ? Exam::where('class_id', $student->class_id)
                 ->with('subject')
@@ -24,14 +47,19 @@ class ScheduleController extends Controller
                 ->get()
             : collect();
 
-        return view('student.schedule', compact('student', 'class', 'exams'));
+        return view('student.schedule', [
+            'student'     => $student,
+            'class'       => $class,
+            'schedules'   => $schedules,
+            'exams'       => $exams,
+            'days'        => self::DAYS,
+            'periodTimes' => self::PERIOD_TIMES,
+        ]);
     }
 
     public function showClass(ClassSchedule $schedule)
     {
         $student = auth()->user()->student;
-
-        // Self-scoped: a student may only view a schedule slot for their own class.
         abort_unless($student && $schedule->class_id === $student->class_id, 403);
 
         $schedule->load(['subject', 'teacher.user', 'schoolClass']);

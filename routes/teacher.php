@@ -16,6 +16,11 @@ Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::get('classes', [ClassController::class, 'index'])->name('classes.index');
 Route::get('classes/{class}/attendance', [AttendanceController::class, 'show'])->name('attendance.show');
 Route::post('classes/{class}/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+use App\Http\Controllers\Teacher\ScheduleController;
+
+Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule.index');
+Route::post('schedule', [ScheduleController::class, 'store'])->name('schedule.store');
+Route::delete('schedule/{schedule}', [ScheduleController::class, 'destroy'])->name('schedule.destroy');
 
 // Sidebar links to a bare /teacher/attendance; route it to the teacher's
 // first class since attendance is always taken per-class.

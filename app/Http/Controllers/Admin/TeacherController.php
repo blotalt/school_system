@@ -14,7 +14,7 @@ class TeacherController extends Controller
 {
     public function index()
     {
-        $teachers = Teacher::with(['user', 'subjects', 'classes'])->paginate(20);
+        $teachers = Teacher::with(['user', 'subjects', 'assignedClasses'])->paginate(20);
 
         return view('admin.teachers', compact('teachers'));
     }
@@ -22,7 +22,7 @@ class TeacherController extends Controller
     public function create()
     {
         $subjects = Subject::orderBy('name')->get();
-        $classes = SchoolClass::orderBy('name')->get();
+        $classes  = SchoolClass::orderBy('name')->get();
 
         return view('admin.teachers-create', compact('subjects', 'classes'));
     }
@@ -42,7 +42,6 @@ class TeacherController extends Controller
             'classes.*'     => ['exists:classes,id'],
         ]);
 
-        // NOTE: User model casts password as 'hashed' automatically — no Hash::make() needed
         DB::transaction(function () use ($request) {
             $user = User::create([
                 'name'     => $request->name,
@@ -59,9 +58,7 @@ class TeacherController extends Controller
             ]);
 
             $teacher->subjects()->sync($request->input('subjects', []));
-
-            SchoolClass::whereIn('id', $request->input('classes', []))
-                ->update(['teacher_id' => $teacher->id]);
+            $teacher->assignedClasses()->sync($request->input('classes', []));
         });
 
         return redirect()->route('admin.teachers.index')->with('success', 'Teacher account created.');
@@ -69,10 +66,10 @@ class TeacherController extends Controller
 
     public function edit(Teacher $teacher)
     {
-        $subjects = Subject::orderBy('name')->get();
-        $classes = SchoolClass::orderBy('name')->get();
+        $subjects           = Subject::orderBy('name')->get();
+        $classes            = SchoolClass::orderBy('name')->get();
         $assignedSubjectIds = $teacher->subjects()->pluck('subjects.id')->all();
-        $assignedClassIds = $teacher->classes()->pluck('id')->all();
+        $assignedClassIds   = $teacher->assignedClasses()->pluck('classes.id')->all();
 
         return view('admin.teachers-edit', compact('teacher', 'subjects', 'classes', 'assignedSubjectIds', 'assignedClassIds'));
     }
@@ -97,7 +94,7 @@ class TeacherController extends Controller
                 'name'     => $request->name,
                 'email'    => $request->email,
                 'password' => $request->password ?: null,
-            ], fn ($value) => $value !== null));
+            ], fn($value) => $value !== null));
 
             $teacher->update([
                 'date_of_birth' => $request->date_of_birth,
@@ -106,11 +103,7 @@ class TeacherController extends Controller
             ]);
 
             $teacher->subjects()->sync($request->input('subjects', []));
-
-            // Release classes this teacher no longer teaches, then assign the newly selected ones.
-            SchoolClass::where('teacher_id', $teacher->id)->update(['teacher_id' => null]);
-            SchoolClass::whereIn('id', $request->input('classes', []))
-                ->update(['teacher_id' => $teacher->id]);
+            $teacher->assignedClasses()->sync($request->input('classes', []));
         });
 
         return redirect()->route('admin.teachers.index')->with('success', 'Teacher updated.');
@@ -120,7 +113,7 @@ class TeacherController extends Controller
     {
         DB::transaction(function () use ($teacher) {
             $user = $teacher->user;
-            SchoolClass::where('teacher_id', $teacher->id)->update(['teacher_id' => null]);
+            $teacher->assignedClasses()->detach();
             $teacher->delete();
             $user->delete();
         });
