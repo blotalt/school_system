@@ -33,9 +33,12 @@
 
     <main class="main">
         <x-page-header>
-            <div class="search-box">
-                <input type="text" placeholder="Search">
-                <i class="fa-solid fa-magnifying-glass"></i>
+            <div class="search-box-wrapper" onclick="event.stopPropagation()">
+                <div class="search-box">
+                    <input type="text" id="globalSearchInput" placeholder="Search students, teachers, classes, exams..." autocomplete="off">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <div class="search-results" id="globalSearchResults"></div>
             </div>
             <div class="top-right">
                 <x-notifications-bell />
@@ -79,6 +82,63 @@ function toggleProfileDropdown(e) {
 document.addEventListener('click', function() {
     document.getElementById('profileDropdown')?.classList.remove('show');
 });
+
+(function() {
+    const input = document.getElementById('globalSearchInput');
+    const panel = document.getElementById('globalSearchResults');
+    let debounceTimer = null;
+    let currentRequest = null;
+
+    function renderResults(groups) {
+        const keys = Object.keys(groups || {});
+        if (keys.length === 0) {
+            panel.innerHTML = '<div class="search-empty">No results found</div>';
+            panel.classList.add('show');
+            return;
+        }
+
+        panel.innerHTML = keys.map(function(group) {
+            const items = groups[group].map(function(item) {
+                return '<a href="' + item.url + '" class="search-result-item">'
+                    + '<span class="search-result-title">' + item.title + '</span>'
+                    + '<span class="search-result-subtitle">' + (item.subtitle || '') + '</span>'
+                    + '</a>';
+            }).join('');
+            return '<div class="search-group"><div class="search-group-label">' + group + '</div>' + items + '</div>';
+        }).join('');
+        panel.classList.add('show');
+    }
+
+    input.addEventListener('input', function() {
+        const q = input.value.trim();
+        clearTimeout(debounceTimer);
+
+        if (q.length < 2) {
+            panel.classList.remove('show');
+            panel.innerHTML = '';
+            return;
+        }
+
+        debounceTimer = setTimeout(function() {
+            if (currentRequest) currentRequest.abort();
+            const controller = new AbortController();
+            currentRequest = controller;
+
+            fetch('{{ route('admin.search') }}?q=' + encodeURIComponent(q), { signal: controller.signal })
+                .then(function(res) { return res.json(); })
+                .then(function(data) { renderResults(data.results); })
+                .catch(function(err) { if (err.name !== 'AbortError') console.error(err); });
+        }, 250);
+    });
+
+    input.addEventListener('focus', function() {
+        if (panel.innerHTML.trim() !== '') panel.classList.add('show');
+    });
+
+    document.addEventListener('click', function() {
+        panel.classList.remove('show');
+    });
+})();
 </script>
 </body>
 </html>
