@@ -12,11 +12,19 @@ use Illuminate\Support\Facades\DB;
 
 class TeacherController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $teachers = Teacher::with(['user', 'subjects', 'classes'])->paginate(20);
+        $search = $request->query('search');
 
-        return view('admin.teachers', compact('teachers'));
+        $teachers = Teacher::with(['user', 'subjects', 'classes'])
+            ->when($search, fn ($query) => $query->whereHas(
+                'user',
+                fn ($user) => $user->where('name', 'like', "%{$search}%")
+            ))
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('admin.teachers', compact('teachers', 'search'));
     }
 
     public function create()

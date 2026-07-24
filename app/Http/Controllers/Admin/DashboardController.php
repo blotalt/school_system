@@ -23,10 +23,10 @@ class DashboardController extends Controller
         $attendanceRate = $total > 0 ? round($present / $total * 100, 1) : 0;
 
         $stats = [
-            ['icon' => 'fa-user-graduate',  'value' => number_format($totalStudents), 'label' => 'Total Students'],
-            ['icon' => 'fa-chalkboard-user','value' => number_format($totalTeachers), 'label' => 'Total Teachers'],
-            ['icon' => 'fa-circle-check',   'value' => $attendanceRate . '%',         'label' => 'Attendance Rate'],
-            ['icon' => 'fa-school',         'value' => number_format($activeClasses), 'label' => 'Active Classes'],
+            ['icon' => 'fa-user-graduate',  'value' => number_format($totalStudents), 'label' => __('admin.dashboard.stat_total_students')],
+            ['icon' => 'fa-chalkboard-user','value' => number_format($totalTeachers), 'label' => __('admin.dashboard.stat_total_teachers')],
+            ['icon' => 'fa-circle-check',   'value' => $attendanceRate . '%',         'label' => __('admin.dashboard.stat_attendance_rate')],
+            ['icon' => 'fa-school',         'value' => number_format($activeClasses), 'label' => __('admin.dashboard.stat_active_classes')],
         ];
 
         // Classes overview — eager-load student counts and per-class attendance in
@@ -41,7 +41,7 @@ class DashboardController extends Controller
 
             return (object) [
                 'name'       => $class->name,
-                'track'      => $class->track ?? 'General',
+                'track'      => $class->track ?? __('admin.dashboard.default_track'),
                 'students'   => $class->students_count,
                 'attendance' => $rate,
             ];

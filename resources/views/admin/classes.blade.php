@@ -3,14 +3,14 @@
 @section('content')
 <x-page-header>
     <div>
-        <h1>Class Timetable - Weekly Grid</h1>
-        <p>{{ $class ? "Managing {$class->name} weekly schedule" : 'No classes yet.' }}</p>
+        <h1>{{ __('admin.classes.title') }}</h1>
+        <p>{{ $class ? __('admin.classes.subtitle', ['name' => $class->name]) : __('admin.classes.no_classes_yet') }}</p>
     </div>
     @if($class)
     <div style="display:flex;gap:20px;align-items:flex-end;">
         <form method="GET" action="{{ route('admin.classes.index') }}" id="classSwitchForm">
             <div class="header-group">
-                <label>SELECT CLASS</label>
+                <label>{{ __('admin.classes.select_class') }}</label>
                 <select name="class" class="filter-select" onchange="this.form.submit()">
                     @foreach($classes as $c)
                         <option value="{{ $c->id }}" {{ $class->id === $c->id ? 'selected' : '' }}>{{ $c->name }}</option>
@@ -20,10 +20,10 @@
             <input type="hidden" name="shift" id="shiftInput" value="morning">
         </form>
         <div class="header-group">
-            <label>SHIFT SELECTION</label>
+            <label>{{ __('admin.classes.shift_selection') }}</label>
             <div class="shift-toggle">
-                <button type="button" class="shift-btn active" data-shift="morning">Morning shift</button>
-                <button type="button" class="shift-btn" data-shift="afternoon">Afternoon shift</button>
+                <button type="button" class="shift-btn active" data-shift="morning">{{ __('admin.classes.morning_shift') }}</button>
+                <button type="button" class="shift-btn" data-shift="afternoon">{{ __('admin.classes.afternoon_shift') }}</button>
             </div>
         </div>
     </div>
@@ -43,7 +43,7 @@
 
 @if(!$class)
     <div class="data-card" style="padding:40px;text-align:center;color:#9ca3af;">
-        No classes exist yet. <a href="{{ route('admin.classes.create') }}">Create one</a> to build its schedule.
+        {{ __('admin.classes.no_classes_message') }} <a href="{{ route('admin.classes.create') }}">{{ __('admin.classes.create_one') }}</a> {{ __('admin.classes.to_build_schedule') }}
     </div>
 @else
 
@@ -56,10 +56,10 @@ $subjectColors = [
 @endphp
 
 <button type="button" id="editBtn" class="add-btn" style="margin:16px 0;" onclick="enterEditMode()">
-    <i class="fa-solid fa-pen"></i> Edit Schedule
+    <i class="fa-solid fa-pen"></i> {{ __('admin.classes.edit_schedule') }}
 </button>
 <button type="button" id="exitEditBtn" class="cancel-btn" style="margin:16px 0 16px 10px;display:none;" onclick="exitEditMode()">
-    Done Editing
+    {{ __('admin.classes.done_editing') }}
 </button>
 
 @foreach(['morning', 'afternoon'] as $shiftKey)
@@ -67,9 +67,9 @@ $subjectColors = [
     <table class="schedule-table-grid">
         <thead>
             <tr>
-                <th class="time-head">Time</th>
+                <th class="time-head">{{ __('admin.classes.time_column') }}</th>
                 @foreach($days as $day)
-                    <th>{{ strtoupper($day) }}</th>
+                    <th>{{ strtoupper(__('common.days.' . $day)) }}</th>
                 @endforeach
             </tr>
         </thead>
@@ -105,7 +105,7 @@ $subjectColors = [
                         $breakEnd = explode(' - ', $periodTimes[$shiftKey][$period + 1])[0];
                     @endphp
                     <tr class="break-row">
-                        <td colspan="6"><i class="fa-regular fa-clock"></i> 10 MIN BREAK ({{ $breakStart }} - {{ $breakEnd }})</td>
+                        <td colspan="{{ count($days) + 1 }}"><i class="fa-regular fa-clock"></i> {{ __('admin.classes.break_label', ['start' => $breakStart, 'end' => $breakEnd]) }}</td>
                     </tr>
                 @endif
             @endfor
@@ -118,31 +118,31 @@ $subjectColors = [
 <div id="slotModal" class="slot-modal-overlay" style="display:none;">
     <form class="slot-modal" method="POST" id="slotForm" action="">
         @csrf
-        <h3>Add Subject</h3>
+        <h3>{{ __('admin.classes.add_subject_modal') }}</h3>
         <input type="hidden" name="day_of_week" id="modalDay">
         <input type="hidden" name="period" id="modalPeriod">
         <input type="hidden" name="shift" id="modalShift">
         <div class="form-group">
-            <label>Subject</label>
+            <label>{{ __('common.subject') }}</label>
             <select name="subject_id" id="modalSubject" required onchange="filterTeachersBySubject()">
-                <option value="">Select a subject</option>
+                <option value="">{{ __('admin.classes.select_a_subject') }}</option>
                 @foreach($subjects as $subject)
                     <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                 @endforeach
             </select>
         </div>
         <div class="form-group">
-            <label>Teacher</label>
+            <label>{{ __('common.teacher') }}</label>
             <select name="teacher_id" id="modalTeacher" required>
                 @foreach($teachers as $teacher)
                     <option value="{{ $teacher->id }}" data-subjects="{{ $teacher->subjects->pluck('id')->implode(',') }}">{{ $teacher->user->name }}</option>
                 @endforeach
             </select>
-            <span id="teacherHint" style="display:none;color:#9ca3af;font-size:13px;margin-top:4px;">No teacher is assigned to this subject yet — showing everyone.</span>
+            <span id="teacherHint" style="display:none;color:#9ca3af;font-size:13px;margin-top:4px;">{{ __('admin.classes.no_teacher_hint') }}</span>
         </div>
         <div class="form-actions">
-            <button type="button" class="cancel-btn" onclick="closeSlotModal()">Cancel</button>
-            <button type="submit" class="save-btn">Add</button>
+            <button type="button" class="cancel-btn" onclick="closeSlotModal()">{{ __('common.cancel') }}</button>
+            <button type="submit" class="save-btn">{{ __('common.add') }}</button>
         </div>
     </form>
 </div>

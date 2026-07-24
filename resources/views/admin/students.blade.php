@@ -3,8 +3,8 @@
 @section('content')
 <x-page-header>
     <div>
-        <h1>Student Management</h1>
-        <p>Managing {{ $students->total() }} enrolled students for the current semester.</p>
+        <h1>{{ __('admin.students.title') }}</h1>
+        <p>{{ __('admin.students.subtitle', ['count' => $students->total()]) }}</p>
     </div>
 </x-page-header>
 
@@ -16,27 +16,22 @@
 
 <div class="data-card-header" style="background:#fff;border-radius:16px 16px 0 0;border:1px solid #e5e9f2;border-bottom:none;padding:20px 24px;">
     <form method="GET" action="{{ route('admin.students.index') }}" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:space-between;width:100%;">
-        <div class="search-box" style="width:320px;">
-            <input type="text" name="search" value="{{ $search }}" placeholder="e.g. Sophea Rath">
-            <button type="submit" style="background:none;border:none;cursor:pointer;padding:0;">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-        </div>
+        <x-live-search :endpoint="route('admin.search')" name="search" :value="$search" placeholder="{{ __('admin.students.search_placeholder') }}" style="width:320px;" />
         <div style="display:flex;gap:15px;align-items:center;">
             <select name="grade" class="filter-select" onchange="this.form.submit()">
-                <option value="">All Grades</option>
+                <option value="">{{ __('admin.students.all_grades') }}</option>
                 @foreach($grades as $g)
-                    <option value="{{ $g }}" {{ $grade === $g ? 'selected' : '' }}>Grade {{ $g }}</option>
+                    <option value="{{ $g }}" {{ $grade === $g ? 'selected' : '' }}>{{ __('admin.students.grade_label', ['grade' => $g]) }}</option>
                 @endforeach
             </select>
             <select name="track" class="filter-select" onchange="this.form.submit()">
-                <option value="">All Tracks</option>
+                <option value="">{{ __('admin.students.all_tracks') }}</option>
                 @foreach($tracks as $t)
                     <option value="{{ $t }}" {{ $track === $t ? 'selected' : '' }}>{{ $t }}</option>
                 @endforeach
             </select>
             <a href="{{ route('admin.students.create') }}" class="add-btn">
-                <i class="fa-solid fa-user-plus"></i> Add
+                <i class="fa-solid fa-user-plus"></i> {{ __('common.add') }}
             </a>
         </div>
     </form>
@@ -46,11 +41,11 @@
     <table class="data-table">
         <thead>
             <tr>
-                <th>Student</th>
-                <th>Class</th>
-                <th>Track</th>
-                <th>Attendance</th>
-                <th>Actions</th>
+                <th>{{ __('common.student') }}</th>
+                <th>{{ __('admin.students.class_column') }}</th>
+                <th>{{ __('admin.students.track_column') }}</th>
+                <th>{{ __('admin.students.attendance_column') }}</th>
+                <th>{{ __('common.actions') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -60,7 +55,7 @@
                         <strong>{{ $student->user->name }}</strong><br>
                         <span style="color:#9ca3af;font-size:13px;">{{ $student->roll_no }}</span>
                     </td>
-                    <td>{{ $student->schoolClass->name ?? 'Unassigned' }}</td>
+                    <td>{{ $student->schoolClass->name ?? __('admin.students.unassigned') }}</td>
                     <td>
                         @if($student->schoolClass?->track)
                             <span class="badge badge-{{ $student->schoolClass->track === 'Science' ? 'science' : 'geography' }}">{{ $student->schoolClass->track }}</span>
@@ -70,7 +65,7 @@
                     </td>
                     <td>
                         @if($student->attendance_percent === null)
-                            <span style="color:#9ca3af;">No records</span>
+                            <span style="color:#9ca3af;">{{ __('admin.students.no_records') }}</span>
                         @else
                             <div style="display:flex;align-items:center;gap:8px;">
                                 <div style="width:80px;height:6px;background:#eef1f6;border-radius:10px;overflow:hidden;">
@@ -81,11 +76,11 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('admin.students.edit', $student) }}" title="Edit"><i class="fa-solid fa-pen"></i></a>
-                        <form action="{{ route('admin.students.destroy', $student) }}" method="POST" style="display:inline;margin-left:12px;" onsubmit="return confirm('Delete this student?');">
+                        <a href="{{ route('admin.students.edit', $student) }}" title="{{ __('common.edit') }}"><i class="fa-solid fa-pen"></i></a>
+                        <form action="{{ route('admin.students.destroy', $student) }}" method="POST" style="display:inline;margin-left:12px;" onsubmit="return confirm('{{ __('admin.students.delete_confirm') }}');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" title="Delete" style="background:none;border:none;cursor:pointer;color:#9ca3af;">
+                            <button type="submit" title="{{ __('common.delete') }}" style="background:none;border:none;cursor:pointer;color:#9ca3af;">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </form>
@@ -93,7 +88,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" style="text-align:center;color:#9ca3af;padding:24px;">No students found.</td>
+                    <td colspan="5" style="text-align:center;color:#9ca3af;padding:24px;">{{ __('admin.students.no_students_found') }}</td>
                 </tr>
             @endforelse
         </tbody>

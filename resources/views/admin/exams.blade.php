@@ -3,8 +3,8 @@
 @section('content')
 <x-page-header>
     <div>
-        <h1>Exam Management</h1>
-        <p>Managing {{ $exams->total() }} exams across all classes.</p>
+        <h1>{{ __('admin.exams.title') }}</h1>
+        <p>{{ __('admin.exams.subtitle', ['count' => $exams->total()]) }}</p>
     </div>
 </x-page-header>
 
@@ -17,13 +17,13 @@
 <div class="data-card-header" style="background:#fff;border-radius:16px 16px 0 0;border:1px solid #e5e9f2;border-bottom:none;padding:20px 24px;">
     <form method="GET" action="{{ route('admin.exams.index') }}" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:space-between;width:100%;">
         <select name="class" class="filter-select" onchange="this.form.submit()">
-            <option value="">All Classes</option>
+            <option value="">{{ __('admin.exams.all_classes') }}</option>
             @foreach($classes as $c)
                 <option value="{{ $c->id }}" {{ (string) $classId === (string) $c->id ? 'selected' : '' }}>{{ $c->name }}</option>
             @endforeach
         </select>
         <a href="{{ route('admin.exams.create') }}" class="add-btn">
-            <i class="fa-solid fa-plus"></i> Add Exam
+            <i class="fa-solid fa-plus"></i> {{ __('admin.exams.add_exam') }}
         </a>
     </form>
 </div>
@@ -32,21 +32,21 @@
     <table class="data-table">
         <thead>
             <tr>
-                <th>Title</th>
-                <th>Class</th>
-                <th>Subject</th>
-                <th>Teacher</th>
-                <th>Type</th>
-                <th>Date</th>
-                <th>Results</th>
-                <th>Actions</th>
+                <th>{{ __('admin.exams.title_column') }}</th>
+                <th>{{ __('admin.exams.class_column') }}</th>
+                <th>{{ __('admin.exams.subject_column') }}</th>
+                <th>{{ __('admin.exams.teacher_column') }}</th>
+                <th>{{ __('admin.exams.type_column') }}</th>
+                <th>{{ __('admin.exams.date_column') }}</th>
+                <th>{{ __('admin.exams.results_column') }}</th>
+                <th>{{ __('common.actions') }}</th>
             </tr>
         </thead>
         <tbody>
             @forelse($exams as $exam)
                 <tr>
                     <td><strong>{{ $exam->title }}</strong></td>
-                    <td>{{ $exam->schoolClass->name ?? 'Unassigned' }}</td>
+                    <td>{{ $exam->schoolClass->name ?? __('admin.exams.unassigned') }}</td>
                     <td>{{ $exam->subject->name ?? '—' }}</td>
                     <td>{{ $exam->teacher->user->name ?? '—' }}</td>
                     <td><span class="badge badge-subject">{{ ucfirst($exam->exam_type) }}</span></td>
@@ -54,11 +54,11 @@
                     <td>{{ $exam->results_count }} / {{ $exam->schoolClass->students()->count() ?? 0 }}</td>
                     <td>
                         <a href="{{ route('admin.exams.results.index', $exam) }}" title="Enter Scores"><i class="fa-solid fa-pen-to-square"></i></a>
-                        <a href="{{ route('admin.exams.edit', $exam) }}" title="Edit" style="margin-left:12px;"><i class="fa-solid fa-pen"></i></a>
-                        <form action="{{ route('admin.exams.destroy', $exam) }}" method="POST" style="display:inline;margin-left:12px;" onsubmit="return confirm('Delete this exam and all its results?');">
+                        <a href="{{ route('admin.exams.edit', $exam) }}" title="{{ __('common.edit') }}" style="margin-left:12px;"><i class="fa-solid fa-pen"></i></a>
+                        <form action="{{ route('admin.exams.destroy', $exam) }}" method="POST" style="display:inline;margin-left:12px;" onsubmit="return confirm('{{ __('admin.exams.delete_confirm') }}');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" title="Delete" style="background:none;border:none;cursor:pointer;color:#9ca3af;">
+                            <button type="submit" title="{{ __('common.delete') }}" style="background:none;border:none;cursor:pointer;color:#9ca3af;">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </form>
@@ -66,7 +66,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="8" style="text-align:center;color:#9ca3af;padding:24px;">No exams found.</td>
+                    <td colspan="8" style="text-align:center;color:#9ca3af;padding:24px;">{{ __('admin.exams.no_exams_found') }}</td>
                 </tr>
             @endforelse
         </tbody>

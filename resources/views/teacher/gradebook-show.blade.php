@@ -5,12 +5,15 @@
 <div class="gradebook-page">
     <div class="gradebook-header">
         <div class="header-left">
-            <h1>Gradebook</h1>
+            <h1>{{ __('teacher.gradebook.title') }}</h1>
             <p>{{ $exam->title }} &mdash; <span>{{ $exam->schoolClass->name ?? '—' }}</span></p>
         </div>
-        <div class="header-right">
+        <div class="header-right" style="display:flex;gap:10px;">
             <a href="{{ route('teacher.gradebook.export', $exam) }}" class="add-btn">
-                <i class="fa-solid fa-file-excel"></i> Export
+                <i class="fa-solid fa-file-excel"></i> {{ __('teacher.gradebook.export') }}
+            </a>
+            <a href="{{ route('teacher.gradebook.export.pdf', $exam) }}" class="add-btn" style="background:#dc2626;">
+                <i class="fa-solid fa-file-pdf"></i> {{ __('teacher.gradebook.export_pdf') }}
             </a>
         </div>
     </div>
@@ -28,10 +31,10 @@
         <table class="gradebook-table">
             <thead>
                 <tr>
-                    <th>Student Name</th>
-                    <th>Subject</th>
-                    <th>Score (0-{{ $exam->max_score }})</th>
-                    <th>Grade</th>
+                    <th>{{ __('teacher.gradebook.student_name_column') }}</th>
+                    <th>{{ __('teacher.gradebook.subject_column') }}</th>
+                    <th>{{ __('teacher.gradebook.score_column', ['max' => $exam->max_score]) }}</th>
+                    <th>{{ __('teacher.gradebook.grade_column') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,17 +72,17 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="4" style="text-align:center;color:#8a94a6;">No students in this class.</td></tr>
+                    <tr><td colspan="4" style="text-align:center;color:#8a94a6;">{{ __('teacher.gradebook.no_students_in_class') }}</td></tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 
     <div class="gradebook-footer">
-        <div class="footer-text">{{ $scores->count() }} of {{ $students->count() }} students scored</div>
+        <div class="footer-text">{{ __('teacher.gradebook.scored_of', ['scored' => $scores->count(), 'total' => $students->count()]) }}</div>
         <div class="footer-buttons">
-            <a href="{{ route('teacher.gradebook.index') }}" class="discard-btn">Back to Exams</a>
-            <button type="submit" class="save-btn">Save All Changes</button>
+            <a href="{{ route('teacher.gradebook.index') }}" class="discard-btn">{{ __('teacher.gradebook.back_to_exams') }}</a>
+            <button type="submit" class="save-btn">{{ __('teacher.gradebook.save_all_changes') }}</button>
         </div>
     </div>
 </form>

@@ -81,6 +81,30 @@
     margin-top:4px;
     display:block;
 }
+.password-input-wrapper{
+    position:relative;
+}
+.password-input-wrapper input{
+    padding-right:44px;
+}
+.password-toggle-btn{
+    position:absolute;
+    top:0;
+    right:0;
+    height:46px;
+    width:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:none;
+    border:none;
+    cursor:pointer;
+    color:#6b7280;
+    font-size:15px;
+}
+.password-toggle-btn:hover{
+    color:#1e293b;
+}
 
 .section-toggle-group{
     display:flex;
@@ -194,6 +218,26 @@
     color:#0b3f86;
 }
 
+.lang-switch{
+    display:flex;
+    background:#eef1f6;
+    border-radius:10px;
+    overflow:hidden;
+}
+.lang-btn{
+    border:none;
+    background:transparent;
+    padding:8px 14px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    color:#6b7280;
+}
+.lang-btn.active{
+    background:#fff;
+    color:#0b3f86;
+}
+
 .icon-only-btn{
     width:44px;
     height:44px;
@@ -267,6 +311,64 @@
 .subject-default{ background:#f3f4f6; border-color:#d1d5db; color:#374151; }
 
 .slot-error{ color:#c0392b; font-size:13px; margin-top:6px; }
+
+.request-slot{
+    height:60px;
+    border:2px dashed #e5e9f2;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#cbd5e1;
+    font-size:20px;
+    cursor:pointer;
+}
+.request-slot:hover{ background:#f8fafc; }
+
+.subject-card.pending-mine{
+    background:#fffbeb;
+    border-color:#fcd34d;
+    border-style:dashed;
+    color:#92400e;
+}
+.subject-card.pending-locked{
+    background:#f3f4f6;
+    border-color:#d1d5db;
+    border-style:dashed;
+    color:#9ca3af;
+    height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.pending-badge{
+    display:block;
+    font-size:11px;
+    font-weight:700;
+    margin-top:2px;
+}
+.approve-btn{
+    background:#10b981; color:#fff; border:none; border-radius:8px;
+    padding:8px 16px; font-size:13px; font-weight:600; cursor:pointer;
+}
+.approve-btn:hover{ background:#0a9e6c; }
+.reject-btn{
+    background:#fdecea; color:#c0392b; border:1px solid #f5b7b1; border-radius:8px;
+    padding:8px 16px; font-size:13px; font-weight:600; cursor:pointer;
+}
+.reject-btn:hover{ background:#fbd8d3; }
+
+.pending-cancel{
+    display:block;
+    font-size:11px;
+    text-decoration:underline;
+    background:none;
+    border:none;
+    color:inherit;
+    cursor:pointer;
+    padding:0;
+    margin-top:4px;
+}
 
 .empty-slot{
     height:60px;
@@ -533,6 +635,34 @@
 .announcement-top h3{ font-size:20px; color:#1f2d3d; }
 .announcement-top i{ color:#9ca3af; cursor:pointer; }
 
+.announcement-menu{ position:relative; }
+.announcement-menu-btn{ background:none; border:none; cursor:pointer; color:#9ca3af; padding:4px 8px; font-size:16px; }
+.announcement-menu-btn:hover{ color:#4b5563; }
+.announcement-dropdown{
+    display:none;
+    position:absolute;
+    top:28px;
+    right:0;
+    background:#fff;
+    border:1px solid #e5e9f2;
+    border-radius:12px;
+    box-shadow:0 8px 24px rgba(0,0,0,.12);
+    width:160px;
+    padding:6px;
+    z-index:20;
+}
+.announcement-dropdown.show{ display:block; }
+.announcement-dropdown button{
+    display:flex; align-items:center; gap:10px;
+    width:100%; padding:8px 10px; border:none; background:none;
+    text-align:left; font-size:13px; color:#374151; border-radius:8px; cursor:pointer;
+}
+.announcement-dropdown button:hover{ background:#f3f4f6; }
+.announcement-dropdown .dropdown-edit{ color:#0b3f86; }
+.announcement-dropdown .dropdown-edit:hover{ background:#edf3ff; }
+.announcement-dropdown .dropdown-delete{ color:#c0392b; }
+.announcement-dropdown .dropdown-delete:hover{ background:#fdecea; }
+
 .announcement-info{ display:flex; gap:18px; color:#9ca3af; font-size:13px; margin:8px 0 12px; }
 .announcement-info span{ display:flex; align-items:center; gap:6px; }
 .announcement-content p{ color:#4b5563; line-height:1.6; margin-bottom:14px; }
@@ -605,7 +735,7 @@
     font-size:13px; font-weight:600;
 }
 .profile-card hr{ border:none; border-top:1px solid #eef1f6; margin:20px 0; }
-.profile-info, .email-box{ text-align:left; margin-bottom:16px; }
+.profile-info, .email-box{ display:block; text-align:left; margin-bottom:16px; }
 .profile-info label, .email-box label{
     display:block; font-size:11px; color:#9ca3af;
     letter-spacing:.5px; margin-bottom:4px;
@@ -665,6 +795,14 @@
 .teacher-status-btn.active[data-status="absent"]{ background:#fee2e2; color:#dc2626; }
 
 .notif-dropdown-wrapper{ position:relative; cursor:pointer; }
+.nav-badge{
+    margin-left:auto;
+    background:#ef4444; color:#fff;
+    font-size:11px; font-weight:700;
+    min-width:20px; height:20px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    padding:0 6px;
+}
 .notif-badge{
     position:absolute; top:-4px; right:-4px;
     background:#ef4444; color:#fff;

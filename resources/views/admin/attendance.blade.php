@@ -3,12 +3,12 @@
 @section('content')
 <x-page-header>
     <div>
-        <h1>Attendance Overview</h1>
-        <p>Monitor and manage daily attendance across all classes.</p>
+        <h1>{{ __('admin.attendance.title') }}</h1>
+        <p>{{ __('admin.attendance.subtitle') }}</p>
     </div>
     @if($class)
     <form method="GET" action="{{ route('admin.attendance.index') }}" class="header-group">
-        <label>SELECT CLASS</label>
+        <label>{{ __('admin.attendance.select_class') }}</label>
         <select name="class" class="filter-select" onchange="this.form.submit()">
             @foreach($classes as $c)
                 <option value="{{ $c->id }}" {{ $class->id === $c->id ? 'selected' : '' }}>{{ $c->name }}</option>
@@ -26,28 +26,36 @@
 
 @if(!$class)
     <div class="data-card" style="padding:40px;text-align:center;color:#9ca3af;">
-        No classes exist yet.
+        {{ __('admin.attendance.no_classes_yet') }}
     </div>
 @else
 
 <div class="session-card">
     <div>
-        <span class="session-label">TODAY'S SESSION</span>
+        <span class="session-label">{{ __('admin.attendance.todays_session') }}</span>
         <h1>{{ $class->name }}</h1>
         <div class="session-info">
             <span><i class="fa-regular fa-calendar"></i> {{ \Carbon\Carbon::parse($date)->format('F j, Y') }}</span>
-            <span><i class="fa-regular fa-user-graduate"></i> {{ $students->count() }} students</span>
+            <span><i class="fa-solid fa-user-graduate"></i> {{ __('admin.attendance.students_count', ['count' => $students->count()]) }}</span>
         </div>
     </div>
-    <button type="button" class="present-btn" onclick="markAllPresent()"><i class="fa-solid fa-check"></i> Mark All Present</button>
+    <div style="display:flex;gap:10px;align-items:center;">
+        <a href="{{ route('admin.attendance.export', $class) }}" class="add-btn">
+            <i class="fa-solid fa-file-excel"></i> {{ __('admin.attendance.export_excel') }}
+        </a>
+        <a href="{{ route('admin.attendance.export.pdf', $class) }}" class="add-btn" style="background:#dc2626;">
+            <i class="fa-solid fa-file-pdf"></i> {{ __('admin.attendance.export_pdf') }}
+        </a>
+        <button type="button" class="present-btn" onclick="markAllPresent()"><i class="fa-solid fa-check"></i> {{ __('admin.attendance.mark_all_present') }}</button>
+    </div>
 </div>
 
 <form method="POST" action="{{ route('admin.attendance.store', $class) }}">
     @csrf
     <div class="attendance-card">
         <div class="attendance-header">
-            <span class="student-column">Student</span>
-            <span class="status-column">Status</span>
+            <span class="student-column">{{ __('admin.attendance.student_column') }}</span>
+            <span class="status-column">{{ __('admin.attendance.status_column') }}</span>
         </div>
 
         @forelse($students as $student)
@@ -62,27 +70,33 @@
                 </div>
                 <div class="attendance-status" data-student="{{ $student->id }}">
                     <input type="hidden" name="attendance[{{ $student->id }}]" class="status-input" value="{{ $status }}">
-                    <button type="button" class="status-btn {{ $status === 'present' ? 'active' : '' }}" onclick="setStatus({{ $student->id }}, 'present', this)">Present</button>
-                    <button type="button" class="status-btn status-late {{ $status === 'late' ? 'active' : '' }}" onclick="setStatus({{ $student->id }}, 'late', this)">Late</button>
-                    <button type="button" class="status-btn status-absent {{ $status === 'absent' ? 'active' : '' }}" onclick="setStatus({{ $student->id }}, 'absent', this)">Absent</button>
+                    <button type="button" class="status-btn {{ $status === 'present' ? 'active' : '' }}" onclick="setStatus({{ $student->id }}, 'present', this)">{{ __('admin.attendance.present') }}</button>
+                    <button type="button" class="status-btn status-late {{ $status === 'late' ? 'active' : '' }}" onclick="setStatus({{ $student->id }}, 'late', this)">{{ __('admin.attendance.late') }}</button>
+                    <button type="button" class="status-btn status-absent {{ $status === 'absent' ? 'active' : '' }}" onclick="setStatus({{ $student->id }}, 'absent', this)">{{ __('admin.attendance.absent') }}</button>
                 </div>
             </div>
         @empty
-            <div class="student-row" style="justify-content:center;color:#9ca3af;">No students in this class.</div>
+            <div class="student-row" style="justify-content:center;color:#9ca3af;">{{ __('admin.attendance.no_students_in_class') }}</div>
         @endforelse
 
         <div class="attendance-footer">
             <div class="attendance-summary">
-                <span class="summary present" id="presentSummary">{{ $presentCount }} Present</span>
-                <span class="summary late" id="lateSummary">{{ $lateCount }} Late</span>
-                <span class="summary absent" id="absentSummary">{{ $absentCount }} Absent</span>
+                <span class="summary present" id="presentSummary">{{ $presentCount }} {{ __('admin.attendance.present') }}</span>
+                <span class="summary late" id="lateSummary">{{ $lateCount }} {{ __('admin.attendance.late') }}</span>
+                <span class="summary absent" id="absentSummary">{{ $absentCount }} {{ __('admin.attendance.absent') }}</span>
             </div>
-            <button type="submit" class="save-attendance-btn"><i class="fa-solid fa-floppy-disk"></i> Save Attendance</button>
+            <button type="submit" class="save-attendance-btn"><i class="fa-solid fa-floppy-disk"></i> {{ __('admin.attendance.save_attendance') }}</button>
         </div>
     </div>
 </form>
 
 <script>
+const ATTENDANCE_LABELS = {
+    present: @json(__('admin.attendance.present')),
+    late: @json(__('admin.attendance.late')),
+    absent: @json(__('admin.attendance.absent')),
+};
+
 function setStatus(studentId, status, btn) {
     const group = document.querySelector(`.attendance-status[data-student="${studentId}"]`);
     group.querySelector('.status-input').value = status;
@@ -101,9 +115,9 @@ function markAllPresent() {
 
 function updateSummary() {
     const values = Array.from(document.querySelectorAll('.status-input')).map(i => i.value);
-    document.getElementById('presentSummary').textContent = values.filter(v => v === 'present').length + ' Present';
-    document.getElementById('lateSummary').textContent = values.filter(v => v === 'late').length + ' Late';
-    document.getElementById('absentSummary').textContent = values.filter(v => v === 'absent').length + ' Absent';
+    document.getElementById('presentSummary').textContent = values.filter(v => v === 'present').length + ' ' + ATTENDANCE_LABELS.present;
+    document.getElementById('lateSummary').textContent = values.filter(v => v === 'late').length + ' ' + ATTENDANCE_LABELS.late;
+    document.getElementById('absentSummary').textContent = values.filter(v => v === 'absent').length + ' ' + ATTENDANCE_LABELS.absent;
 }
 </script>
 @endif

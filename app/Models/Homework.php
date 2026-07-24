@@ -37,4 +37,9 @@ class Homework extends Model
     {
         return $this->belongsTo(Subject::class);
     }
+
+    public function submissions()
+    {
+        return $this->hasMany(HomeworkSubmission::class);
+    }
 }

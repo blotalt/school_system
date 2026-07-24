@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboard;
 use App\Http\Controllers\Student\DashboardController as StudentDashboard;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\LocaleController;
 
 // Route::get('/', function () {
 //     if (auth()->check()) {
@@ -22,6 +23,8 @@ use App\Http\Controllers\NotificationController;
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
+
+Route::post('/locale', [LocaleController::class, 'update'])->name('locale.update');
 
 // 2. Central Dashboard Traffic Cop: Protected by 'auth' middleware
 Route::middleware(['auth'])->group(function () {

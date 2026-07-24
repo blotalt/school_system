@@ -5,11 +5,30 @@ namespace App\Http\Controllers\Concerns;
 use App\Models\Exam;
 use App\Models\ExamResult;
 use App\Models\Student;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 trait ExportsExamScores
 {
+    use ExportsTables;
+
+    private const SCORE_HEADERS = ['Student Name', 'Roll No', 'Subject', 'Score', 'Max Score', 'Grade'];
+
     protected function exportExamScoresCsv(Exam $exam): StreamedResponse
+    {
+        [$filename, $rows] = $this->examScoreExportData($exam, 'csv');
+
+        return $this->exportCsv($filename, self::SCORE_HEADERS, $rows);
+    }
+
+    protected function exportExamScoresPdf(Exam $exam): Response
+    {
+        [$filename, $rows] = $this->examScoreExportData($exam, 'pdf');
+
+        return $this->exportPdf($filename, $exam->title . ' - Scores', self::SCORE_HEADERS, $rows);
+    }
+
+    private function examScoreExportData(Exam $exam, string $extension): array
     {
         $exam->loadMissing(['schoolClass', 'subject']);
 
@@ -20,20 +39,13 @@ trait ExportsExamScores
 
         $scores = ExamResult::where('exam_id', $exam->id)->pluck('score', 'student_id');
 
-        $filename = str($exam->title . '-scores')->slug() . '.csv';
+        $filename = str($exam->title . '-scores')->slug() . '.' . $extension;
 
-        return response()->streamDownload(function () use ($students, $scores, $exam) {
-            $out = fopen('php://output', 'w');
-            // Excel needs a UTF-8 BOM to render non-ASCII names correctly.
-            fwrite($out, "\xEF\xBB\xBF");
-            fputcsv($out, ['Student Name', 'Roll No', 'Subject', 'Score', 'Max Score', 'Grade']);
+        $rows = $students->map(
+            fn (Student $student) => $this->examScoreRow($student, $scores->get($student->id), $exam)
+        );
 
-            foreach ($students as $student) {
-                fputcsv($out, $this->examScoreRow($student, $scores->get($student->id), $exam));
-            }
-
-            fclose($out);
-        }, $filename, ['Content-Type' => 'text/csv']);
+        return [$filename, $rows];
     }
 
     private function examScoreRow(Student $student, ?int $score, Exam $exam): array

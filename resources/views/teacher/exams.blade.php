@@ -4,11 +4,11 @@
 
 <x-page-header>
     <div>
-        <h1>My Exams</h1>
-        <p>Exams you've created for your classes.</p>
+        <h1>{{ __('teacher.exams.title') }}</h1>
+        <p>{{ __('teacher.exams.subtitle') }}</p>
     </div>
     <a href="{{ route('teacher.exams.create') }}" class="add-btn">
-        <i class="fa-solid fa-plus"></i> Create Exam
+        <i class="fa-solid fa-plus"></i> {{ __('teacher.exams.create_exam') }}
     </a>
 </x-page-header>
 
@@ -22,13 +22,13 @@
     <table class="data-table">
         <thead>
             <tr>
-                <th>Title</th>
-                <th>Class</th>
-                <th>Subject</th>
-                <th>Type</th>
-                <th>Date</th>
-                <th>Scored</th>
-                <th>Actions</th>
+                <th>{{ __('teacher.exams.title_column') }}</th>
+                <th>{{ __('teacher.exams.class_column') }}</th>
+                <th>{{ __('teacher.exams.subject_column') }}</th>
+                <th>{{ __('teacher.exams.type_column') }}</th>
+                <th>{{ __('teacher.exams.date_column') }}</th>
+                <th>{{ __('teacher.exams.scored_column') }}</th>
+                <th>{{ __('teacher.exams.actions_column') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -42,18 +42,18 @@
                     <td>{{ $exam->results_count }}</td>
                     <td>
                         <a href="{{ route('teacher.gradebook.show', $exam) }}" title="Enter Scores"><i class="fa-solid fa-pen-to-square"></i></a>
-                        <a href="{{ route('teacher.exams.edit', $exam) }}" title="Edit" style="margin-left:12px;"><i class="fa-solid fa-pen"></i></a>
-                        <form action="{{ route('teacher.exams.destroy', $exam) }}" method="POST" style="display:inline;margin-left:12px;" onsubmit="return confirm('Delete this exam and all its results?');">
+                        <a href="{{ route('teacher.exams.edit', $exam) }}" title="{{ __('common.edit') }}" style="margin-left:12px;"><i class="fa-solid fa-pen"></i></a>
+                        <form action="{{ route('teacher.exams.destroy', $exam) }}" method="POST" style="display:inline;margin-left:12px;" onsubmit="return confirm('{{ __('teacher.exams.delete_confirm') }}');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" title="Delete" style="background:none;border:none;cursor:pointer;color:#9ca3af;">
+                            <button type="submit" title="{{ __('common.delete') }}" style="background:none;border:none;cursor:pointer;color:#9ca3af;">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </form>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="7" style="text-align:center;color:#8a94a6;">You haven't created any exams yet.</td></tr>
+                <tr><td colspan="7" style="text-align:center;color:#8a94a6;">{{ __('teacher.exams.no_exams_yet') }}</td></tr>
             @endforelse
         </tbody>
     </table>

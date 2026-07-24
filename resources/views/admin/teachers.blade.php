@@ -3,8 +3,8 @@
 @section('content')
 <x-page-header>
     <div>
-        <h1>Teacher Management</h1>
-        <p>Managing {{ $teachers->total() }} teachers for the current semester.</p>
+        <h1>{{ __('admin.teachers.title') }}</h1>
+        <p>{{ __('admin.teachers.subtitle', ['count' => $teachers->total()]) }}</p>
     </div>
 </x-page-header>
 
@@ -15,28 +15,25 @@
 @endif
 
 <div class="data-card-header" style="background:#fff;border-radius:16px 16px 0 0;border:1px solid #e5e9f2;border-bottom:none;padding:20px 24px;">
-    <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:space-between;">
-        <div class="search-box" style="width:320px;">
-            <input type="text" placeholder="e.g. Sophea Rath">
-            <i class="fa-solid fa-magnifying-glass"></i>
-        </div>
+    <form method="GET" action="{{ route('admin.teachers.index') }}" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:space-between;width:100%;">
+        <x-live-search :endpoint="route('admin.search')" name="search" :value="$search" placeholder="{{ __('admin.teachers.search_placeholder') }}" style="width:320px;" />
         <div style="display:flex;gap:15px;align-items:center;">
             <a href="{{ route('admin.teachers.create') }}" class="add-btn">
-                <i class="fa-solid fa-user-plus"></i> Add
+                <i class="fa-solid fa-user-plus"></i> {{ __('common.add') }}
             </a>
         </div>
-    </div>
+    </form>
 </div>
 
 <div class="data-card" style="border-radius:0 0 16px 16px;">
     <table class="data-table">
         <thead>
             <tr>
-                <th>Teacher Name</th>
-                <th>Subject</th>
-                <th>Assigned Classes</th>
-                <th>Email</th>
-                <th>Actions</th>
+                <th>{{ __('admin.teachers.name_column') }}</th>
+                <th>{{ __('common.subject') }}</th>
+                <th>{{ __('admin.teachers.assigned_classes') }}</th>
+                <th>{{ __('common.email') }}</th>
+                <th>{{ __('common.actions') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -53,14 +50,14 @@
                             <span style="color:#9ca3af;">&mdash;</span>
                         @endforelse
                     </td>
-                    <td>{{ $teacher->classes->pluck('name')->implode(', ') ?: 'N/A' }}</td>
+                    <td>{{ $teacher->classes->pluck('name')->implode(', ') ?: __('admin.teachers.not_available') }}</td>
                     <td>{{ $teacher->user->email }}</td>
                     <td>
-                        <a href="{{ route('admin.teachers.edit', $teacher) }}" title="Edit"><i class="fa-solid fa-pen"></i></a>
-                        <form action="{{ route('admin.teachers.destroy', $teacher) }}" method="POST" style="display:inline;margin-left:12px;" onsubmit="return confirm('Delete this teacher?');">
+                        <a href="{{ route('admin.teachers.edit', $teacher) }}" title="{{ __('common.edit') }}"><i class="fa-solid fa-pen"></i></a>
+                        <form action="{{ route('admin.teachers.destroy', $teacher) }}" method="POST" style="display:inline;margin-left:12px;" onsubmit="return confirm('{{ __('admin.teachers.delete_confirm') }}');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" title="Delete" style="background:none;border:none;cursor:pointer;color:#9ca3af;">
+                            <button type="submit" title="{{ __('common.delete') }}" style="background:none;border:none;cursor:pointer;color:#9ca3af;">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </form>
@@ -68,7 +65,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" style="text-align:center;color:#9ca3af;padding:24px;">No teachers found.</td>
+                    <td colspan="5" style="text-align:center;color:#9ca3af;padding:24px;">{{ __('admin.teachers.no_teachers_found') }}</td>
                 </tr>
             @endforelse
         </tbody>

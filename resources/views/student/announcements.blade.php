@@ -4,10 +4,10 @@
 
 @php
 $audienceMeta = [
-    'everyone'  => ['class' => 'general',  'label' => 'Everyone',   'icon' => 'fa-bullhorn'],
-    'students'  => ['class' => 'events',   'label' => 'Students',   'icon' => 'fa-user-graduate'],
-    'teachers'  => ['class' => 'academic', 'label' => 'Teachers',   'icon' => 'fa-chalkboard-user'],
-    'class'     => ['class' => 'academic', 'label' => 'Your Class', 'icon' => 'fa-school'],
+    'everyone'  => ['class' => 'general',  'label' => __('student.announcements.audience_everyone'),   'icon' => 'fa-bullhorn'],
+    'students'  => ['class' => 'events',   'label' => __('student.announcements.audience_students'),   'icon' => 'fa-user-graduate'],
+    'teachers'  => ['class' => 'academic', 'label' => __('student.announcements.audience_teachers'),   'icon' => 'fa-chalkboard-user'],
+    'class'     => ['class' => 'academic', 'label' => __('student.announcements.audience_your_class'), 'icon' => 'fa-school'],
 ];
 $priorityMeta = [
     'high'   => 'high',
@@ -23,19 +23,19 @@ $priorityMeta = [
                 {{ collect(explode(' ', auth()->user()->name))->map(fn ($n) => mb_substr($n, 0, 1))->take(2)->implode('') }}
             </div>
             <div>
-                <h1>Hello, {{ auth()->user()->name }}</h1>
+                <h1>{{ __('student.announcements.hello', ['name' => auth()->user()->name]) }}</h1>
             </div>
         </div>
         <div class="student-date">
-            <small>CURRENT DATE</small>
+            <small>{{ __('student.announcements.current_date') }}</small>
             <h2>{{ now()->format('F j, Y') }}</h2>
         </div>
     </div>
 
     <div class="announcement-top">
         <div>
-            <p class="breadcrumb">System &gt; <strong>Announcements</strong></p>
-            <h2>Announcements</h2>
+            <p class="breadcrumb">{{ __('student.announcements.breadcrumb_system') }} &gt; <strong>{{ __('student.announcements.title') }}</strong></p>
+            <h2>{{ __('student.announcements.title') }}</h2>
         </div>
     </div>
 
@@ -53,7 +53,7 @@ $priorityMeta = [
                 </div>
                 <div class="announcement-meta">
                     <span><i class="fa-regular fa-calendar"></i> {{ $announcement->created_at->format('M j, Y') }}</span>
-                    <span><i class="fa-regular fa-user"></i> {{ $announcement->author->name ?? 'School' }}</span>
+                    <span><i class="fa-regular fa-user"></i> {{ $announcement->author->name ?? __('student.announcements.school_fallback') }}</span>
                 </div>
                 <p>{{ $announcement->body }}</p>
             </div>
@@ -61,7 +61,7 @@ $priorityMeta = [
     @empty
         <div class="announcement-card">
             <div class="announcement-content">
-                <p>No announcements yet.</p>
+                <p>{{ __('student.announcements.no_announcements_yet') }}</p>
             </div>
         </div>
     @endforelse

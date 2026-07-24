@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambodia High School - Admin</title>
+    <link rel="stylesheet" href="http://school-management-system-project.test/css/style.css">
+    <link rel="stylesheet" href="http://school-management-system-project.test/css/ad-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<div class="wrapper">
+    <aside class="sidebar">
+    <div>
+            <div class="logo">
+                <h2>Cambodia High School</h2>
+                <p>Academic Year 2025-2026</p>
+            </div>
+            <ul class="menu">
+                <li><a href="/admin/dashboard" class=""><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a href="/admin/students" class=""><i class="fa-solid fa-user-graduate"></i> Students</a></li>
+                <li><a href="/admin/teachers" class="active"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a></li>
+                <li><a href="/admin/classes" class=""><i class="fa-solid fa-school"></i> Classes</a></li>
+                <li><a href="/admin/attendance" class=""><i class="fa-solid fa-user-check"></i> Attendance</a></li>
+                <li><a href="/admin/exams" class=""><i class="fa-regular fa-clipboard"></i> Exams</a></li>
+                <li><a href="/admin/announcements" class=""><i class="fa-solid fa-bullhorn"></i> Announcements</a></li>
+            </ul>
+        </div>
+        <div class="settings">
+            <a href="http://school-management-system-project.test/admin/profile"><i class="fa-solid fa-gear"></i> Settings</a>
+        </div>
+</aside>
+    <main class="main">
+        <header class="topbar">
+    <div class="search-box-wrapper" onclick="event.stopPropagation()">
+                <div class="search-box">
+                    <input type="text" id="globalSearchInput" placeholder="Search students, teachers, classes, exams..." autocomplete="off">
+                    <button type="button" class="search-clear-btn" id="searchClearBtn" style="display:none;" aria-label="Clear search">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <i class="fa-solid fa-magnifying-glass" id="searchIcon"></i>
+                </div>
+                <div class="search-results" id="globalSearchResults"></div>
+            </div>
+            <div class="top-right">
+                <div class="notif-dropdown-wrapper" onclick="toggleNotifDropdown(event)">
+    <div class="icon-btn" style="position:relative;">
+        <i class="fa-regular fa-bell"></i>
+            </div>
+
+    <div class="notif-dropdown" id="notifDropdown">
+        <div class="notif-dropdown-header">
+            <strong>Notifications</strong>
+                    </div>
+        <div class="notif-list">
+                            <div class="notif-empty">No notifications yet.</div>
+                    </div>
+    </div>
+</div>
+
+<script>
+function toggleNotifDropdown(e) {
+    e.stopPropagation();
+    document.getElementById('notifDropdown').classList.toggle('show');
+}
+document.addEventListener('click', function () {
+    document.getElementById('notifDropdown')?.classList.remove('show');
+});
+</script>
+                <div class="icon-btn"><i class="fa-solid fa-grip"></i></div>
+                                <div class="teacher profile-dropdown-wrapper" onclick="toggleProfileDropdown(event)">
+                    <div class="teacher-info">
+                        <h4>Test Admin</h4>
+                        <span>Administrator</span>
+                    </div>
+                    <div class="avatar-circle">TA</div>
+
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="dropdown-user-info">
+                            <div class="avatar-circle" style="width:44px;height:44px;">TA</div>
+                            <div>
+                                <strong>Test Admin</strong>
+                                <p>admin@school.test</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <a href="http://school-management-system-project.test/admin/profile"><i class="fa-solid fa-gear"></i> Settings</a>
+                        <hr>
+                        <form method="POST" action="http://school-management-system-project.test/logout">
+                            <input type="hidden" name="_token" value="VTqLx8eLKrsiwVzYHF26FvdMOWjzKpKpBAQIMEKH" autocomplete="off">                            <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+</header>
+        <div class="breadcrumb">
+    <a href="http://school-management-system-project.test/admin">Dashboard</a> &gt;
+    <a href="http://school-management-system-project.test/admin/teachers">Teachers</a> &gt;
+    <span>Edit Teacher</span>
+</div>
+
+<header class="topbar">
+    <div>
+        <h1>Edit Teacher</h1>
+        <p>Update faculty information for Vibol Sok.</p>
+    </div>
+</header>
+<form method="POST" action="http://school-management-system-project.test/admin/teachers/57" class="form-card">
+    <input type="hidden" name="_token" value="VTqLx8eLKrsiwVzYHF26FvdMOWjzKpKpBAQIMEKH" autocomplete="off">    <input type="hidden" name="_method" value="PUT">
+    <h3 class="form-section-title"><i class="fa-solid fa-briefcase"></i> Faculty Information</h3>
+
+    <div class="form-row form-row-3">
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" name="name" value="Vibol Sok">
+                    </div>
+        <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="date" name="date_of_birth" value="1990-02-22">
+                    </div>
+        <div class="form-group">
+            <label>Gender</label>
+            <select name="gender">
+                <option value="">Select Gender</option>
+                <option value="male" selected>Male</option>
+                <option value="female" >Female</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="email" value="vibol.sok.t7@school.test">
+                    </div>
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="text" name="phone" value="012345678">
+                    </div>
+    </div>
+
+    <div class="form-group" style="max-width:400px;">
+        <label>System Password</label>
+        <div class="password-input-wrapper">
+            <input type="password" name="password" placeholder="Leave blank to keep current password">
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility(this)" aria-label="Show password"><i class="fa-solid fa-eye"></i></button>
+        </div>
+            </div>
+
+    <hr class="form-divider">
+
+    <div class="form-group">
+        <label>Subject Specialization</label>
+        <div class="section-toggle-group">
+                            <label class="section-toggle">
+                    <input type="checkbox" name="subjects[]" value="3" >
+                    <span>Biology</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="subjects[]" value="4" >
+                    <span>Chemistry</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="subjects[]" value="8" >
+                    <span>Computer Science</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="subjects[]" value="11" >
+                    <span>Earth Science</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="subjects[]" value="5" >
+                    <span>English</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="subjects[]" value="7" checked>
+                    <span>Geography</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="subjects[]" value="6" checked>
+                    <span>History</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="subjects[]" value="10" >
+                    <span>Khmer Literature</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="subjects[]" value="1" >
+                    <span>Mathematics</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="subjects[]" value="9" >
+                    <span>Morality &amp; Civics</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="subjects[]" value="2" >
+                    <span>Physics</span>
+                </label>
+                    </div>
+            </div>
+
+    <div class="form-group">
+        <label>Assigned Classes</label>
+        <div class="section-toggle-group">
+                            <label class="section-toggle">
+                    <input type="checkbox" name="classes[]" value="5" >
+                    <span>Grade 10-A</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="classes[]" value="6" >
+                    <span>Grade 10-B</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="classes[]" value="7" >
+                    <span>Grade 10-C</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="classes[]" value="8" >
+                    <span>Grade 11-A</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="classes[]" value="9" >
+                    <span>Grade 11-B</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="classes[]" value="10" >
+                    <span>Grade 11-C</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="classes[]" value="11" >
+                    <span>Grade 12-A</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="classes[]" value="12" >
+                    <span>Grade 12-B</span>
+                </label>
+                            <label class="section-toggle">
+                    <input type="checkbox" name="classes[]" value="13" >
+                    <span>Grade 12-C</span>
+                </label>
+                    </div>
+            </div>
+
+    <div class="info-box">
+        <i class="fa-solid fa-circle-info"></i>
+        <span>Assigning a class here reassigns it from any teacher currently teaching it.</span>
+    </div>
+
+    <div class="form-actions">
+        <a href="http://school-management-system-project.test/admin/teachers" class="cancel-btn">Cancel</a>
+        <button type="submit" class="save-btn"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+    </div>
+</form>
+    </main>
+</div>
+<script>
+function togglePasswordVisibility(btn) {
+    const input = btn.previousElementSibling;
+    const icon = btn.querySelector('i');
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    icon.classList.toggle('fa-eye', !isHidden);
+    icon.classList.toggle('fa-eye-slash', isHidden);
+    btn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+}
+
+function toggleProfileDropdown(e) {
+    e.stopPropagation();
+    document.getElementById('profileDropdown').classList.toggle('show');
+}
+document.addEventListener('click', function() {
+    document.getElementById('profileDropdown')?.classList.remove('show');
+});
+
+(function() {
+    const input = document.getElementById('globalSearchInput');
+    const panel = document.getElementById('globalSearchResults');
+    const icon = document.getElementById('searchIcon');
+    const clearBtn = document.getElementById('searchClearBtn');
+
+    const CATEGORY_ICONS = {
+        Students: 'fa-user-graduate',
+        Teachers: 'fa-chalkboard-user',
+        Classes: 'fa-school',
+        Exams: 'fa-clipboard',
+    };
+
+    let debounceTimer = null;
+    let currentRequest = null;
+    let activeIndex = -1;
+    let items = [];
+
+    function escapeHtml(value) {
+        const div = document.createElement('div');
+        div.textContent = value == null ? '' : String(value);
+        return div.innerHTML;
+    }
+
+    function setLoading(isLoading) {
+        icon.classList.toggle('fa-magnifying-glass', !isLoading);
+        icon.classList.toggle('fa-spinner', isLoading);
+        icon.classList.toggle('fa-spin', isLoading);
+    }
+
+    function setActive(index) {
+        items.forEach(function(el) { el.classList.remove('active'); });
+        activeIndex = index;
+        if (activeIndex >= 0 && items[activeIndex]) {
+            items[activeIndex].classList.add('active');
+            items[activeIndex].scrollIntoView({ block: 'nearest' });
+        }
+    }
+
+    function renderResults(groups) {
+        const keys = Object.keys(groups || {});
+        activeIndex = -1;
+
+        if (keys.length === 0) {
+            panel.innerHTML = '<div class="search-empty">No results found</div>';
+            panel.classList.add('show');
+            items = [];
+            return;
+        }
+
+        panel.innerHTML = keys.map(function(group) {
+            const groupItems = groups[group].map(function(item) {
+                return '<a href="' + escapeHtml(item.url) + '" class="search-result-item">'
+                    + '<span class="search-result-title">' + escapeHtml(item.title) + '</span>'
+                    + '<span class="search-result-subtitle">' + escapeHtml(item.subtitle || '') + '</span>'
+                    + '</a>';
+            }).join('');
+            const groupIcon = CATEGORY_ICONS[group] || 'fa-circle';
+            return '<div class="search-group"><div class="search-group-label"><i class="fa-solid ' + groupIcon + '"></i> ' + escapeHtml(group) + '</div>' + groupItems + '</div>';
+        }).join('');
+        panel.classList.add('show');
+        items = Array.from(panel.querySelectorAll('.search-result-item'));
+    }
+
+    function renderError() {
+        panel.innerHTML = '<div class="search-empty">Search failed. Try again.</div>';
+        panel.classList.add('show');
+        items = [];
+    }
+
+    function runSearch(q) {
+        if (currentRequest) currentRequest.abort();
+        const controller = new AbortController();
+        currentRequest = controller;
+        setLoading(true);
+
+        fetch('http://school-management-system-project.test/admin/search?q=' + encodeURIComponent(q), { signal: controller.signal })
+            .then(function(res) { return res.json(); })
+            .then(function(data) { renderResults(data.results); })
+            .catch(function(err) { if (err.name !== 'AbortError') renderError(); })
+            .finally(function() { setLoading(false); });
+    }
+
+    input.addEventListener('input', function() {
+        const q = input.value.trim();
+        clearBtn.style.display = q.length ? 'flex' : 'none';
+        clearTimeout(debounceTimer);
+
+        if (q.length < 2) {
+            panel.classList.remove('show');
+            panel.innerHTML = '';
+            items = [];
+            return;
+        }
+
+        debounceTimer = setTimeout(function() { runSearch(q); }, 250);
+    });
+
+    input.addEventListener('keydown', function(e) {
+        if (!panel.classList.contains('show') || items.length === 0) return;
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            setActive(activeIndex < items.length - 1 ? activeIndex + 1 : 0);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            setActive(activeIndex > 0 ? activeIndex - 1 : items.length - 1);
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            const target = items[activeIndex >= 0 ? activeIndex : 0];
+            target?.click();
+        } else if (e.key === 'Escape') {
+            panel.classList.remove('show');
+            input.blur();
+        }
+    });
+
+    input.addEventListener('focus', function() {
+        if (panel.innerHTML.trim() !== '') panel.classList.add('show');
+    });
+
+    clearBtn.addEventListener('click', function() {
+        input.value = '';
+        clearBtn.style.display = 'none';
+        panel.classList.remove('show');
+        panel.innerHTML = '';
+        items = [];
+        input.focus();
+    });
+
+    document.addEventListener('click', function() {
+        panel.classList.remove('show');
+    });
+})();
+</script>
+</body>
+</html>

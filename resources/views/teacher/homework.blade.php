@@ -4,11 +4,11 @@
 
 <x-page-header>
     <div>
-        <h1>Homework</h1>
-        <p>Assignments you've set for your classes.</p>
+        <h1>{{ __('teacher.homework.title') }}</h1>
+        <p>{{ __('teacher.homework.subtitle') }}</p>
     </div>
     <a href="{{ route('teacher.homework.create') }}" class="add-btn">
-        <i class="fa-solid fa-plus"></i> Assign Homework
+        <i class="fa-solid fa-plus"></i> {{ __('teacher.homework.assign_homework') }}
     </a>
 </x-page-header>
 
@@ -22,12 +22,12 @@
     <table class="data-table">
         <thead>
             <tr>
-                <th>Title</th>
-                <th>Class</th>
-                <th>Subject</th>
-                <th>Due Date</th>
-                <th>Attachment</th>
-                <th>Actions</th>
+                <th>{{ __('teacher.homework.title_column') }}</th>
+                <th>{{ __('teacher.homework.class_column') }}</th>
+                <th>{{ __('teacher.homework.subject_column') }}</th>
+                <th>{{ __('teacher.homework.due_date_column') }}</th>
+                <th>{{ __('teacher.homework.attachment_column') }}</th>
+                <th>{{ __('teacher.homework.actions_column') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -45,18 +45,21 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('teacher.homework.edit', $hw) }}" title="Edit"><i class="fa-solid fa-pen"></i></a>
-                        <form action="{{ route('teacher.homework.destroy', $hw) }}" method="POST" style="display:inline;margin-left:12px;" onsubmit="return confirm('Delete this homework?');">
+                        <a href="{{ route('teacher.homework.submissions', $hw) }}" title="{{ __('teacher.homework.view_submissions') }}" style="margin-right:12px;">
+                            <i class="fa-solid fa-inbox"></i> {{ $hw->submissions_count }}
+                        </a>
+                        <a href="{{ route('teacher.homework.edit', $hw) }}" title="{{ __('common.edit') }}"><i class="fa-solid fa-pen"></i></a>
+                        <form action="{{ route('teacher.homework.destroy', $hw) }}" method="POST" style="display:inline;margin-left:12px;" onsubmit="return confirm('{{ __('teacher.homework.delete_confirm') }}');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" title="Delete" style="background:none;border:none;cursor:pointer;color:#9ca3af;">
+                            <button type="submit" title="{{ __('common.delete') }}" style="background:none;border:none;cursor:pointer;color:#9ca3af;">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </form>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="6" style="text-align:center;color:#8a94a6;">No homework assigned yet.</td></tr>
+                <tr><td colspan="6" style="text-align:center;color:#8a94a6;">{{ __('teacher.homework.no_homework_yet') }}</td></tr>
             @endforelse
         </tbody>
     </table>

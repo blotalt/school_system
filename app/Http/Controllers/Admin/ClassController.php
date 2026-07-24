@@ -7,28 +7,12 @@ use App\Models\ClassSchedule;
 use App\Models\SchoolClass;
 use App\Models\Subject;
 use App\Models\Teacher;
+use App\Support\Timetable;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class ClassController extends Controller
 {
-    private const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-
-    private const PERIOD_TIMES = [
-        'morning' => [
-            1 => '7:10 - 8:00',
-            2 => '8:10 - 9:00',
-            3 => '9:10 - 10:00',
-            4 => '10:10 - 11:00',
-        ],
-        'afternoon' => [
-            1 => '1:10 - 2:00',
-            2 => '2:10 - 3:00',
-            3 => '3:10 - 4:00',
-            4 => '4:10 - 5:00',
-        ],
-    ];
-
     public function index(Request $request)
     {
         $classes = SchoolClass::orderBy('name')->get();
@@ -51,8 +35,8 @@ class ClassController extends Controller
             'subjects'    => $subjects,
             'teachers'    => $teachers,
             'schedules'   => $schedules,
-            'days'        => self::DAYS,
-            'periodTimes' => self::PERIOD_TIMES,
+            'days'        => Timetable::DAYS,
+            'periodTimes' => Timetable::PERIOD_TIMES,
         ]);
     }
 
@@ -110,18 +94,18 @@ class ClassController extends Controller
         $validated = $request->validate([
             'subject_id'  => ['required', 'exists:subjects,id'],
             'teacher_id'  => ['required', 'exists:teachers,id'],
-            'day_of_week' => ['required', 'in:' . implode(',', self::DAYS)],
+            'day_of_week' => ['required', 'in:' . implode(',', Timetable::DAYS)],
             'period'      => ['required', 'integer', 'min:1', 'max:4'],
             'shift'       => ['required', 'in:morning,afternoon'],
         ]);
 
-        $conflict = ClassSchedule::with(['teacher.user', 'schoolClass'])
-            ->where('teacher_id', $validated['teacher_id'])
-            ->where('day_of_week', $validated['day_of_week'])
-            ->where('period', $validated['period'])
-            ->where('shift', $validated['shift'])
-            ->where('class_id', '!=', $class->id)
-            ->first();
+        $conflict = Timetable::teacherConflict(
+            $validated['teacher_id'],
+            $validated['day_of_week'],
+            $validated['period'],
+            $validated['shift'],
+            $class->id
+        );
 
         if ($conflict) {
             throw ValidationException::withMessages([

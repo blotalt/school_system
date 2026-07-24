@@ -4,8 +4,8 @@
 
 <x-page-header>
     <div>
-        <h1>Welcome, {{ $teacher?->user->name ?? auth()->user()->name }}</h1>
-        <p>Here's an overview of your classes today.</p>
+        <h1>{{ __('teacher.dashboard.welcome', ['name' => $teacher?->user->name ?? auth()->user()->name]) }}</h1>
+        <p>{{ __('teacher.dashboard.subtitle') }}</p>
     </div>
 </x-page-header>
 
@@ -13,47 +13,47 @@
     <div class="stat-card">
         <div class="stat-icon"><i class="fa-solid fa-school"></i></div>
         <div class="stat-value">{{ $classes->count() }}</div>
-        <div class="stat-label">My Classes</div>
+        <div class="stat-label">{{ __('teacher.dashboard.stat_my_classes') }}</div>
     </div>
     <div class="stat-card">
         <div class="stat-icon"><i class="fa-solid fa-user-graduate"></i></div>
         <div class="stat-value">{{ number_format($studentCount) }}</div>
-        <div class="stat-label">Total Students</div>
+        <div class="stat-label">{{ __('teacher.dashboard.stat_total_students') }}</div>
     </div>
     <div class="stat-card">
         <div class="stat-icon"><i class="fa-regular fa-clipboard"></i></div>
         <div class="stat-value">{{ number_format($examCount) }}</div>
-        <div class="stat-label">Exams Created</div>
+        <div class="stat-label">{{ __('teacher.dashboard.stat_exams_created') }}</div>
     </div>
     <div class="stat-card">
         <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
         <div class="stat-value">{{ $attendanceRate }}%</div>
-        <div class="stat-label">Attendance Rate</div>
+        <div class="stat-label">{{ __('teacher.dashboard.stat_attendance_rate') }}</div>
     </div>
 </div>
 
 <div class="data-card">
     <div class="data-card-header">
-        <h3>My Classes</h3>
-        <a href="/teacher/classes">View All</a>
+        <h3>{{ __('teacher.dashboard.my_classes') }}</h3>
+        <a href="/teacher/classes">{{ __('common.view_all') }}</a>
     </div>
     <table class="data-table">
         <thead>
             <tr>
-                <th>Class Name</th>
-                <th>Track</th>
-                <th>Students</th>
+                <th>{{ __('teacher.dashboard.class_name') }}</th>
+                <th>{{ __('common.track') }}</th>
+                <th>{{ __('teacher.dashboard.students') }}</th>
             </tr>
         </thead>
         <tbody>
             @forelse($classes as $class)
                 <tr>
                     <td>{{ $class->name }}</td>
-                    <td>{{ $class->track ?? 'General' }}</td>
+                    <td>{{ $class->track ?? __('common.default_track') }}</td>
                     <td>{{ $class->students_count }}</td>
                 </tr>
             @empty
-                <tr><td colspan="3" style="text-align:center;color:#8a94a6;">No classes assigned yet.</td></tr>
+                <tr><td colspan="3" style="text-align:center;color:#8a94a6;">{{ __('teacher.dashboard.no_classes_assigned') }}</td></tr>
             @endforelse
         </tbody>
     </table>
@@ -61,7 +61,7 @@
 
 <div class="today-card">
     <div class="today-header">
-        <h2>Today's Schedule</h2>
+        <h2>{{ __('teacher.dashboard.todays_schedule') }}</h2>
     </div>
 
     @forelse($todaySchedule as $slot)
@@ -73,14 +73,14 @@
             </div>
         </div>
     @empty
-        <div class="today-item"><div class="today-left"><p>No classes scheduled today.</p></div></div>
+        <div class="today-item"><div class="today-left"><p>{{ __('teacher.dashboard.no_classes_scheduled') }}</p></div></div>
     @endforelse
 </div>
 
 <div class="today-card" style="margin-top:20px;">
     <div class="today-header">
-        <h2>Recent Announcements</h2>
-        <a href="/teacher/announcements">View All</a>
+        <h2>{{ __('teacher.dashboard.recent_announcements') }}</h2>
+        <a href="/teacher/announcements">{{ __('common.view_all') }}</a>
     </div>
 
     @forelse($announcements as $announcement)
@@ -88,11 +88,11 @@
             <div class="today-left">
                 <span class="time">{{ $announcement->created_at->format('M j, Y') }}</span>
                 <h3>{{ $announcement->title }}</h3>
-                <p>{{ $announcement->author->name ?? 'School' }}</p>
+                <p>{{ $announcement->author->name ?? __('teacher.dashboard.school_fallback') }}</p>
             </div>
         </div>
     @empty
-        <div class="today-item"><div class="today-left"><p>No announcements yet.</p></div></div>
+        <div class="today-item"><div class="today-left"><p>{{ __('teacher.dashboard.no_announcements_yet') }}</p></div></div>
     @endforelse
 </div>
 

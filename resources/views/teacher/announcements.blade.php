@@ -4,24 +4,24 @@
 
 @php
 $audienceMeta = [
-    'everyone' => ['icon' => 'fa-bell',            'color' => 'green', 'tag' => 'everyone', 'label' => 'Everyone'],
-    'students' => ['icon' => 'fa-user-graduate',   'color' => 'blue',  'tag' => 'student',  'label' => 'Students'],
-    'teachers' => ['icon' => 'fa-users',           'color' => 'red',   'tag' => 'teacher',  'label' => 'Teachers'],
-    'class'    => ['icon' => 'fa-clipboard',       'color' => 'navy',  'tag' => 'academic', 'label' => 'Academic'],
+    'everyone' => ['icon' => 'fa-bell',            'color' => 'green', 'tag' => 'everyone', 'label' => __('teacher.announcements.audience_everyone')],
+    'students' => ['icon' => 'fa-user-graduate',   'color' => 'blue',  'tag' => 'student',  'label' => __('teacher.announcements.audience_students')],
+    'teachers' => ['icon' => 'fa-users',           'color' => 'red',   'tag' => 'teacher',  'label' => __('teacher.announcements.audience_teachers')],
+    'class'    => ['icon' => 'fa-clipboard',       'color' => 'navy',  'tag' => 'academic', 'label' => __('teacher.announcements.audience_academic')],
 ];
 @endphp
 
 <div class="announcement-page">
     <div class="breadcrumb">
-        <span>Portal</span>
+        <span>{{ __('teacher.announcements.breadcrumb_portal') }}</span>
         <i class="fa-solid fa-angle-right"></i>
-        <span>Announcements</span>
+        <span>{{ __('teacher.announcements.title') }}</span>
     </div>
 
     <div class="announcement-header">
         <div>
-            <h1>Announcements</h1>
-            <p>Stay updated with the latest school news and notices.</p>
+            <h1>{{ __('teacher.announcements.title') }}</h1>
+            <p>{{ __('teacher.announcements.subtitle') }}</p>
         </div>
     </div>
 </div>
@@ -38,18 +38,18 @@ $audienceMeta = [
             </div>
             <div class="announcement-info">
                 <span><i class="fa-regular fa-calendar"></i> {{ $announcement->created_at->format('M j, Y') }}</span>
-                <span><i class="fa-regular fa-user"></i> {{ $announcement->author->name ?? 'School' }}</span>
+                <span><i class="fa-regular fa-user"></i> {{ $announcement->author->name ?? __('teacher.announcements.school_fallback') }}</span>
             </div>
             <p>{{ $announcement->body }}</p>
             <div class="announcement-footer">
                 <span class="tag {{ $meta['tag'] }}">{{ $meta['label'] }}</span>
-                <span class="priority {{ $announcement->priority }}">&#9679; {{ strtoupper($announcement->priority) }} PRIORITY</span>
+                <span class="priority {{ $announcement->priority }}">&#9679; {{ strtoupper($announcement->priority) }} {{ __('teacher.announcements.priority_suffix') }}</span>
             </div>
         </div>
     </div>
 @empty
     <div class="announcement-card">
-        <div class="announcement-content"><p>No announcements yet.</p></div>
+        <div class="announcement-content"><p>{{ __('teacher.announcements.no_announcements_yet') }}</p></div>
     </div>
 @endforelse
 

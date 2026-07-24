@@ -3,14 +3,14 @@
 @section('content')
 
 <div class="breadcrumb">
-    <a href="{{ route('student.dashboard') }}">Dashboard</a> &gt;
-    <span>{{ $schedule->subject->name ?? 'Class' }}</span>
+    <a href="{{ route('student.dashboard') }}">{{ __('common.dashboard') }}</a> &gt;
+    <span>{{ $schedule->subject->name ?? __('student.view_class.class_fallback') }}</span>
 </div>
 
 <x-page-header>
     <div>
         <h1>{{ $schedule->subject->name ?? '—' }}</h1>
-        <p>{{ $schedule->schoolClass->name ?? '—' }} &middot; {{ $schedule->day_of_week }}, Period {{ $schedule->period }}</p>
+        <p>{{ $schedule->schoolClass->name ?? '—' }} &middot; {{ __('common.days.' . $schedule->day_of_week) }}, {{ __('student.view_class.period_label', ['period' => $schedule->period]) }}</p>
     </div>
 </x-page-header>
 
@@ -22,15 +22,15 @@
                     {{ collect(explode(' ', $schedule->teacher->user->name ?? '—'))->map(fn ($n) => mb_substr($n, 0, 1))->take(2)->implode('') }}
                 </div>
             </div>
-            <h2>{{ $schedule->teacher->user->name ?? 'Unassigned' }}</h2>
-            <span class="role-badge">Teacher</span>
+            <h2>{{ $schedule->teacher->user->name ?? __('student.dashboard.unassigned') }}</h2>
+            <span class="role-badge">{{ __('common.teacher') }}</span>
             <hr>
             <div class="profile-info">
-                <label>Subject</label>
+                <label>{{ __('common.subject') }}</label>
                 <h4>{{ $schedule->subject->name ?? '—' }}</h4>
             </div>
             <div class="profile-info">
-                <label>Email</label>
+                <label>{{ __('common.email') }}</label>
                 <h4>{{ $schedule->teacher->user->email ?? '—' }}</h4>
             </div>
         </div>
@@ -38,13 +38,13 @@
 
     <div class="profile-right">
         <div class="data-card-header" style="padding:0 0 16px;">
-            <h3>Classmates</h3>
+            <h3>{{ __('student.view_class.classmates') }}</h3>
         </div>
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>Student</th>
-                    <th>Roll No.</th>
+                    <th>{{ __('common.student') }}</th>
+                    <th>{{ __('student.view_class.roll_no_column') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,7 +54,7 @@
                         <td>{{ $classmate->roll_no }}</td>
                     </tr>
                 @empty
-                    <tr><td colspan="2" style="text-align:center;color:#8a94a6;">No classmates found.</td></tr>
+                    <tr><td colspan="2" style="text-align:center;color:#8a94a6;">{{ __('student.view_class.no_classmates_found') }}</td></tr>
                 @endforelse
             </tbody>
         </table>

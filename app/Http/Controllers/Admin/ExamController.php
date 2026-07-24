@@ -144,4 +144,9 @@ class ExamController extends Controller
     {
         return $this->exportExamScoresCsv($exam);
     }
+
+    public function exportResultsPdf(Exam $exam)
+    {
+        return $this->exportExamScoresPdf($exam);
+    }
 }

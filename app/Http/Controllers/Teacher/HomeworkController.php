@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Teacher\Concerns\EnsuresClassOwnership;
 use App\Models\Homework;
+use App\Models\HomeworkSubmission;
+use App\Models\Student;
 use App\Models\Subject;
 use App\Models\User;
 use App\Notifications\HomeworkAssignedNotification;
+use App\Notifications\HomeworkSubmissionGradedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -25,6 +28,7 @@ class HomeworkController extends Controller
 
         $homeworks = Homework::where('teacher_id', $teacherId)
             ->with(['schoolClass', 'subject'])
+            ->withCount('submissions')
             ->latest('due_date')
             ->paginate(20);
 
@@ -134,6 +138,60 @@ class HomeworkController extends Controller
 
         return redirect()->route('teacher.homework.index')
             ->with('status', 'Homework deleted.');
+    }
+
+    public function submissions(Homework $homework)
+    {
+        $this->ensureTeacherOwnsClass($homework->class_id);
+
+        $homework->load(['schoolClass', 'subject']);
+
+        $students = Student::with('user')
+            ->where('class_id', $homework->class_id)
+            ->orderBy('roll_no')
+            ->get();
+
+        $submissions = HomeworkSubmission::where('homework_id', $homework->id)
+            ->get()
+            ->keyBy('student_id');
+
+        return view('teacher.homework-submissions', compact('homework', 'students', 'submissions'));
+    }
+
+    public function grade(Request $request, Homework $homework)
+    {
+        $this->ensureTeacherOwnsClass($homework->class_id);
+
+        $validated = $request->validate([
+            'scores'     => ['nullable', 'array'],
+            'scores.*'   => ['nullable', 'integer', 'min:0', 'max:100'],
+            'feedback'   => ['nullable', 'array'],
+            'feedback.*' => ['nullable', 'string'],
+        ]);
+
+        $submissions = HomeworkSubmission::where('homework_id', $homework->id)->get()->keyBy('student_id');
+
+        foreach ($validated['scores'] ?? [] as $studentId => $score) {
+            if ($score === null || $score === '') {
+                continue;
+            }
+
+            // A teacher can only grade work that was actually submitted.
+            $submission = $submissions->get($studentId);
+            if (! $submission) {
+                continue;
+            }
+
+            $submission->update([
+                'score'     => $score,
+                'feedback'  => $validated['feedback'][$studentId] ?? null,
+                'graded_at' => now(),
+            ]);
+
+            $submission->student?->user?->notify(new HomeworkSubmissionGradedNotification($submission));
+        }
+
+        return redirect()->route('teacher.homework.submissions', $homework)->with('success', 'Grades saved.');
     }
 
     private function storeAttachment(Request $request): ?array

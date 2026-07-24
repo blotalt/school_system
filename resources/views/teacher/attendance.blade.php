@@ -12,29 +12,37 @@
         <div class="session-left">
             <span class="session-label">
                 <i class="fa-solid fa-flask"></i>
-                {{ $isToday ? "TODAY'S SESSION" : 'SESSION' }}
+                {{ $isToday ? __('teacher.attendance.todays_session') : __('teacher.attendance.session') }}
             </span>
             <h1>{{ $class->name }}</h1>
             <div class="session-info">
                 <span><i class="fa-regular fa-calendar"></i> {{ $viewingDate->format('F j, Y') }}</span>
-                <span><i class="fa-regular fa-user-graduate"></i> {{ $students->count() }} students</span>
+                <span><i class="fa-solid fa-user-graduate"></i> {{ __('teacher.attendance.students_count', ['count' => $students->count()]) }}</span>
             </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end;">
             <form method="GET" action="{{ route('teacher.attendance.show', $class) }}" style="display:flex;gap:8px;align-items:center;">
-                <a href="{{ route('teacher.attendance.show', ['class' => $class, 'date' => $viewingDate->copy()->subDay()->toDateString()]) }}" class="icon-only-btn" title="Previous day" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;">
+                <a href="{{ route('teacher.attendance.show', ['class' => $class, 'date' => $viewingDate->copy()->subDay()->toDateString()]) }}" class="icon-only-btn" title="{{ __('teacher.attendance.previous_day') }}" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;">
                     <i class="fa-solid fa-chevron-left"></i>
                 </a>
                 <input type="date" name="date" value="{{ $viewingDate->toDateString() }}" onchange="this.form.submit()" style="height:44px;border:1px solid #e5e9f2;border-radius:10px;padding:0 12px;">
-                <a href="{{ route('teacher.attendance.show', ['class' => $class, 'date' => $viewingDate->copy()->addDay()->toDateString()]) }}" class="icon-only-btn" title="Next day" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;">
+                <a href="{{ route('teacher.attendance.show', ['class' => $class, 'date' => $viewingDate->copy()->addDay()->toDateString()]) }}" class="icon-only-btn" title="{{ __('teacher.attendance.next_day') }}" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;">
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
             </form>
             @if(!$isToday)
-                <a href="{{ route('teacher.attendance.show', $class) }}" style="font-size:13px;color:#0b3f86;">Jump to today</a>
+                <a href="{{ route('teacher.attendance.show', $class) }}" style="font-size:13px;color:#0b3f86;">{{ __('teacher.attendance.jump_to_today') }}</a>
             @endif
+            <div style="display:flex;gap:10px;">
+                <a href="{{ route('teacher.attendance.export', ['class' => $class, 'date' => $date]) }}" class="add-btn">
+                    <i class="fa-solid fa-file-excel"></i> {{ __('teacher.attendance.export_excel') }}
+                </a>
+                <a href="{{ route('teacher.attendance.export.pdf', ['class' => $class, 'date' => $date]) }}" class="add-btn" style="background:#dc2626;">
+                    <i class="fa-solid fa-file-pdf"></i> {{ __('teacher.attendance.export_pdf') }}
+                </a>
+            </div>
             <button type="button" id="markAllPresent" class="present-btn">
-                <i class="fa-solid fa-check-double"></i> Mark All Present
+                <i class="fa-solid fa-check-double"></i> {{ __('teacher.attendance.mark_all_present') }}
             </button>
         </div>
     </div>
@@ -52,8 +60,8 @@
 
     <div class="attendance-card">
         <div class="attendance-header">
-            <div class="student-column">STUDENT NAME & ID</div>
-            <div class="status-column">ATTENDANCE STATUS</div>
+            <div class="student-column">{{ __('teacher.attendance.student_name_id_column') }}</div>
+            <div class="status-column">{{ __('teacher.attendance.status_column') }}</div>
         </div>
 
         @forelse($students as $student)
@@ -68,28 +76,34 @@
                 </div>
                 <div class="teacher-attendance-status" data-student="{{ $student->id }}">
                     <input type="hidden" name="attendance[{{ $student->id }}]" class="teacher-status-input" value="{{ $status }}">
-                    <button type="button" class="teacher-status-btn {{ $status === 'present' ? 'active' : '' }}" data-status="present" onclick="setTeacherStatus({{ $student->id }}, 'present', this)">Present</button>
-                    <button type="button" class="teacher-status-btn {{ $status === 'late' ? 'active' : '' }}" data-status="late" onclick="setTeacherStatus({{ $student->id }}, 'late', this)">Late</button>
-                    <button type="button" class="teacher-status-btn {{ $status === 'absent' ? 'active' : '' }}" data-status="absent" onclick="setTeacherStatus({{ $student->id }}, 'absent', this)">Absent</button>
+                    <button type="button" class="teacher-status-btn {{ $status === 'present' ? 'active' : '' }}" data-status="present" onclick="setTeacherStatus({{ $student->id }}, 'present', this)">{{ __('teacher.attendance.present') }}</button>
+                    <button type="button" class="teacher-status-btn {{ $status === 'late' ? 'active' : '' }}" data-status="late" onclick="setTeacherStatus({{ $student->id }}, 'late', this)">{{ __('teacher.attendance.late') }}</button>
+                    <button type="button" class="teacher-status-btn {{ $status === 'absent' ? 'active' : '' }}" data-status="absent" onclick="setTeacherStatus({{ $student->id }}, 'absent', this)">{{ __('teacher.attendance.absent') }}</button>
                 </div>
             </div>
         @empty
-            <div class="student-row"><p style="color:#8a94a6;">No students in this class.</p></div>
+            <div class="student-row"><p style="color:#8a94a6;">{{ __('teacher.attendance.no_students_in_class') }}</p></div>
         @endforelse
     </div>
 
     <div class="attendance-footer">
         <div class="attendance-summary">
-            <span><strong>Total Students:</strong> {{ $students->count() }}</span>
-            <span class="summary present" id="presentSummary">{{ $records->where('status', 'present')->count() }} Present</span>
-            <span class="summary late" id="lateSummary">{{ $records->where('status', 'late')->count() }} Late</span>
-            <span class="summary absent" id="absentSummary">{{ $records->where('status', 'absent')->count() }} Absent</span>
+            <span><strong>{{ __('teacher.attendance.total_students') }}</strong> {{ $students->count() }}</span>
+            <span class="summary present" id="presentSummary">{{ $records->where('status', 'present')->count() }} {{ __('teacher.attendance.present') }}</span>
+            <span class="summary late" id="lateSummary">{{ $records->where('status', 'late')->count() }} {{ __('teacher.attendance.late') }}</span>
+            <span class="summary absent" id="absentSummary">{{ $records->where('status', 'absent')->count() }} {{ __('teacher.attendance.absent') }}</span>
         </div>
-        <button type="submit" class="save-attendance-btn"><i class="fa-solid fa-floppy-disk"></i> Save Attendance</button>
+        <button type="submit" class="save-attendance-btn"><i class="fa-solid fa-floppy-disk"></i> {{ __('teacher.attendance.save_attendance') }}</button>
     </div>
 </form>
 
 <script>
+const TEACHER_ATTENDANCE_LABELS = {
+    present: @json(__('teacher.attendance.present')),
+    late: @json(__('teacher.attendance.late')),
+    absent: @json(__('teacher.attendance.absent')),
+};
+
 function setTeacherStatus(studentId, status, btn) {
     const group = document.querySelector(`.teacher-attendance-status[data-student="${studentId}"]`);
     group.querySelector('.teacher-status-input').value = status;
@@ -108,9 +122,9 @@ document.getElementById('markAllPresent').addEventListener('click', function () 
 
 function updateTeacherSummary() {
     const values = Array.from(document.querySelectorAll('.teacher-status-input')).map(i => i.value);
-    document.getElementById('presentSummary').textContent = values.filter(v => v === 'present').length + ' Present';
-    document.getElementById('lateSummary').textContent = values.filter(v => v === 'late').length + ' Late';
-    document.getElementById('absentSummary').textContent = values.filter(v => v === 'absent').length + ' Absent';
+    document.getElementById('presentSummary').textContent = values.filter(v => v === 'present').length + ' ' + TEACHER_ATTENDANCE_LABELS.present;
+    document.getElementById('lateSummary').textContent = values.filter(v => v === 'late').length + ' ' + TEACHER_ATTENDANCE_LABELS.late;
+    document.getElementById('absentSummary').textContent = values.filter(v => v === 'absent').length + ' ' + TEACHER_ATTENDANCE_LABELS.absent;
 }
 </script>
 

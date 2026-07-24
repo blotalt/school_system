@@ -2,15 +2,15 @@
 
 @section('content')
 <div class="breadcrumb">
-    <a href="{{ route('admin.dashboard') }}">Dashboard</a> &gt;
-    <a href="{{ route('admin.teachers.index') }}">Teachers</a> &gt;
-    <span>Edit Teacher</span>
+    <a href="{{ route('admin.dashboard') }}">{{ __('common.dashboard') }}</a> &gt;
+    <a href="{{ route('admin.teachers.index') }}">{{ __('admin.teachers.title') }}</a> &gt;
+    <span>{{ __('admin.teachers.edit_title') }}</span>
 </div>
 
 <x-page-header>
     <div>
-        <h1>Edit Teacher</h1>
-        <p>Update faculty information for {{ $teacher->user->name }}.</p>
+        <h1>{{ __('admin.teachers.edit_title') }}</h1>
+        <p>{{ __('admin.teachers.edit_subtitle', ['name' => $teacher->user->name]) }}</p>
     </div>
 </x-page-header>
 
@@ -18,52 +18,55 @@
     @csrf
     @method('PUT')
 
-    <h3 class="form-section-title"><i class="fa-solid fa-briefcase"></i> Faculty Information</h3>
+    <h3 class="form-section-title"><i class="fa-solid fa-briefcase"></i> {{ __('admin.teachers.faculty_information') }}</h3>
 
     <div class="form-row form-row-3">
         <div class="form-group">
-            <label>Full Name</label>
+            <label>{{ __('common.full_name') }}</label>
             <input type="text" name="name" value="{{ old('name', $teacher->user->name) }}">
             @error('name') <span class="field-error">{{ $message }}</span> @enderror
         </div>
         <div class="form-group">
-            <label>Date of Birth</label>
+            <label>{{ __('common.date_of_birth') }}</label>
             <input type="date" name="date_of_birth" value="{{ old('date_of_birth', optional($teacher->date_of_birth)->format('Y-m-d')) }}">
             @error('date_of_birth') <span class="field-error">{{ $message }}</span> @enderror
         </div>
         <div class="form-group">
-            <label>Gender</label>
+            <label>{{ __('common.gender') }}</label>
             <select name="gender">
-                <option value="">Select Gender</option>
-                <option value="male" @selected(old('gender', $teacher->gender) === 'male')>Male</option>
-                <option value="female" @selected(old('gender', $teacher->gender) === 'female')>Female</option>
+                <option value="">{{ __('admin.teachers.select_gender') }}</option>
+                <option value="male" @selected(old('gender', $teacher->gender) === 'male')>{{ __('common.male') }}</option>
+                <option value="female" @selected(old('gender', $teacher->gender) === 'female')>{{ __('common.female') }}</option>
             </select>
         </div>
     </div>
 
     <div class="form-row">
         <div class="form-group">
-            <label>Email Address</label>
+            <label>{{ __('common.email_address') }}</label>
             <input type="email" name="email" value="{{ old('email', $teacher->user->email) }}">
             @error('email') <span class="field-error">{{ $message }}</span> @enderror
         </div>
         <div class="form-group">
-            <label>Phone Number</label>
+            <label>{{ __('common.phone_number') }}</label>
             <input type="text" name="phone" value="{{ old('phone', $teacher->phone) }}">
             @error('phone') <span class="field-error">{{ $message }}</span> @enderror
         </div>
     </div>
 
     <div class="form-group" style="max-width:400px;">
-        <label>System Password</label>
-        <input type="password" name="password" placeholder="Leave blank to keep current password">
+        <label>{{ __('common.system_password') }}</label>
+        <div class="password-input-wrapper">
+            <input type="password" name="password" placeholder="{{ __('admin.teachers.password_hint') }}">
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility(this)" aria-label="{{ __('common.show_password') }}"><i class="fa-solid fa-eye"></i></button>
+        </div>
         @error('password') <span class="field-error">{{ $message }}</span> @enderror
     </div>
 
     <hr class="form-divider">
 
     <div class="form-group">
-        <label>Subject Specialization</label>
+        <label>{{ __('admin.teachers.subject_specialization') }}</label>
         <div class="section-toggle-group">
             @foreach($subjects as $subject)
                 <label class="section-toggle">
@@ -76,7 +79,7 @@
     </div>
 
     <div class="form-group">
-        <label>Assigned Classes</label>
+        <label>{{ __('common.assigned_classes') }}</label>
         <div class="section-toggle-group">
             @foreach($classes as $class)
                 <label class="section-toggle">
@@ -90,12 +93,12 @@
 
     <div class="info-box">
         <i class="fa-solid fa-circle-info"></i>
-        <span>Assigning a class here reassigns it from any teacher currently teaching it.</span>
+        <span>{{ __('admin.teachers.reassign_notice') }}</span>
     </div>
 
     <div class="form-actions">
-        <a href="{{ route('admin.teachers.index') }}" class="cancel-btn">Cancel</a>
-        <button type="submit" class="save-btn"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+        <a href="{{ route('admin.teachers.index') }}" class="cancel-btn">{{ __('common.cancel') }}</a>
+        <button type="submit" class="save-btn"><i class="fa-solid fa-floppy-disk"></i> {{ __('common.save_changes') }}</button>
     </div>
 </form>
 @endsection

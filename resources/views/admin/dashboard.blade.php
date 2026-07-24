@@ -3,8 +3,8 @@
 @section('content')
 <x-page-header>
     <div>
-        <h1>Institutional Dashboard</h1>
-        <p>Academic Session: 2025-2026 • Senior Secondary Department</p>
+        <h1>{{ __('admin.dashboard.title') }}</h1>
+        <p>{{ __('admin.dashboard.subtitle') }}</p>
     </div>
 </x-page-header>
 
@@ -20,16 +20,16 @@
 
 <div class="data-card">
     <div class="data-card-header">
-        <h3>Classes Overview</h3>
-        <a href="/admin/classes">View All Classes</a>
+        <h3>{{ __('admin.dashboard.classes_overview') }}</h3>
+        <a href="/admin/classes">{{ __('admin.dashboard.view_all_classes') }}</a>
     </div>
     <table class="data-table">
         <thead>
             <tr>
-                <th>Class Name</th>
-                <th>Track</th>
-                <th>Students</th>
-                <th>Attendance</th>
+                <th>{{ __('admin.dashboard.class_name') }}</th>
+                <th>{{ __('common.track') }}</th>
+                <th>{{ __('admin.dashboard.students') }}</th>
+                <th>{{ __('admin.dashboard.attendance') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -41,7 +41,7 @@
                     <td>{{ $class->attendance }}%</td>
                 </tr>
             @empty
-                <tr><td colspan="4" style="text-align:center;color:#8a94a6;">No classes yet.</td></tr>
+                <tr><td colspan="4" style="text-align:center;color:#8a94a6;">{{ __('admin.dashboard.no_classes_yet') }}</td></tr>
             @endforelse
         </tbody>
     </table>

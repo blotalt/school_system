@@ -4,8 +4,8 @@
 
 <x-page-header>
     <div>
-        <h1>Gradebook</h1>
-        <p>Select an exam to view or enter student scores.</p>
+        <h1>{{ __('teacher.gradebook.title') }}</h1>
+        <p>{{ __('teacher.gradebook.subtitle') }}</p>
     </div>
 </x-page-header>
 
@@ -19,12 +19,12 @@
     <table class="data-table">
         <thead>
             <tr>
-                <th>Exam</th>
-                <th>Class</th>
-                <th>Subject</th>
-                <th>Type</th>
-                <th>Date</th>
-                <th>Scored</th>
+                <th>{{ __('teacher.gradebook.exam_column') }}</th>
+                <th>{{ __('teacher.gradebook.class_column') }}</th>
+                <th>{{ __('teacher.gradebook.subject_column') }}</th>
+                <th>{{ __('teacher.gradebook.type_column') }}</th>
+                <th>{{ __('teacher.gradebook.date_column') }}</th>
+                <th>{{ __('teacher.gradebook.scored_column') }}</th>
                 <th></th>
             </tr>
         </thead>
@@ -39,12 +39,12 @@
                     <td>{{ $exam->results_count }}</td>
                     <td>
                         <a href="{{ route('teacher.gradebook.show', $exam) }}" class="add-btn">
-                            <i class="fa-solid fa-pen-to-square"></i> Enter Scores
+                            <i class="fa-solid fa-pen-to-square"></i> {{ __('teacher.gradebook.enter_scores') }}
                         </a>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="7" style="text-align:center;color:#8a94a6;">You haven't created any exams yet.</td></tr>
+                <tr><td colspan="7" style="text-align:center;color:#8a94a6;">{{ __('teacher.gradebook.no_exams_yet') }}</td></tr>
             @endforelse
         </tbody>
     </table>

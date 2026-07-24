@@ -13,11 +13,11 @@
 
     <div class="notif-dropdown" id="notifDropdown">
         <div class="notif-dropdown-header">
-            <strong>Notifications</strong>
+            <strong>{{ __('nav.notifications') }}</strong>
             @if($unreadCount > 0)
                 <form method="POST" action="{{ route('notifications.readAll') }}">
                     @csrf
-                    <button type="submit" class="notif-mark-all">Mark all read</button>
+                    <button type="submit" class="notif-mark-all">{{ __('nav.mark_all_read') }}</button>
                 </form>
             @endif
         </div>
@@ -26,13 +26,13 @@
                 <a href="{{ route('notifications.read', $notification) }}" class="notif-item {{ $notification->read_at ? '' : 'unread' }}">
                     <div class="notif-item-icon"><i class="fa-solid {{ $notification->data['icon'] ?? 'fa-bell' }}"></i></div>
                     <div class="notif-item-body">
-                        <strong>{{ $notification->data['title'] ?? 'Notification' }}</strong>
+                        <strong>{{ $notification->data['title'] ?? __('nav.notification_fallback') }}</strong>
                         <p>{{ $notification->data['message'] ?? '' }}</p>
                         <span>{{ $notification->created_at->diffForHumans() }}</span>
                     </div>
                 </a>
             @empty
-                <div class="notif-empty">No notifications yet.</div>
+                <div class="notif-empty">{{ __('nav.no_notifications_yet') }}</div>
             @endforelse
         </div>
     </div>

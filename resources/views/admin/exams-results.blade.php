@@ -2,19 +2,24 @@
 
 @section('content')
 <div class="breadcrumb">
-    <a href="{{ route('admin.dashboard') }}">Dashboard</a> &gt;
-    <a href="{{ route('admin.exams.index') }}">Exams</a> &gt;
-    <span>{{ $exam->title }} - Results</span>
+    <a href="{{ route('admin.dashboard') }}">{{ __('common.dashboard') }}</a> &gt;
+    <a href="{{ route('admin.exams.index') }}">{{ __('admin.exams.title') }}</a> &gt;
+    <span>{{ __('admin.exams.results_breadcrumb', ['title' => $exam->title]) }}</span>
 </div>
 
 <x-page-header>
     <div>
         <h1>{{ $exam->title }}</h1>
-        <p>{{ $exam->schoolClass->name ?? 'Unassigned' }} &middot; {{ $exam->subject->name ?? '—' }} &middot; Max Score {{ $exam->max_score }}</p>
+        <p>{{ $exam->schoolClass->name ?? __('admin.exams.unassigned') }} &middot; {{ $exam->subject->name ?? '—' }} &middot; {{ __('admin.exams.max_score_suffix', ['score' => $exam->max_score]) }}</p>
     </div>
-    <a href="{{ route('admin.exams.results.export', $exam) }}" class="add-btn">
-        <i class="fa-solid fa-file-excel"></i> Export
-    </a>
+    <div style="display:flex;gap:10px;">
+        <a href="{{ route('admin.exams.results.export', $exam) }}" class="add-btn">
+            <i class="fa-solid fa-file-excel"></i> {{ __('admin.exams.export') }}
+        </a>
+        <a href="{{ route('admin.exams.results.export.pdf', $exam) }}" class="add-btn" style="background:#dc2626;">
+            <i class="fa-solid fa-file-pdf"></i> {{ __('admin.exams.export_pdf') }}
+        </a>
+    </div>
 </x-page-header>
 
 @if (session('success'))
@@ -25,12 +30,12 @@
 
 <div class="session-card">
     <div>
-        <span class="session-label">EXAM DETAILS</span>
-        <h1 style="font-size:22px;">{{ ucfirst($exam->exam_type) }} Exam</h1>
+        <span class="session-label">{{ __('admin.exams.exam_details') }}</span>
+        <h1 style="font-size:22px;">{{ ucfirst($exam->exam_type) }} {{ __('admin.exams.exam_type_suffix') }}</h1>
         <div class="session-info">
             <span><i class="fa-regular fa-calendar"></i> {{ \Illuminate\Support\Carbon::parse($exam->exam_date)->format('F j, Y') }}</span>
             <span><i class="fa-solid fa-chalkboard-user"></i> {{ $exam->teacher->user->name ?? '—' }}</span>
-            <span><i class="fa-regular fa-chart-bar"></i> Average: {{ $average ?? '—' }}</span>
+            <span><i class="fa-regular fa-chart-bar"></i> {{ __('admin.exams.average', ['value' => $average ?? '—']) }}</span>
         </div>
     </div>
 </div>
@@ -39,8 +44,8 @@
     @csrf
     <div class="attendance-card">
         <div class="attendance-header">
-            <span class="student-column">Student</span>
-            <span class="status-column">Score (out of {{ $exam->max_score }})</span>
+            <span class="student-column">{{ __('common.student') }}</span>
+            <span class="status-column">{{ __('admin.exams.score_out_of', ['max' => $exam->max_score]) }}</span>
         </div>
 
         @forelse($students as $student)
@@ -59,12 +64,12 @@
                 </div>
             </div>
         @empty
-            <div class="student-row" style="justify-content:center;color:#9ca3af;">No students in this class.</div>
+            <div class="student-row" style="justify-content:center;color:#9ca3af;">{{ __('admin.attendance.no_students_in_class') }}</div>
         @endforelse
 
         <div class="attendance-footer">
-            <span style="color:#9ca3af;font-size:14px;">{{ $scores->count() }} of {{ $students->count() }} scored</span>
-            <button type="submit" class="save-attendance-btn"><i class="fa-solid fa-floppy-disk"></i> Save Scores</button>
+            <span style="color:#9ca3af;font-size:14px;">{{ __('admin.exams.scored_of', ['scored' => $scores->count(), 'total' => $students->count()]) }}</span>
+            <button type="submit" class="save-attendance-btn"><i class="fa-solid fa-floppy-disk"></i> {{ __('admin.exams.save_scores') }}</button>
         </div>
     </div>
 </form>

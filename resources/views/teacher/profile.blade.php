@@ -3,8 +3,8 @@
 @section('content')
 <div class="profile-page">
     <div class="profile-header">
-        <h1>My Profile</h1>
-        <p>Your account information.</p>
+        <h1>{{ __('common.my_profile') }}</h1>
+        <p>{{ __('teacher.profile.subtitle') }}</p>
     </div>
 
     <div class="profile-wrapper">
@@ -16,14 +16,14 @@
                     </div>
                 </div>
                 <h2>{{ $user->name }}</h2>
-                <span class="role-badge">Teacher</span>
+                <span class="role-badge">{{ __('teacher.profile.role_teacher') }}</span>
                 <hr>
                 <div class="profile-info">
-                    <label>Email</label>
+                    <label>{{ __('common.email') }}</label>
                     <h4>{{ $user->email }}</h4>
                 </div>
                 <div class="profile-info">
-                    <label>Member Since</label>
+                    <label>{{ __('common.member_since') }}</label>
                     <h4>{{ $user->created_at->format('F Y') }}</h4>
                 </div>
             </div>
@@ -31,21 +31,21 @@
 
         <div class="profile-right">
             <div class="account-card">
-                <h3>Teaching Info</h3>
+                <h3>{{ __('teacher.profile.teaching_info') }}</h3>
                 <div class="profile-info">
-                    <label>Subjects</label>
+                    <label>{{ __('common.subjects') }}</label>
                     <h4>{{ $teacher?->subjects->pluck('name')->implode(', ') ?: '—' }}</h4>
                 </div>
                 <div class="profile-info">
-                    <label>Assigned Classes</label>
+                    <label>{{ __('common.assigned_classes') }}</label>
                     <h4>{{ $teacher?->classes->pluck('name')->implode(', ') ?: '—' }}</h4>
                 </div>
                 <div class="profile-info">
-                    <label>Phone</label>
+                    <label>{{ __('teacher.profile.phone') }}</label>
                     <h4>{{ $teacher?->phone ?? '—' }}</h4>
                 </div>
                 <p style="color:#9ca3af;font-size:13px;margin-top:16px;">
-                    <i class="fa-solid fa-circle-info"></i> Contact your school administrator to update this information.
+                    <i class="fa-solid fa-circle-info"></i> {{ __('teacher.profile.contact_admin_notice') }}
                 </p>
             </div>
         </div>

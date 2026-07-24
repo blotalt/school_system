@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\AttendanceController; // B4
 use App\Http\Controllers\Admin\AnnouncementController; // B4
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\SearchController;
+use App\Http\Controllers\Admin\ScheduleRequestController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('search', [SearchController::class, 'search'])->name('search');
@@ -26,7 +27,15 @@ Route::resource('exams', ExamController::class);
 Route::get('exams/{exam}/results', [ExamController::class, 'results'])->name('exams.results.index');
 Route::post('exams/{exam}/results', [ExamController::class, 'storeResults'])->name('exams.results.store');
 Route::get('exams/{exam}/results/export', [ExamController::class, 'exportResults'])->name('exams.results.export');
+Route::get('exams/{exam}/results/export/pdf', [ExamController::class, 'exportResultsPdf'])->name('exams.results.export.pdf');
 Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
 Route::post('attendance/{class}', [AttendanceController::class, 'store'])->name('attendance.store');
+Route::get('attendance/{class}/export', [AttendanceController::class, 'downloadAttendanceCsv'])->name('attendance.export');
+Route::get('attendance/{class}/export/pdf', [AttendanceController::class, 'downloadAttendancePdf'])->name('attendance.export.pdf');
 Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
 Route::post('announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
+Route::put('announcements/{announcement}', [AnnouncementController::class, 'update'])->name('announcements.update');
+Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+Route::get('schedule-requests', [ScheduleRequestController::class, 'index'])->name('schedule-requests.index');
+Route::post('schedule-requests/{scheduleRequest}/approve', [ScheduleRequestController::class, 'approve'])->name('schedule-requests.approve');
+Route::post('schedule-requests/{scheduleRequest}/reject', [ScheduleRequestController::class, 'reject'])->name('schedule-requests.reject');

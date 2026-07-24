@@ -31,11 +31,11 @@ $gradeColor = function (?float $pct): string {
                 {{ collect(explode(' ', $student?->user->name ?? auth()->user()->name))->map(fn ($n) => mb_substr($n, 0, 1))->take(2)->implode('') }}
             </div>
             <div>
-                <h1>Hello, {{ $student?->user->name ?? auth()->user()->name }}</h1>
+                <h1>{{ __('student.dashboard.hello', ['name' => $student?->user->name ?? auth()->user()->name]) }}</h1>
                 <div class="student-badges">
-                    <span class="grade-badge">{{ $class->name ?? 'Unassigned' }}</span>
+                    <span class="grade-badge">{{ $class->name ?? __('student.grades.unassigned') }}</span>
                     @if($class?->track)
-                        <span class="track-badge">{{ $class->track }} Track</span>
+                        <span class="track-badge">{{ $class->track }} {{ __('student.grades.track_suffix') }}</span>
                     @endif
                 </div>
             </div>
@@ -47,7 +47,7 @@ $gradeColor = function (?float $pct): string {
             <div class="summary-top">
                 <div class="summary-icon"><i class="fa-regular fa-calendar-check"></i></div>
             </div>
-            <h5>ATTENDANCE RATE</h5>
+            <h5>{{ __('student.grades.stat_attendance_rate') }}</h5>
             <h2>{{ $attendanceRate }}%</h2>
         </div>
 
@@ -55,7 +55,7 @@ $gradeColor = function (?float $pct): string {
             <div class="summary-top">
                 <div class="summary-icon"><i class="fa-solid fa-book"></i></div>
             </div>
-            <h5>OVERALL GRADE</h5>
+            <h5>{{ __('student.grades.stat_overall_grade') }}</h5>
             <h2>{{ $gradeLetter($averageScore) }}</h2>
         </div>
 
@@ -63,23 +63,31 @@ $gradeColor = function (?float $pct): string {
             <div class="summary-top">
                 <div class="summary-icon"><i class="fa-regular fa-star"></i></div>
             </div>
-            <h5>AVERAGE SCORE</h5>
+            <h5>{{ __('student.grades.stat_average_score') }}</h5>
             <h2>{{ $averageScore ?? '—' }}<small>/100</small></h2>
         </div>
     </div>
 </div>
 
 <div class="performance-card">
-    <div class="performance-header">
-        <h2>Recent Academic Performance</h2>
+    <div class="performance-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+        <h2>{{ __('student.grades.recent_performance') }}</h2>
+        <div style="display:flex;gap:10px;">
+            <a href="{{ route('student.grades.export') }}" class="add-btn">
+                <i class="fa-solid fa-file-excel"></i> {{ __('student.grades.export_excel') }}
+            </a>
+            <a href="{{ route('student.grades.export.pdf') }}" class="add-btn" style="background:#dc2626;">
+                <i class="fa-solid fa-file-pdf"></i> {{ __('student.grades.export_pdf') }}
+            </a>
+        </div>
     </div>
 
     <table class="performance-table">
         <thead>
             <tr>
-                <th>SUBJECT</th>
-                <th>SCORE</th>
-                <th>GRADE</th>
+                <th>{{ __('student.grades.subject_column') }}</th>
+                <th>{{ __('student.grades.score_column') }}</th>
+                <th>{{ __('student.grades.grade_column') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -109,7 +117,7 @@ $gradeColor = function (?float $pct): string {
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="3" style="text-align:center;color:#8a94a6;">No exam results yet.</td></tr>
+                <tr><td colspan="3" style="text-align:center;color:#8a94a6;">{{ __('student.grades.no_results_yet') }}</td></tr>
             @endforelse
         </tbody>
     </table>

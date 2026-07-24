@@ -80,6 +80,13 @@ class GradebookController extends Controller
         return $this->exportExamScoresCsv($exam);
     }
 
+    public function downloadGradebookPdf(Exam $exam)
+    {
+        $this->authorizeExam($exam);
+
+        return $this->exportExamScoresPdf($exam);
+    }
+
     // Exam-scoped, not class-scoped: a class's homeroom teacher and the
     // teacher who set a given exam aren't necessarily the same person, so
     // grading permission follows the exam's own teacher_id.

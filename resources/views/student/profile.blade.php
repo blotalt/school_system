@@ -3,8 +3,8 @@
 @section('content')
 <div class="profile-page">
     <div class="profile-header">
-        <h1>My Profile</h1>
-        <p>Your account information.</p>
+        <h1>{{ __('common.my_profile') }}</h1>
+        <p>{{ __('student.profile.subtitle') }}</p>
     </div>
 
     <div class="profile-wrapper">
@@ -16,14 +16,14 @@
                     </div>
                 </div>
                 <h2>{{ $user->name }}</h2>
-                <span class="role-badge">Student</span>
+                <span class="role-badge">{{ __('student.profile.role_student') }}</span>
                 <hr>
                 <div class="profile-info">
-                    <label>Email</label>
+                    <label>{{ __('common.email') }}</label>
                     <h4>{{ $user->email }}</h4>
                 </div>
                 <div class="profile-info">
-                    <label>Roll Number</label>
+                    <label>{{ __('common.roll_number') }}</label>
                     <h4>{{ $student?->roll_no ?? '—' }}</h4>
                 </div>
             </div>
@@ -31,25 +31,25 @@
 
         <div class="profile-right">
             <div class="account-card">
-                <h3>Enrollment Details</h3>
+                <h3>{{ __('student.profile.enrollment_details') }}</h3>
                 <div class="profile-info">
-                    <label>Class</label>
+                    <label>{{ __('common.class') }}</label>
                     <h4>{{ $student?->schoolClass?->name ?? '—' }}</h4>
                 </div>
                 <div class="profile-info">
-                    <label>Track</label>
+                    <label>{{ __('common.track') }}</label>
                     <h4>{{ $student?->schoolClass?->track ?? '—' }}</h4>
                 </div>
                 <div class="profile-info">
-                    <label>Guardian Contact</label>
+                    <label>{{ __('common.guardian_contact') }}</label>
                     <h4>{{ $student?->guardian_contact ?? '—' }}</h4>
                 </div>
                 <div class="profile-info">
-                    <label>Date of Birth</label>
+                    <label>{{ __('common.date_of_birth') }}</label>
                     <h4>{{ $student?->date_of_birth?->format('F j, Y') ?? '—' }}</h4>
                 </div>
                 <p style="color:#9ca3af;font-size:13px;margin-top:16px;">
-                    <i class="fa-solid fa-circle-info"></i> Contact your school administrator to update this information.
+                    <i class="fa-solid fa-circle-info"></i> {{ __('student.profile.contact_admin_notice') }}
                 </p>
             </div>
         </div>
