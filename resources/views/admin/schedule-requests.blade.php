@@ -63,10 +63,10 @@ $allSchedules = \App\Models\ClassSchedule::all()
                             <td>
                                 <div style="display:flex;align-items:center;gap:8px;">
                                     <div style="width:30px;height:30px;border-radius:50%;background:#1e40af;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">
-                                        {{ collect(explode(' ', $teacher->user->name))->map(fn($n) => mb_substr($n, 0, 1))->take(2)->implode('') }}
+                                        {{ collect(explode(' ', $teacher->user->displayName()))->map(fn($n) => mb_substr($n, 0, 1))->take(2)->implode('') }}
                                     </div>
                                     <div>
-                                        <div style="font-weight:600;font-size:13px;">{{ $teacher->user->name }}</div>
+                                        <div style="font-weight:600;font-size:13px;">{{ $teacher->user->displayName() }}</div>
                                         <div style="font-size:11px;color:#9ca3af;">{{ $teacher->subject_specialty ?? '—' }}</div>
                                     </div>
                                 </div>

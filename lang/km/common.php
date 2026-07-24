@@ -47,4 +47,25 @@ return [
         'Saturday'  => 'សៅរ៍',
         'Sunday'    => 'អាទិត្យ',
     ],
+
+    'tracks' => [
+    'Science'       => 'វិទ្យាសាស្ត្រ',
+    'Arts'          => 'សិល្បៈ',
+    'Commerce'      => 'ពាណិជ្ជកម្ម',
+    'Social Science'=> 'សង្គមវិទ្យា',
+    'General'       => 'ទូទៅ',
+],
+'subjects' => [
+    'Mathematics'       => 'គណិតវិទ្យា',
+    'Physics'           => 'រូបវិទ្យា',
+    'Biology'           => 'ជីវវិទ្យា',
+    'Chemistry'         => 'គីមីវិទ្យា',
+    'English'           => 'ភាសាអង់គ្លេស',
+    'History'           => 'ប្រវត្តិវិទ្យា',
+    'Geography'         => 'ភូមិវិទ្យា',
+    'Computer Science'  => 'វិទ្យាសាស្ត្រកុំព្យូទ័រ',
+    'Khmer Literature'  => 'អក្សរសាស្ត្រខ្មែរ',
+    'Earth Science'     => 'វិទ្យាសាស្ត្រផែនដី',
+    'Morality & Civics' => 'សីលធម៌និងពលរដ្ឋ',
+],
 ];

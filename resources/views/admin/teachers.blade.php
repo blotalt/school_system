@@ -39,10 +39,15 @@
         <tbody>
             @forelse($teachers as $teacher)
                 <tr>
-                    <td>
-                        <strong>{{ $teacher->user->name }}</strong><br>
-                        <span style="color:#9ca3af;font-size:13px;">TCH-{{ str_pad($teacher->id, 4, '0', STR_PAD_LEFT) }}</span>
-                    </td>
+<td>
+    <div style="display:flex;align-items:center;gap:10px;">
+        <img src="{{ $teacher->user->profilePicture() }}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+        <div>
+            <strong>{{ $teacher->user->displayName() }}</strong>
+<br><span style="color:#9ca3af;font-size:13px;">TCH-{{ str_pad($teacher->id, 4, '0', STR_PAD_LEFT) }}</span>
+        </div>
+    </div>
+</td>
                     <td>
                         @forelse($teacher->subjects as $subject)
                             <span class="badge badge-subject">{{ $subject->name }}</span>
@@ -50,7 +55,7 @@
                             <span style="color:#9ca3af;">&mdash;</span>
                         @endforelse
                     </td>
-                    <td>{{ $teacher->classes->pluck('name')->implode(', ') ?: __('admin.teachers.not_available') }}</td>
+                    <td>{{ $teacher->classes->map(fn($c) => $c->displayName())->implode(', ') ?: __('admin.teachers.not_available') }}</td>
                     <td>{{ $teacher->user->email }}</td>
                     <td>
                         <a href="{{ route('admin.teachers.edit', $teacher) }}" title="{{ __('common.edit') }}"><i class="fa-solid fa-pen"></i></a>

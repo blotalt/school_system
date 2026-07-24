@@ -23,9 +23,9 @@
         <tbody>
             @forelse($classes as $class)
                 <tr>
-                    <td>{{ $class->name }}</td>
+                    <td>{{ $class->displayName() }}</td>
                     <td>{{ $class->grade_level ?? '—' }}</td>
-                    <td>{{ $class->track ?? __('common.default_track') }}</td>
+                    <td>{{ $class->displayTrack() ?: __('common.default_track') }}</td>
                     <td>{{ $class->students_count }}</td>
                     <td>
                         <a href="{{ route('teacher.attendance.show', $class) }}" class="add-btn">

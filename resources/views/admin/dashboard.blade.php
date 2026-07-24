@@ -35,10 +35,10 @@
         <tbody>
             @forelse($classes as $class)
                 <tr>
-                    <td>{{ $class->name }}</td>
-                    <td><span class="badge badge-{{ strtolower($class->track) }}">{{ strtoupper($class->track) }}</span></td>
-                    <td>{{ $class->students }}</td>
-                    <td>{{ $class->attendance }}%</td>
+                    <td>{{ $class->displayName() }}</td>
+<td><span class="badge badge-{{ strtolower($class->track) }}">{{ strtoupper($class->displayTrack()) }}</span></td>
+                    <td>{{ $class->students_count }}</td>
+                    <td>{{ $class->computed_attendance }}%</td>
                 </tr>
             @empty
                 <tr><td colspan="4" style="text-align:center;color:#8a94a6;">{{ __('admin.dashboard.no_classes_yet') }}</td></tr>

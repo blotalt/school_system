@@ -51,11 +51,16 @@
         <tbody>
             @forelse($students as $student)
                 <tr>
-                    <td>
-                        <strong>{{ $student->user->name }}</strong><br>
-                        <span style="color:#9ca3af;font-size:13px;">{{ $student->roll_no }}</span>
-                    </td>
-                    <td>{{ $student->schoolClass->name ?? __('admin.students.unassigned') }}</td>
+<td>
+    <div style="display:flex;align-items:center;gap:10px;">
+        <img src="{{ $student->user->profilePicture() }}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+        <div>
+            <strong>{{ $student->user->displayName() }}</strong>
+            <br><span style="color:#9ca3af;font-size:13px;">{{ $student->roll_no }}</span>
+        </div>
+    </div>
+</td>
+                    <td>{{ $student->schoolClass->displayName() ?? __('admin.students.unassigned') }}</td>
                     <td>
                         @if($student->schoolClass?->track)
                             <span class="badge badge-{{ $student->schoolClass->track === 'Science' ? 'science' : 'geography' }}">{{ $student->schoolClass->track }}</span>

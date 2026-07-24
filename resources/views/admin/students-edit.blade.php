@@ -10,11 +10,11 @@
 <x-page-header>
     <div>
         <h1>{{ __('admin.students.edit_title') }}</h1>
-        <p>{{ __('admin.students.edit_subtitle', ['name' => $student->user->name]) }}</p>
+        <p>{{ __('admin.students.edit_subtitle', ['name' => $student->user->displayName()]) }}</p>
     </div>
 </x-page-header>
 
-<form method="POST" action="{{ route('admin.students.update', $student) }}" class="form-card">
+<form method="POST" action="{{ route('admin.students.update', $student) }}" class="form-card" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -30,6 +30,35 @@
             @error('email') <span class="field-error">{{ $message }}</span> @enderror
         </div>
     </div>
+
+    <div class="form-row">
+    <div class="form-group">
+        <label>ឈ្មោះជាអក្សរខ្មែរ (Khmer Name)</label>
+        <input type="text" name="khmer_name" value="{{ old('khmer_name', $student->user->khmer_name) }}" placeholder="ឧ. សុខ ដារ៉ា">
+        @error('khmer_name') <span class="field-error">{{ $message }}</span> @enderror
+    </div>
+    <div class="form-group">
+        <label>{{ __('common.gender') }}</label>
+        <select name="gender">
+            <option value="">-- Select --</option>
+            <option value="male" @selected(old('gender', $student->gender) === 'male')>{{ __('common.male') }}</option>
+            <option value="female" @selected(old('gender', $student->gender) === 'female')>{{ __('common.female') }}</option>
+        </select>
+        @error('gender') <span class="field-error">{{ $message }}</span> @enderror
+    </div>
+</div>
+
+<div class="form-group">
+    <label>Profile Picture</label>
+    @if($student->user->profile_picture)
+        <div style="margin-bottom:8px;">
+            <img src="{{ asset($student->user->profile_picture) }}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;">
+        </div>
+    @endif
+    <input type="file" name="profile_picture" accept="image/*">
+    <small style="color:#9ca3af;">Leave empty to keep current photo. Default photo based on gender if none uploaded.</small>
+    @error('profile_picture') <span class="field-error">{{ $message }}</span> @enderror
+</div>
 
     <div class="form-row">
         <div class="form-group">

@@ -31,7 +31,7 @@
                 <div style="display:flex;flex-wrap:wrap;gap:6px;">
                     @foreach($uniqueClasses as $class)
                         <span style="background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe;border-radius:6px;padding:4px 10px;font-size:13px;font-weight:600;">
-                            {{ $class->name }}{{ $class->track ? ' · ' . $class->track : '' }}
+                            {{ $class->displayName() }}{{ $class->displayTrack() }}
                             @if($class->schedule_approved_at)
                                 <span style="color:#10b981;margin-left:4px;" title="Approved"><i class="fa-solid fa-circle-check"></i></span>
                             @else
@@ -50,7 +50,7 @@
                 <div style="display:flex;flex-wrap:wrap;gap:6px;">
                     @foreach($uniqueSubjects as $subject)
                         <span style="background:#f0fdf4;color:#15803d;border:1px solid #86efac;border-radius:6px;padding:4px 10px;font-size:13px;font-weight:600;">
-                            {{ $subject->name }}
+                            {{ $subject->displayName() }}
                         </span>
                     @endforeach
                 </div>
@@ -107,7 +107,7 @@
                                 @if($slot)
                                     @php $colorClass = $subjectColors[$slot->subject->name] ?? 'default'; @endphp
                                     <div class="subject-card subject-{{ $colorClass }}">
-                                        <strong>{{ $slot->subject->name }}</strong><br>
+                                        <strong>{{ $slot->subject->displayName() }}</strong><br>
                                         <span style="font-size:12px;">{{ $slot->schoolClass->name }}</span>
                                     </div>
                                 @else

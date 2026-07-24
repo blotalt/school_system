@@ -14,7 +14,7 @@
     </div>
 </x-page-header>
 
-<form method="POST" action="{{ route('admin.students.store') }}" class="form-card">
+<form method="POST" action="{{ route('admin.students.store') }}" class="form-card" enctype="multipart/form-data">
     @csrf
 
     <div class="form-row">
@@ -29,6 +29,29 @@
             @error('email') <span class="field-error">{{ $message }}</span> @enderror
         </div>
     </div>
+
+    <div class="form-row">
+    <div class="form-group">
+        <label>ឈ្មោះជាអក្សរខ្មែរ (Khmer Name)</label>
+        <input type="text" name="khmer_name" placeholder="ឧ. សុខ ដារ៉ា" value="{{ old('khmer_name') }}">
+        @error('khmer_name') <span class="field-error">{{ $message }}</span> @enderror
+    </div>
+    <div class="form-group">
+        <label>{{ __('common.gender') }}</label>
+        <select name="gender">
+            <option value="">-- Select --</option>
+            <option value="male" @selected(old('gender') === 'male')>{{ __('common.male') }}</option>
+            <option value="female" @selected(old('gender') === 'female')>{{ __('common.female') }}</option>
+        </select>
+        @error('gender') <span class="field-error">{{ $message }}</span> @enderror
+    </div>
+</div>
+
+<div class="form-group">
+    <label>Profile Picture</label>
+    <input type="file" name="profile_picture" accept="image/*">
+    @error('profile_picture') <span class="field-error">{{ $message }}</span> @enderror
+</div>
 
     <div class="form-row">
         <div class="form-group">

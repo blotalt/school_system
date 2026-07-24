@@ -11,12 +11,12 @@
 <div class="stat-grid">
     <div class="stat-card">
         <div class="stat-icon"><i class="fa-solid fa-school"></i></div>
-        <div class="stat-value">{{ $class->name ?? '—' }}</div>
+        <div class="stat-value">{{ $class?->displayName() ?? '—' }}</div>
         <div class="stat-label">{{ __('common.class') }}</div>
     </div>
     <div class="stat-card">
         <div class="stat-icon"><i class="fa-solid fa-layer-group"></i></div>
-        <div class="stat-value">{{ $class->track ?? '—' }}</div>
+        <div class="stat-value">{{ $class?->displayTrack() ?? '—' }}</div>
         <div class="stat-label">{{ __('common.track') }}</div>
     </div>
     <div class="stat-card">
@@ -66,8 +66,8 @@ $subjectColors = [
                             @if($slot)
                                 @php $colorClass = $subjectColors[$slot->subject->name] ?? 'default'; @endphp
                                 <div class="subject-card subject-{{ $colorClass }}">
-                                    <strong>{{ $slot->subject->name }}</strong><br>
-                                    <span>{{ collect(explode(' ', $slot->teacher->user->name))->map(fn($n) => mb_substr($n, 0, 1))->take(2)->implode('') }}</span>
+                                    <strong>{{ $slot->subject->displayName() }}</strong><br>
+                                    <span>{{ collect(explode(' ', $slot->teacher->user->displayName()))->map(fn($n) => mb_substr($n, 0, 1))->take(2)->implode('') }}</span>
                                 </div>
                             @else
                                 <div class="empty-slot"></div>

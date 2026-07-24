@@ -46,22 +46,21 @@
             <div class="top-right">
                 <x-notifications-bell />
                 <div class="icon-btn"><i class="fa-solid fa-grip"></i></div>
-                @php $initials = collect(explode(' ', auth()->user()->name))->map(fn ($n) => mb_substr($n, 0, 1))->take(2)->implode(''); @endphp
                 <div class="teacher profile-dropdown-wrapper" onclick="toggleProfileDropdown(event)">
-                    <div class="teacher-info">
-                        <h4>{{ auth()->user()->name }}</h4>
-                        <span>{{ __('admin.administrator') }}</span>
-                    </div>
-                    <div class="avatar-circle">{{ $initials }}</div>
+    <div class="teacher-info">
+        <h4>{{ auth()->user()->displayName() }}</h4>
+        <span>{{ __('admin.administrator') }}</span>
+    </div>
+    <img src="{{ auth()->user()->profilePicture() }}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;cursor:pointer;">
 
-                    <div class="profile-dropdown" id="profileDropdown">
-                        <div class="dropdown-user-info">
-                            <div class="avatar-circle" style="width:44px;height:44px;">{{ $initials }}</div>
-                            <div>
-                                <strong>{{ auth()->user()->name }}</strong>
-                                <p>{{ auth()->user()->email }}</p>
-                            </div>
-                        </div>
+    <div class="profile-dropdown" id="profileDropdown">
+        <div class="dropdown-user-info">
+            <img src="{{ auth()->user()->profilePicture() }}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+            <div>
+                <strong>{{ auth()->user()->displayName() }}</strong>
+                <p>{{ auth()->user()->email }}</p>
+            </div>
+        </div>
                         <hr>
                         <a href="{{ route('admin.profile.edit') }}"><i class="fa-solid fa-gear"></i> {{ __('nav.settings') }}</a>
                         <hr>

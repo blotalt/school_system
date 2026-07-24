@@ -14,7 +14,7 @@
     </div>
 </x-page-header>
 
-<form method="POST" action="{{ route('admin.teachers.store') }}" class="form-card">
+<form method="POST" action="{{ route('admin.teachers.store') }}" class="form-card" enctype="multipart/form-data">
     @csrf
 
     <h3 class="form-section-title"><i class="fa-solid fa-briefcase"></i> {{ __('admin.teachers.faculty_information') }}</h3>
@@ -39,6 +39,20 @@
             </select>
         </div>
     </div>
+
+    <div class="form-row">
+    <div class="form-group">
+        <label>ឈ្មោះជាអក្សរខ្មែរ (Khmer Name)</label>
+        <input type="text" name="khmer_name" placeholder="ឧ. ចាន់ ប្រាក់" value="{{ old('khmer_name') }}">
+        @error('khmer_name') <span class="field-error">{{ $message }}</span> @enderror
+    </div>
+    <div class="form-group">
+        <label>Profile Picture</label>
+        <input type="file" name="profile_picture" accept="image/*">
+        <small style="color:#9ca3af;">Optional. Default based on gender if not uploaded.</small>
+        @error('profile_picture') <span class="field-error">{{ $message }}</span> @enderror
+    </div>
+</div>
 
     <div class="form-row">
         <div class="form-group">

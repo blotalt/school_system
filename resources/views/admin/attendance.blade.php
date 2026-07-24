@@ -33,7 +33,7 @@
 <div class="session-card">
     <div>
         <span class="session-label">{{ __('admin.attendance.todays_session') }}</span>
-        <h1>{{ $class->name }}</h1>
+        <h1>{{ $class->displayName() }}</h1>
         <div class="session-info">
             <span><i class="fa-regular fa-calendar"></i> {{ \Carbon\Carbon::parse($date)->format('F j, Y') }}</span>
             <span><i class="fa-solid fa-user-graduate"></i> {{ __('admin.attendance.students_count', ['count' => $students->count()]) }}</span>
@@ -62,9 +62,9 @@
             @php $status = $marked->get($student->id); @endphp
             <div class="student-row">
                 <div class="student-info">
-                    <div class="avatar-circle">{{ strtoupper(substr($student->user->name, 0, 1)) }}</div>
+                    <div class="avatar-circle">{{ strtoupper(substr($student->user->displayName(), 0, 1)) }}</div>
                     <div>
-                        <h4>{{ $student->user->name }}</h4>
+                        <h4>{{ $student->user->displayName() }}</h4>
                         <p>{{ $student->roll_no }}</p>
                     </div>
                 </div>

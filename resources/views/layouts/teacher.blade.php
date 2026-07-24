@@ -45,12 +45,12 @@
                 <x-notifications-bell />
                 <div class="teacher">
                     <div class="teacher-info">
-                        <h4>{{ auth()->user()->name }}</h4>
-                        <span>{{ __('common.teacher') }}</span>
-                    </div>
-                    <a href="{{ route('teacher.profile.edit') }}">
-                        <div class="avatar-circle" style="width:40px;height:40px;">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</div>
-                    </a>
+                        <h4>{{ auth()->user()->displayName() }}</h4>
+<span>{{ __('common.teacher') }}</span>
+</div>
+<a href="{{ route('teacher.profile.edit') }}">
+    <img src="{{ auth()->user()->profilePicture() }}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+</a>
                 </div>
             </div>
         </x-page-header>

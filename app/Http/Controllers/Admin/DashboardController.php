@@ -39,12 +39,8 @@ class DashboardController extends Controller
             $row  = $attendanceByClass->get($class->id);
             $rate = ($row && $row->total > 0) ? round($row->present / $row->total * 100, 1) : 0;
 
-            return (object) [
-                'name'       => $class->name,
-                'track'      => $class->track ?? __('admin.dashboard.default_track'),
-                'students'   => $class->students_count,
-                'attendance' => $rate,
-            ];
+            $class->computed_attendance = $rate;
+            return $class;
         });
 
         return view('admin.dashboard', compact('stats', 'classes'));

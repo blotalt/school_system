@@ -4,7 +4,7 @@
 <x-page-header>
     <div>
         <h1>{{ __('admin.classes.title') }}</h1>
-        <p>{{ $class ? __('admin.classes.subtitle', ['name' => $class->name]) : __('admin.classes.no_classes_yet') }}</p>
+        <p>{{ $class ? __('admin.classes.subtitle', ['name' => $class->displayName()]) : __('admin.classes.no_classes_yet') }}</p>
     </div>
     @if($class)
     <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;">
@@ -116,8 +116,8 @@ $subjectColors = [
                             @if($slot)
                                 @php $colorClass = $subjectColors[$slot->subject->name] ?? 'default'; @endphp
                                 <div class="subject-card subject-{{ $colorClass }}" style="position:relative;">
-                                    <strong>{{ $slot->subject->name }}</strong><br>
-                                    <span>{{ explode(' ', $slot->teacher->user->name)[0] }}</span>
+                                    <strong>{{ $slot->subject->displayName() }}</strong><br>
+                                    <span>{{ explode(' ', $slot->teacher->user->displayName())[0] }}</span>
                                     <form action="{{ route('admin.classes.schedule.destroy', [$class, $slot]) }}" method="POST"
                                           class="edit-only-delete" style="display:none;position:absolute;top:2px;right:2px;"
                                           onsubmit="return confirm('Remove this slot?')">

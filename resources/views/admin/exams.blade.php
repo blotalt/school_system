@@ -47,8 +47,8 @@
                 <tr>
                     <td><strong>{{ $exam->title }}</strong></td>
                     <td>{{ $exam->schoolClass->name ?? __('admin.exams.unassigned') }}</td>
-                    <td>{{ $exam->subject->name ?? '—' }}</td>
-                    <td>{{ $exam->teacher->user->name ?? '—' }}</td>
+                    <td>{{ $exam->subject?->displayName() ?? '—' }}</td>
+                    <td>{{ $exam->teacher?->user?->displayName() ?? '—' }}</td>
                     <td><span class="badge badge-subject">{{ ucfirst($exam->exam_type) }}</span></td>
                     <td>{{ \Illuminate\Support\Carbon::parse($exam->exam_date)->format('M j, Y') }}</td>
                     <td>{{ $exam->results_count }} / {{ $exam->schoolClass->students()->count() ?? 0 }}</td>
