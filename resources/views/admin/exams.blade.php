@@ -19,7 +19,7 @@
         <select name="class" class="filter-select" onchange="this.form.submit()">
             <option value="">{{ __('admin.exams.all_classes') }}</option>
             @foreach($classes as $c)
-                <option value="{{ $c->id }}" {{ (string) $classId === (string) $c->id ? 'selected' : '' }}>{{ $c->name }}</option>
+                <option value="{{ $c->id }}" {{ (string) $classId === (string) $c->id ? 'selected' : '' }}>>{{ $c->displayName() }}</option>
             @endforeach
         </select>
         <a href="{{ route('admin.exams.create') }}" class="add-btn">
@@ -46,7 +46,7 @@
             @forelse($exams as $exam)
                 <tr>
                     <td><strong>{{ $exam->title }}</strong></td>
-                    <td>{{ $exam->schoolClass->name ?? __('admin.exams.unassigned') }}</td>
+                    <td>{{ $exam->schoolClass?->displayName() ?? __('admin.exams.unassigned') }}</td>
                     <td>{{ $exam->subject?->displayName() ?? '—' }}</td>
                     <td>{{ $exam->teacher?->user?->displayName() ?? '—' }}</td>
                     <td><span class="badge badge-subject">{{ ucfirst($exam->exam_type) }}</span></td>

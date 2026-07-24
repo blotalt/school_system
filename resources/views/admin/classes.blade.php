@@ -14,7 +14,7 @@
                 <select name="class" class="filter-select" onchange="this.form.submit()">
                     @foreach($classes as $c)
                         <option value="{{ $c->id }}" {{ $class->id === $c->id ? 'selected' : '' }}>
-                            {{ $c->name }}
+    {{ $c->displayName() }}
                             @if($c->schedule_approved_at) ✓ @endif
                         </option>
                     @endforeach
@@ -49,12 +49,12 @@
 <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;padding:14px 18px;background:#fff;border-radius:12px;border:1px solid #e5e9f2;">
     @if($class->schedule_approved_at)
         <span style="display:flex;align-items:center;gap:6px;background:#d1fae5;color:#065f46;border:1px solid #10b981;border-radius:8px;padding:6px 14px;font-size:13px;font-weight:600;">
-            <i class="fa-solid fa-circle-check"></i> Approved — Published to teachers
+            <i class="fa-solid fa-circle-check"></i>Approved — Published to teachers
         </span>
         <form method="POST" action="{{ route('admin.classes.schedule.unapprove', $class) }}">
             @csrf
             <button type="submit" class="cancel-btn" style="font-size:13px;">
-                <i class="fa-solid fa-rotate-left"></i> Revert to Draft
+                <i class="fa-solid fa-rotate-left"></i>Revert to Draft
             </button>
         </form>
     @else
@@ -177,7 +177,7 @@ $subjectColors = [
             <select name="subject_id" id="modalSubject" required onchange="renderTeacherList()">
                 <option value="">Select a subject</option>
                 @foreach($subjects as $subject)
-                    <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                    <option value="{{ $subject->id }}">{{ $subject->displayName() }}</option>
                 @endforeach
             </select>
         </div>
@@ -248,6 +248,7 @@ $subjectColors = [
 </style>
 
 <script>
+    const SUBJECT_DISPLAY_MAP = @json($subjects->mapWithKeys(fn($s) => [$s->id => $s->displayName()]));
 const AVAILABILITY_MAP  = @json($availabilityMap ?? []);
 const ALL_ASSIGNED      = @json($allAssignedSlots ?? []);
 const TEACHER_DATA      = @json($teacherData ?? []);
@@ -372,7 +373,7 @@ function renderTeacherList() {
             <div class="t-avatar ${t.avail}">${t.firstname.charAt(0)}</div>
             <div style="flex:1;min-width:0;">
                 <div style="font-weight:600;font-size:13px;">${t.name}</div>
-                <div style="font-size:12px;color:#9ca3af;">${t.specialty || 'No specialty'}</div>
+                <div style="font-size:12px;color:#9ca3af;">${SUBJECT_DISPLAY_MAP[t.subjects[0]] || 'No specialty'}</div>
             </div>
             <span class="avail-badge ${t.avail}">${badgeLabels[t.avail] ?? '—'}</span>
         `;

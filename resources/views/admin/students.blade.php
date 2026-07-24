@@ -56,6 +56,11 @@
         <img src="{{ $student->user->profilePicture() }}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;">
         <div>
             <strong>{{ $student->user->displayName() }}</strong>
+            @if(app()->getLocale() === 'km' && $student->user->name)
+                <br><span style="color:#6b7280;font-size:12px;">{{ $student->user->name }}</span>
+            @elseif(app()->getLocale() !== 'km' && $student->user->khmer_name)
+                <br><span style="color:#6b7280;font-size:12px;">{{ $student->user->khmer_name }}</span>
+            @endif
             <br><span style="color:#9ca3af;font-size:13px;">{{ $student->roll_no }}</span>
         </div>
     </div>

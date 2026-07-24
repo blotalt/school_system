@@ -44,13 +44,18 @@
         <img src="{{ $teacher->user->profilePicture() }}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;">
         <div>
             <strong>{{ $teacher->user->displayName() }}</strong>
+            @if(app()->getLocale() === 'km' && $teacher->user->name)
+                <br><span style="color:#6b7280;font-size:12px;">{{ $teacher->user->name }}</span>
+            @elseif(app()->getLocale() !== 'km' && $teacher->user->khmer_name)
+                <br><span style="color:#6b7280;font-size:12px;">{{ $teacher->user->khmer_name }}</span>
+            @endif
 <br><span style="color:#9ca3af;font-size:13px;">TCH-{{ str_pad($teacher->id, 4, '0', STR_PAD_LEFT) }}</span>
         </div>
     </div>
 </td>
                     <td>
                         @forelse($teacher->subjects as $subject)
-                            <span class="badge badge-subject">{{ $subject->name }}</span>
+                            <span class="badge badge-subject">{{ $subject->displayName() }}</span>
                         @empty
                             <span style="color:#9ca3af;">&mdash;</span>
                         @endforelse

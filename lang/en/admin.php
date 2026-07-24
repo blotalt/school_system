@@ -201,4 +201,18 @@ return [
         'no_teacher_hint'    => 'No teacher is assigned to this subject yet — showing everyone.',
         'reassign_notice'    => 'Assigning a class here reassigns it from any teacher currently teaching it.',
     ],
+
+    'status_approved'  => 'Approved — Published to teachers',
+'status_draft'     => 'Draft — Not visible to teachers yet',
+'revert_draft'     => 'Revert to Draft',
+'edit_schedule'    => 'Edit Schedule',
+'done_editing'     => 'Done Editing',
+'legend_preferred' => 'Preferred',
+'legend_available' => 'Available',
+'legend_no_data'   => 'No data',
+'legend_conflict'  => 'Conflict (teaching elsewhere)',
+'assign_slot'      => 'Assign Slot',
+'select_subject'   => 'Select a subject',
+'select_teacher'   => 'Select Teacher',
+'no_specialty'     => 'No specialty',
 ];

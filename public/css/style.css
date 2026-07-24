@@ -273,3 +273,19 @@ ul{list-style:none;}
 .grade-f{
     background:#6b7280;
 }
+
+/* Existing rule — just ADD the two new properties */
+.sidebar {
+    width: 260px;
+    background: #0b3f86;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    /* ADD THESE: */
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
