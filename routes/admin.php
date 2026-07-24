@@ -39,3 +39,7 @@ Route::delete('announcements/{announcement}', [AnnouncementController::class, 'd
 Route::get('schedule-requests', [ScheduleRequestController::class, 'index'])->name('schedule-requests.index');
 Route::post('schedule-requests/{scheduleRequest}/approve', [ScheduleRequestController::class, 'approve'])->name('schedule-requests.approve');
 Route::post('schedule-requests/{scheduleRequest}/reject', [ScheduleRequestController::class, 'reject'])->name('schedule-requests.reject');
+
+
+Route::post('classes/{class}/approve-schedule', [ClassController::class, 'approveSchedule'])->name('classes.schedule.approve');
+Route::post('classes/{class}/unapprove-schedule', [ClassController::class, 'unapproveSchedule'])->name('classes.schedule.unapprove');

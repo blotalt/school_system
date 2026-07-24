@@ -18,7 +18,6 @@ Route::get('search', [SearchController::class, 'search'])->name('search');
 Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule.index');
 Route::post('schedule', [ScheduleController::class, 'store'])->name('schedule.store');
-Route::delete('schedule/{scheduleRequest}', [ScheduleController::class, 'destroy'])->name('schedule.destroy');
 Route::get('classes', [ClassController::class, 'index'])->name('classes.index');
 Route::get('classes/{class}/attendance', [AttendanceController::class, 'show'])->name('attendance.show');
 Route::post('classes/{class}/attendance', [AttendanceController::class, 'store'])->name('attendance.store');

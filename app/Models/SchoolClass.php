@@ -10,12 +10,17 @@ class SchoolClass extends Model
 {
     protected $table = 'classes';
 
-    protected $fillable = [
-        'name',
-        'track',
-        'grade_level',
-        'teacher_id',
-    ];
+protected $fillable = [
+    'name',
+    'track', 
+    'grade_level',
+    'teacher_id',
+    'schedule_approved_at',
+];
+
+protected $casts = [
+    'schedule_approved_at' => 'datetime',
+];
 
     public function teacher(): BelongsTo
     {

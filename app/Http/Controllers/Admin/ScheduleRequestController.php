@@ -12,23 +12,26 @@ use Illuminate\Validation\ValidationException;
 
 class ScheduleRequestController extends Controller
 {
-    public function index(Request $request)
-    {
-        $status = in_array($request->query('status'), ['pending', 'approved', 'rejected'], true)
-            ? $request->query('status')
-            : 'pending';
+public function index(Request $request)
+{
+    $teachers = \App\Models\Teacher::with(['user', 'availability', 'subjects'])->get()
+        ->sortBy(fn($t) => $t->user->name)
+        ->values();
 
-        $requests = ScheduleRequest::with(['schoolClass', 'subject', 'teacher.user'])
-            ->when($status !== 'all', fn ($q) => $q->where('status', $status))
-            ->latest()
-            ->get();
+    $availabilityMap = \App\Models\TeacherAvailability::all()
+        ->groupBy('teacher_id')
+        ->map(fn($items) => $items
+            ->keyBy(fn($a) => "{$a->shift}-{$a->day_of_week}-{$a->period}")
+            ->map->status
+        );
 
-        return view('admin.schedule-requests', [
-            'requests'    => $requests,
-            'status'      => $status,
-            'periodTimes' => Timetable::PERIOD_TIMES,
-        ]);
-    }
+    return view('admin.schedule-requests', [
+        'teachers'        => $teachers,
+        'availabilityMap' => $availabilityMap,
+        'days'            => \App\Support\Timetable::DAYS,
+        'periodTimes'     => \App\Support\Timetable::PERIOD_TIMES,
+    ]);
+}
 
     public function approve(ScheduleRequest $scheduleRequest)
     {

@@ -38,4 +38,9 @@ class Teacher extends Model
     {
         return $this->belongsToMany(Subject::class);
     }
+
+    public function availability(): HasMany
+    {
+        return $this->hasMany(TeacherAvailability::class);
+    }
 }
