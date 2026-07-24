@@ -8,11 +8,11 @@
             {{ collect(explode(' ', $student?->user->name ?? auth()->user()->name))->map(fn ($n) => mb_substr($n, 0, 1))->take(2)->implode('') }}
         </div>
         <div>
-            <h1>{{ __('student.dashboard.hello', ['name' => $student?->user->name ?? auth()->user()->name]) }}</h1>
+            <h1>{{ __('student.dashboard.hello', ['name' => $student?->user->displayName() ?? auth()->user()->displayName()]) }}</h1>
             <div class="student-badge">
                 <span class="grade-badge">{{ $class->name ?? __('student.dashboard.unassigned') }}</span>
                 @if($class?->track)
-                    <span class="track-badge">{{ $class->track }}</span>
+                    <span class="track-badge">{{ $class->displayTrack() }}</span>
                 @endif
             </div>
         </div>

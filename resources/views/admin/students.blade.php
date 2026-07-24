@@ -1,6 +1,16 @@
 @extends('layouts.admin')
 
 @section('content')
+@php
+$trackKhmer = [
+    'Science'   => 'វិទ្យាសាស្ត្រ',
+    'Social'    => 'សង្គម',
+    'Geography' => 'ភូមិសាស្ត្រ',
+    'General'   => 'ទូទៅ',
+    'Arts'      => 'សិល្បៈ',
+    'Commerce'  => 'ពាណិជ្ជកម្ម',
+];
+@endphp
 <x-page-header>
     <div>
         <h1>{{ __('admin.students.title') }}</h1>
@@ -27,7 +37,7 @@
             <select name="track" class="filter-select" onchange="this.form.submit()">
                 <option value="">{{ __('admin.students.all_tracks') }}</option>
                 @foreach($tracks as $t)
-                    <option value="{{ $t }}" {{ $track === $t ? 'selected' : '' }}>{{ $t }}</option>
+                    <option value="{{ $t }}" {{ $track === $t ? 'selected' : '' }}>{{ $trackKhmer[$t] ?? $t }}</option>
                 @endforeach
             </select>
             <a href="{{ route('admin.students.create') }}" class="add-btn">
@@ -68,7 +78,7 @@
                     <td>{{ $student->schoolClass->displayName() ?? __('admin.students.unassigned') }}</td>
                     <td>
                         @if($student->schoolClass?->track)
-                            <span class="badge badge-{{ $student->schoolClass->track === 'Science' ? 'science' : 'geography' }}">{{ $student->schoolClass->track }}</span>
+                            <span class="badge badge-{{ $student->schoolClass->track === 'Science' ? 'science' : 'geography' }}">{{ $trackKhmer[$student->schoolClass->track] ?? $student->schoolClass->track }}</span>
                         @else
                             <span style="color:#9ca3af;">&mdash;</span>
                         @endif

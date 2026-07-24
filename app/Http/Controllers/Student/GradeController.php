@@ -69,7 +69,8 @@ class GradeController extends Controller
             ->get();
 
         return $results->map(function (ExamResult $result) {
-            $pct = $result->exam->max_score > 0 ? $result->score / $result->exam->max_score * 100 : null;
+            $maxScore = $result->exam?->max_score ?? 0;
+            $pct = $maxScore > 0 ? $result->score / $maxScore * 100 : null;
             $grade = match (true) {
                 $pct === null => '',
                 $pct >= 90 => 'A', $pct >= 80 => 'B', $pct >= 70 => 'C', $pct >= 60 => 'D',
@@ -77,10 +78,10 @@ class GradeController extends Controller
             };
 
             return [
-                $result->exam->subject->name ?? '',
-                $result->exam->title,
+                $result->exam?->subject?->name ?? '',
+                $result->exam?->title ?? '',
                 $result->score,
-                $result->exam->max_score,
+                $maxScore,
                 $grade,
             ];
         });

@@ -55,7 +55,7 @@ return [
     'Social Science'=> 'សង្គមវិទ្យា',
     'General'       => 'ទូទៅ',
 ],
-'subjects' => [
+'subject_names' => [
     'Mathematics'       => 'គណិតវិទ្យា',
     'Physics'           => 'រូបវិទ្យា',
     'Biology'           => 'ជីវវិទ្យា',

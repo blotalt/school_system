@@ -29,7 +29,7 @@
             <select name="class_id">
                 <option value="">{{ __('admin.exams.select_class_option') }}</option>
                 @foreach($classes as $class)
-                    <option value="{{ $class->id }}" {{ (string) old('class_id') === (string) $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
+                    <option value="{{ $class->id }}" {{ (string) old('class_id') === (string) $class->id ? 'selected' : '' }}>{{ $class->displayName() }}</option>
                 @endforeach
             </select>
             @error('class_id') <span class="field-error">{{ $message }}</span> @enderror
@@ -39,7 +39,7 @@
             <select name="subject_id">
                 <option value="">{{ __('admin.exams.select_subject_option') }}</option>
                 @foreach($subjects as $subject)
-                    <option value="{{ $subject->id }}" {{ (string) old('subject_id') === (string) $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
+                    <option value="{{ $subject->id }}" {{ (string) old('subject_id') === (string) $subject->id ? 'selected' : '' }}>{{ $subject->displayName() }}</option>
                 @endforeach
             </select>
             @error('subject_id') <span class="field-error">{{ $message }}</span> @enderror
@@ -49,7 +49,7 @@
             <select name="teacher_id">
                 <option value="">{{ __('admin.exams.select_teacher_option') }}</option>
                 @foreach($teachers as $teacher)
-                    <option value="{{ $teacher->id }}" {{ (string) old('teacher_id') === (string) $teacher->id ? 'selected' : '' }}>{{ $teacher->user->name }}</option>
+                    <option value="{{ $teacher->id }}" {{ (string) old('teacher_id') === (string) $teacher->id ? 'selected' : '' }}>{{ $teacher->user->displayName() }}</option>
                 @endforeach
             </select>
             @error('teacher_id') <span class="field-error">{{ $message }}</span> @enderror

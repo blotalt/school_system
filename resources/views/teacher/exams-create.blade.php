@@ -30,7 +30,7 @@
             <select name="class_id">
                 <option value="">{{ __('teacher.exams.select_class') }}</option>
                 @foreach($classes as $class)
-                    <option value="{{ $class->id }}" {{ (string) old('class_id') === (string) $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
+                    <option value="{{ $class->id }}" {{ (string) old('class_id') === (string) $class->id ? 'selected' : '' }}>{{ $class->displayName() }}</option>
                 @endforeach
             </select>
             @error('class_id') <span class="field-error">{{ $message }}</span> @enderror
@@ -38,13 +38,13 @@
         <div class="form-group">
             <label>{{ __('common.subject') }}</label>
             @if($subjects->count() === 1)
-                <input type="text" value="{{ $subjects->first()->name }}" disabled>
+                <input type="text" value="{{ $subjects->first()->displayName() }}" disabled>
                 <input type="hidden" name="subject_id" value="{{ $subjects->first()->id }}">
             @elseif($subjects->count() > 1)
                 <select name="subject_id">
                     <option value="">{{ __('teacher.exams.select_subject') }}</option>
                     @foreach($subjects as $subject)
-                        <option value="{{ $subject->id }}" {{ (string) old('subject_id') === (string) $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
+                        <option value="{{ $subject->id }}" {{ (string) old('subject_id') === (string) $subject->id ? 'selected' : '' }}>{{ $subject->displayName() }}</option>
                     @endforeach
                 </select>
             @else

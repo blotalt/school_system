@@ -50,14 +50,14 @@
                     <tr>
                         <td>
                             <div class="student-info">
-                                <div class="avatar-circle" style="width:36px;height:36px;">{{ strtoupper(substr($student->user->name, 0, 2)) }}</div>
+                                <div class="avatar-circle" style="width:36px;height:36px;">{{ mb_strtoupper(mb_substr($student->user->displayName(), 0, 2)) }}</div>
                                 <div>
-                                    <h4>{{ $student->user->name }}</h4>
+                                    <h4>{{ $student->user->displayName() }}</h4>
                                     <p>{{ $student->roll_no }}</p>
                                 </div>
                             </div>
                         </td>
-                        <td><span class="subject-badge">{{ $exam->subject->name ?? '—' }}</span></td>
+                        <td><span class="subject-badge">{{ $exam->subject?->displayName() ?? '—' }}</span></td>
                         <td>
                             <input type="number" name="scores[{{ $student->id }}]" class="score-input"
                                 min="0" max="{{ $exam->max_score }}"

@@ -1,12 +1,11 @@
 @extends('layouts.teacher')
 
 @section('content')
-<x-page-header>
-    <div>
-        <h1>My Schedule</h1>
-        <p>Your officially assigned teaching schedule.</p>
+<div class="profile-page">
+    <div class="profile-header">
+        <h1>{{ __('teacher.schedule.title') }}</h1>
+        <p>{{ __('teacher.schedule.official_subtitle') }}</p>
     </div>
-</x-page-header>
 
 @if(session('success'))
     <div class="alert alert-success" style="margin-bottom:16px;padding:12px 16px;background:#e6f9f0;border:1px solid #10b981;border-radius:10px;color:#0a7a4d;">{{ session('success') }}</div>
@@ -24,9 +23,9 @@
 <div class="data-card" style="margin-bottom:24px;padding:20px 24px;">
     <div style="display:flex;gap:32px;flex-wrap:wrap;">
         <div>
-            <div style="font-size:12px;font-weight:700;color:#9ca3af;letter-spacing:.05em;margin-bottom:8px;">CLASSES TEACHING</div>
+            <div style="font-size:12px;font-weight:700;color:#9ca3af;letter-spacing:.05em;margin-bottom:8px;">{{ strtoupper(__('teacher.schedule.stat_classes_teaching')) }}</div>
             @if($uniqueClasses->isEmpty())
-                <span style="color:#9ca3af;font-size:13px;">Not assigned yet</span>
+                <span style="color:#9ca3af;font-size:13px;">{{ __('teacher.schedule.no_classes_yet') }}</span>
             @else
                 <div style="display:flex;flex-wrap:wrap;gap:6px;">
                     @foreach($uniqueClasses as $class)
@@ -35,7 +34,7 @@
                             @if($class->schedule_approved_at)
                                 <span style="color:#10b981;margin-left:4px;" title="Approved"><i class="fa-solid fa-circle-check"></i></span>
                             @else
-                                <span style="color:#f59e0b;margin-left:4px;" title="Pending approval"><i class="fa-regular fa-clock"></i></span>
+                                <span style="color:#f59e0b;margin-left:4px;" title="{{ __('teacher.schedule.legend_pending') }}"><i class="fa-regular fa-clock"></i></span>
                             @endif
                         </span>
                     @endforeach
@@ -43,9 +42,9 @@
             @endif
         </div>
         <div>
-            <div style="font-size:12px;font-weight:700;color:#9ca3af;letter-spacing:.05em;margin-bottom:8px;">SUBJECTS</div>
+            <div style="font-size:12px;font-weight:700;color:#9ca3af;letter-spacing:.05em;margin-bottom:8px;">{{ strtoupper(__('common.subjects')) }}</div>
             @if($uniqueSubjects->isEmpty())
-                <span style="color:#9ca3af;font-size:13px;">Not assigned yet</span>
+                <span style="color:#9ca3af;font-size:13px;">{{ __('teacher.schedule.no_classes_yet') }}</span>
             @else
                 <div style="display:flex;flex-wrap:wrap;gap:6px;">
                     @foreach($uniqueSubjects as $subject)
@@ -57,8 +56,8 @@
             @endif
         </div>
         <div>
-            <div style="font-size:12px;font-weight:700;color:#9ca3af;letter-spacing:.05em;margin-bottom:8px;">TEACHING HOURS / WEEK</div>
-            <span style="font-size:22px;font-weight:700;color:#1a2235;">{{ $totalHours }}<span style="font-size:14px;color:#9ca3af;font-weight:400;margin-left:4px;">hrs</span></span>
+            <div style="font-size:12px;font-weight:700;color:#9ca3af;letter-spacing:.05em;margin-bottom:8px;">{{ strtoupper(__('teacher.schedule.stat_hours_week')) }}</div>
+            <span style="font-size:22px;font-weight:700;color:#1a2235;">{{ $totalHours }}<span style="font-size:14px;color:#9ca3af;font-weight:400;margin-left:4px;">{{ __('teacher.schedule.hrs_unit') }}</span></span>
         </div>
     </div>
 </div>
@@ -67,14 +66,14 @@
 @if($assignedSlots->isEmpty())
     <div style="padding:16px;background:#fef3c7;border:1px solid #f59e0b;border-radius:10px;color:#92400e;margin-bottom:24px;font-size:13px;">
         <i class="fa-solid fa-triangle-exclamation"></i>
-        No schedule assigned yet. Mark your availability below so admin can assign your slots.
+        {{ __('teacher.schedule.no_schedule_assigned') }}
     </div>
 @else
     <div style="display:flex;gap:16px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
-        <h3 style="margin:0;">Official Timetable</h3>
+        <h3 style="margin:0;">{{ __('teacher.schedule.official_timetable') }}</h3>
         <div class="shift-toggle">
-            <button type="button" class="shift-btn active" data-shift="morning">Morning</button>
-            <button type="button" class="shift-btn" data-shift="afternoon">Afternoon</button>
+            <button type="button" class="shift-btn active" data-shift="morning">{{ __('teacher.schedule.morning') }}</button>
+            <button type="button" class="shift-btn" data-shift="afternoon">{{ __('teacher.schedule.afternoon') }}</button>
         </div>
     </div>
 
@@ -91,9 +90,10 @@
         <table class="schedule-table-grid">
             <thead>
                 <tr>
-                    <th class="time-head">Time</th>
+                    <th class="time-head">{{ __('teacher.schedule.time_col') }}</th>
                     @foreach($days as $day)
-                        <th>{{ strtoupper($day) }}</th>
+                        @php $dayTrans = __('common.days.' . $day); @endphp
+                        <th>{{ is_string($dayTrans) ? mb_strtoupper($dayTrans) : strtoupper($day) }}</th>
                     @endforeach
                 </tr>
             </thead>
@@ -122,7 +122,7 @@
                             $breakEnd   = explode(' - ', $periodTimes[$shiftKey][$period + 1])[0];
                         @endphp
                         <tr class="break-row">
-                            <td colspan="{{ count($days) + 1 }}"><i class="fa-regular fa-clock"></i> 10 MIN BREAK ({{ $breakStart }} - {{ $breakEnd }})</td>
+                            <td colspan="{{ count($days) + 1 }}"><i class="fa-regular fa-clock"></i> {{ __('teacher.schedule.break_label') }} ({{ $breakStart }} - {{ $breakEnd }})</td>
                         </tr>
                     @endif
                 @endfor
@@ -135,26 +135,26 @@
 {{-- Availability Section --}}
 @if($allApproved)
     <div style="margin-top:24px;padding:14px 18px;background:#d1fae5;border:1px solid #10b981;border-radius:10px;color:#065f46;font-size:13px;">
-        <i class="fa-solid fa-circle-check"></i> Your schedule is finalized and approved by admin. No further action needed.
+        <i class="fa-solid fa-circle-check"></i> {{ __('teacher.schedule.schedule_finalized') }}
     </div>
 @else
     <div style="margin-top:32px;border-top:1px solid #e5e9f2;padding-top:24px;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px;">
             <div>
-                <h3 style="margin:0 0 4px;">Availability Preferences</h3>
-                <p style="margin:0;font-size:13px;color:#9ca3af;">Help admin assign your remaining slots by marking when you're free.</p>
+                <h3 style="margin:0 0 4px;">{{ __('teacher.schedule.avail_title') }}</h3>
+                <p style="margin:0;font-size:13px;color:#9ca3af;">{{ __('teacher.schedule.avail_subtitle') }}</p>
             </div>
             <div class="shift-toggle">
-                <button type="button" class="shift-btn active" data-avail-shift="morning">Morning</button>
-                <button type="button" class="shift-btn" data-avail-shift="afternoon">Afternoon</button>
+                <button type="button" class="shift-btn active" data-avail-shift="morning">{{ __('teacher.schedule.morning') }}</button>
+                <button type="button" class="shift-btn" data-avail-shift="afternoon">{{ __('teacher.schedule.afternoon') }}</button>
             </div>
         </div>
 
         <div style="display:flex;gap:14px;font-size:12px;margin-bottom:12px;flex-wrap:wrap;">
-            <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#f59e0b;margin-right:4px;"></span>Preferred</span>
-            <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#10b981;margin-right:4px;"></span>Available</span>
-            <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#e5e9f2;margin-right:4px;"></span>Unavailable</span>
-            <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#1e40af;margin-right:4px;"></span>Already assigned</span>
+            <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#f59e0b;margin-right:4px;"></span>{{ __('teacher.schedule.preferred') }}</span>
+            <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#10b981;margin-right:4px;"></span>{{ __('teacher.schedule.available') }}</span>
+            <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#e5e9f2;margin-right:4px;"></span>{{ __('teacher.schedule.unavailable') }}</span>
+            <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#1e40af;margin-right:4px;"></span>{{ __('teacher.schedule.already_assigned') }}</span>
         </div>
 
         <form method="POST" action="{{ route('teacher.schedule.store') }}">
@@ -165,9 +165,10 @@
                 <table class="schedule-table-grid">
                     <thead>
                         <tr>
-                            <th class="time-head">Time</th>
+                            <th class="time-head">{{ __('teacher.schedule.time_col') }}</th>
                             @foreach($days as $day)
-                                <th>{{ strtoupper($day) }}</th>
+                                @php $dayTrans = __('common.days.' . $day); @endphp
+<th>{{ is_string($dayTrans) ? mb_strtoupper($dayTrans) : strtoupper($day) }}</th>
                             @endforeach
                         </tr>
                     </thead>
@@ -189,7 +190,7 @@
                                             <input type="hidden" name="availability[{{ $shiftKey }}][{{ $day }}][{{ $period }}]" value="{{ $avail }}">
                                         @else
                                             <div class="avail-cell {{ $avail }}" onclick="cycleAvailability(this)" data-status="{{ $avail }}">
-                                                <span class="avail-label">{{ ucfirst($avail) }}</span>
+                                                <span class="avail-label">{{ __('teacher.schedule.' . $avail) }}</span>
                                                 <input type="hidden" name="availability[{{ $shiftKey }}][{{ $day }}][{{ $period }}]" value="{{ $avail }}">
                                             </div>
                                         @endif
@@ -202,7 +203,7 @@
                                     $breakEnd   = explode(' - ', $periodTimes[$shiftKey][$period + 1])[0];
                                 @endphp
                                 <tr class="break-row">
-                                    <td colspan="{{ count($days) + 1 }}"><i class="fa-regular fa-clock"></i> 10 MIN BREAK ({{ $breakStart }} - {{ $breakEnd }})</td>
+                                    <td colspan="{{ count($days) + 1 }}"><i class="fa-regular fa-clock"></i> {{ __('teacher.schedule.break_label') }} ({{ $breakStart }} - {{ $breakEnd }})</td>
                                 </tr>
                             @endif
                         @endfor
@@ -213,12 +214,14 @@
 
             <div style="margin-top:16px;display:flex;justify-content:flex-end;">
                 <button type="submit" class="save-btn">
-                    <i class="fa-solid fa-floppy-disk"></i> Save Availability
+                    <i class="fa-solid fa-floppy-disk"></i> {{ __('teacher.schedule.save_availability') }}
                 </button>
             </div>
         </form>
     </div>
 @endif
+
+</div>
 
 <style>
 .avail-cell {
@@ -234,6 +237,11 @@
 </style>
 
 <script>
+const AVAIL_LABELS = {
+    unavailable: @json(__('teacher.schedule.unavailable')),
+    available:   @json(__('teacher.schedule.available')),
+    preferred:   @json(__('teacher.schedule.preferred')),
+};
 const CYCLE = ['unavailable', 'available', 'preferred'];
 
 function cycleAvailability(cell) {
@@ -241,7 +249,7 @@ function cycleAvailability(cell) {
     cell.dataset.status = next;
     cell.className = 'avail-cell ' + next;
     cell.querySelector('input[type=hidden]').value = next;
-    cell.querySelector('.avail-label').textContent = next.charAt(0).toUpperCase() + next.slice(1);
+    cell.querySelector('.avail-label').textContent = AVAIL_LABELS[next];
 }
 
 document.querySelectorAll('.shift-btn[data-shift]').forEach(btn => {

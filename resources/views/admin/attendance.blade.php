@@ -11,7 +11,7 @@
         <label>{{ __('admin.attendance.select_class') }}</label>
         <select name="class" class="filter-select" onchange="this.form.submit()">
             @foreach($classes as $c)
-                <option value="{{ $c->id }}" {{ $class->id === $c->id ? 'selected' : '' }}>{{ $c->name }}</option>
+                <option value="{{ $c->id }}" {{ $class->id === $c->id ? 'selected' : '' }}>{{ $c->displayName() }}</option>
             @endforeach
         </select>
     </form>

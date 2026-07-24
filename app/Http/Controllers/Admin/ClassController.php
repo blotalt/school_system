@@ -45,13 +45,14 @@ class ClassController extends Controller
                 ->values()
             );
 
-        $teacherData = $teachers->map(fn($t) => [
-            'id'        => $t->id,
-            'name'      => $t->user->name,
-            'firstname' => explode(' ', $t->user->name)[0],
-            'specialty' => $t->subject_specialty ?? '',
-            'subjects'  => $t->subjects->pluck('id')->values()->all(),
-        ])->values();
+$teacherData = $teachers->map(fn($t) => [
+    'id'          => $t->id,
+    'name'        => $t->user->name,
+    'khmer_name'  => $t->user->khmer_name ?? '',
+    'firstname'   => explode(' ', $t->user->name)[0],
+    'specialty'   => $t->subject_specialty ?? '',
+    'subjects'    => $t->subjects->pluck('id')->values()->all(),
+])->values();
 
         return view('admin.classes', [
             'classes'          => $classes,

@@ -31,10 +31,6 @@
         </div>
         <div class="settings">
             <a href="{{ route('teacher.profile.edit') }}"><i class="fa-solid fa-gear"></i> {{ __('nav.settings') }}</a>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <a href="#" onclick="event.preventDefault(); this.closest('form').submit();"><i class="fa-solid fa-right-from-bracket"></i> {{ __('nav.log_out_alt') }}</a>
-            </form>
         </div>
     </x-sidebar>
 
@@ -43,14 +39,30 @@
             <x-live-search :endpoint="route('teacher.search')" placeholder="{{ __('nav.search_placeholder_teacher') }}" />
             <div class="top-right">
                 <x-notifications-bell />
-                <div class="teacher">
+                <div class="icon-btn"><i class="fa-solid fa-grip"></i></div>
+                <div class="teacher profile-dropdown-wrapper" onclick="toggleProfileDropdown(event)">
                     <div class="teacher-info">
                         <h4>{{ auth()->user()->displayName() }}</h4>
-<span>{{ __('common.teacher') }}</span>
-</div>
-<a href="{{ route('teacher.profile.edit') }}">
-    <img src="{{ auth()->user()->profilePicture() }}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
-</a>
+                        <span>{{ __('common.teacher') }}</span>
+                    </div>
+                    <img src="{{ auth()->user()->profilePicture() }}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;cursor:pointer;">
+
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="dropdown-user-info">
+                            <img src="{{ auth()->user()->profilePicture() }}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+                            <div>
+                                <strong>{{ auth()->user()->displayName() }}</strong>
+                                <p>{{ auth()->user()->email }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <a href="{{ route('teacher.profile.edit') }}"><i class="fa-solid fa-gear"></i> {{ __('nav.settings') }}</a>
+                        <hr>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> {{ __('nav.log_out') }}</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </x-page-header>
@@ -60,5 +72,29 @@
 </div>
 <script src="{{ asset('js/app.js') }}"></script>
 <script src="{{ asset('js/teacher.js') }}"></script>
+<script>
+const PASSWORD_LABELS = {
+    show: @json(__('common.show_password')),
+    hide: @json(__('common.hide_password')),
+};
+
+function togglePasswordVisibility(btn) {
+    const input = btn.previousElementSibling;
+    const icon = btn.querySelector('i');
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    icon.classList.toggle('fa-eye', !isHidden);
+    icon.classList.toggle('fa-eye-slash', isHidden);
+    btn.setAttribute('aria-label', isHidden ? PASSWORD_LABELS.hide : PASSWORD_LABELS.show);
+}
+
+function toggleProfileDropdown(e) {
+    e.stopPropagation();
+    document.getElementById('profileDropdown').classList.toggle('show');
+}
+document.addEventListener('click', function() {
+    document.getElementById('profileDropdown')?.classList.remove('show');
+});
+</script>
 </body>
 </html>

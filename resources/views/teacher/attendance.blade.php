@@ -14,7 +14,7 @@
                 <i class="fa-solid fa-flask"></i>
                 {{ $isToday ? __('teacher.attendance.todays_session') : __('teacher.attendance.session') }}
             </span>
-            <h1>{{ $class->name }}</h1>
+            <h1>{{ $class->displayName() }}</h1>
             <div class="session-info">
                 <span><i class="fa-regular fa-calendar"></i> {{ $viewingDate->format('F j, Y') }}</span>
                 <span><i class="fa-solid fa-user-graduate"></i> {{ __('teacher.attendance.students_count', ['count' => $students->count()]) }}</span>
@@ -69,10 +69,15 @@
             <div class="student-row">
                 <div class="student-info">
                     <div class="avatar-circle" style="width:40px;height:40px;">{{ strtoupper(substr($student->user->name, 0, 2)) }}</div>
-                    <div>
-                        <h4>{{ $student->user->name }}</h4>
-                        <p>{{ $student->roll_no }}</p>
-                    </div>
+<div>
+    <h4>{{ $student->user->displayName() }}</h4>
+    @if($student->user->khmer_name)
+        <span style="font-size:12px;color:#9ca3af;">
+            {{ app()->getLocale() === 'km' ? $student->user->name : $student->user->khmer_name }}
+        </span>
+    @endif
+    <p>{{ $student->roll_no }}</p>
+</div>
                 </div>
                 <div class="teacher-attendance-status" data-student="{{ $student->id }}">
                     <input type="hidden" name="attendance[{{ $student->id }}]" class="teacher-status-input" value="{{ $status }}">

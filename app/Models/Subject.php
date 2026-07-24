@@ -11,7 +11,7 @@ class Subject extends Model
     public function displayName(): string
     {
         if (app()->getLocale() === 'km') {
-            return __('common.subjects.' . $this->name);
+            return __('common.subject_names.' . $this->name, [], null) ?: $this->name;
         }
         return $this->name;
     }

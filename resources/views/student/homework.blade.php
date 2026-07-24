@@ -32,7 +32,7 @@
                 @endphp
                 <tr>
                     <td>{{ $hw->title }}</td>
-                    <td>{{ $hw->subject->name ?? '—' }}</td>
+                    <td>{{ $hw->subject?->displayName() ?? '—' }}</td>
                     <td>{{ optional($hw->due_date)->format('M d, Y') ?? '—' }}</td>
                     <td>
                         @if($hw->attachment_path)

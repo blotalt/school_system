@@ -31,11 +31,11 @@ $gradeColor = function (?float $pct): string {
                 {{ collect(explode(' ', $student?->user->name ?? auth()->user()->name))->map(fn ($n) => mb_substr($n, 0, 1))->take(2)->implode('') }}
             </div>
             <div>
-                <h1>{{ __('student.dashboard.hello', ['name' => $student?->user->name ?? auth()->user()->name]) }}</h1>
+                <h1>{{ __('student.dashboard.hello', ['name' => $student?->user->displayName() ?? auth()->user()->displayName()]) }}</h1>
                 <div class="student-badges">
                     <span class="grade-badge">{{ $class->name ?? __('student.grades.unassigned') }}</span>
                     @if($class?->track)
-                        <span class="track-badge">{{ $class->track }} {{ __('student.grades.track_suffix') }}</span>
+                        <span class="track-badge">{{ $class->displayTrack() }} {{ __('student.grades.track_suffix') }}</span>
                     @endif
                 </div>
             </div>
@@ -101,7 +101,7 @@ $gradeColor = function (?float $pct): string {
                         <div class="subject-cell">
                             <div class="subject-icon"><i class="fa-solid {{ $icon }}"></i></div>
                             <div>
-                                <h4>{{ $result->exam->subject->name ?? '—' }}</h4>
+                                <h4>{{ $result->exam->subject?->displayName() ?? '—' }}</h4>
                                 <p>{{ $result->exam->title }}</p>
                             </div>
                         </div>

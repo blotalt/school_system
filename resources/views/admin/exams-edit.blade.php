@@ -29,7 +29,7 @@
             <label>{{ __('common.class') }}</label>
             <select name="class_id">
                 @foreach($classes as $class)
-                    <option value="{{ $class->id }}" {{ (string) old('class_id', $exam->class_id) === (string) $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
+                    <option value="{{ $class->id }}" {{ (string) old('class_id', $exam->class_id) === (string) $class->id ? 'selected' : '' }}>{{ $class->displayName() }}</option>
                 @endforeach
             </select>
             @error('class_id') <span class="field-error">{{ $message }}</span> @enderror
@@ -38,7 +38,7 @@
             <label>{{ __('common.subject') }}</label>
             <select name="subject_id">
                 @foreach($subjects as $subject)
-                    <option value="{{ $subject->id }}" {{ (string) old('subject_id', $exam->subject_id) === (string) $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
+                    <option value="{{ $subject->id }}" {{ (string) old('subject_id', $exam->subject_id) === (string) $subject->id ? 'selected' : '' }}>{{ $subject->displayName() }}</option>
                 @endforeach
             </select>
             @error('subject_id') <span class="field-error">{{ $message }}</span> @enderror
@@ -47,7 +47,7 @@
             <label>{{ __('common.teacher') }}</label>
             <select name="teacher_id">
                 @foreach($teachers as $teacher)
-                    <option value="{{ $teacher->id }}" {{ (string) old('teacher_id', $exam->teacher_id) === (string) $teacher->id ? 'selected' : '' }}>{{ $teacher->user->name }}</option>
+                    <option value="{{ $teacher->id }}" {{ (string) old('teacher_id', $exam->teacher_id) === (string) $teacher->id ? 'selected' : '' }}>{{ $teacher->user->displayName() }}</option>
                 @endforeach
             </select>
             @error('teacher_id') <span class="field-error">{{ $message }}</span> @enderror

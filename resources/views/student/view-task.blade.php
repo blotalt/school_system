@@ -13,7 +13,7 @@
 <x-page-header>
     <div>
         <h1>{{ $homework->title }}</h1>
-        <p>{{ $homework->subject->name ?? '—' }} &middot; {{ $homework->schoolClass->name ?? '—' }}</p>
+        <p>{{ $homework->subject?->displayName() ?? '—' }} &middot; {{ $homework->schoolClass->name ?? '—' }}</p>
     </div>
 </x-page-header>
 

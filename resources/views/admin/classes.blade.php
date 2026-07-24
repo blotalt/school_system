@@ -14,7 +14,7 @@
                 <select name="class" class="filter-select" onchange="this.form.submit()">
                     @foreach($classes as $c)
                         <option value="{{ $c->id }}" {{ $class->id === $c->id ? 'selected' : '' }}>
-    {{ $c->displayName() }}
+                            {{ $c->displayName() }}
                             @if($c->schedule_approved_at) ✓ @endif
                         </option>
                     @endforeach
@@ -41,7 +41,7 @@
 
 @if(!$class)
     <div class="data-card" style="padding:40px;text-align:center;color:#9ca3af;">
-        No classes yet. <a href="{{ route('admin.classes.create') }}">Create one</a>.
+        {{ __('admin.classes.no_classes_message') }} <a href="{{ route('admin.classes.create') }}">{{ __('admin.classes.create_one') }}</a> {{ __('admin.classes.to_build_schedule') }}
     </div>
 @else
 
@@ -49,42 +49,42 @@
 <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;padding:14px 18px;background:#fff;border-radius:12px;border:1px solid #e5e9f2;">
     @if($class->schedule_approved_at)
         <span style="display:flex;align-items:center;gap:6px;background:#d1fae5;color:#065f46;border:1px solid #10b981;border-radius:8px;padding:6px 14px;font-size:13px;font-weight:600;">
-            <i class="fa-solid fa-circle-check"></i>Approved — Published to teachers
+            <i class="fa-solid fa-circle-check"></i>{{ __('admin.status_approved') }}
         </span>
         <form method="POST" action="{{ route('admin.classes.schedule.unapprove', $class) }}">
             @csrf
             <button type="submit" class="cancel-btn" style="font-size:13px;">
-                <i class="fa-solid fa-rotate-left"></i>Revert to Draft
+                <i class="fa-solid fa-rotate-left"></i>{{ __('admin.revert_draft') }}
             </button>
         </form>
     @else
         <span style="display:flex;align-items:center;gap:6px;background:#fef3c7;color:#92400e;border:1px solid #f59e0b;border-radius:8px;padding:6px 14px;font-size:13px;font-weight:600;">
-            <i class="fa-regular fa-clock"></i> Draft — Not visible to teachers yet
+            <i class="fa-regular fa-clock"></i> {{ __('admin.status_draft') }}
         </span>
         <form method="POST" action="{{ route('admin.classes.schedule.approve', $class) }}">
             @csrf
             <button type="submit" class="save-btn" style="font-size:13px;">
-                <i class="fa-solid fa-circle-check"></i> Approve & Publish
+                <i class="fa-solid fa-circle-check"></i> អនុម័ត & បោះផ្សាយ
             </button>
         </form>
     @endif
 
     <div style="margin-left:auto;display:flex;gap:12px;">
         <button type="button" id="editBtn" class="add-btn" onclick="enterEditMode()">
-            <i class="fa-solid fa-pen"></i> Edit Schedule
+            <i class="fa-solid fa-pen"></i> {{ __('admin.edit_schedule') }}
         </button>
         <button type="button" id="exitEditBtn" class="cancel-btn" style="display:none;" onclick="exitEditMode()">
-            Done Editing
+            {{ __('admin.done_editing') }}
         </button>
     </div>
 </div>
 
 {{-- Legend --}}
 <div style="display:flex;gap:16px;font-size:12px;color:#6b7280;margin-bottom:12px;flex-wrap:wrap;">
-    <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#f59e0b;margin-right:4px;"></span>Preferred</span>
-    <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#10b981;margin-right:4px;"></span>Available</span>
-    <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#e5e9f2;border:1px solid #d1d5db;margin-right:4px;"></span>No data</span>
-    <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#fecaca;margin-right:4px;"></span>Conflict (teaching elsewhere)</span>
+    <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#f59e0b;margin-right:4px;"></span>{{ __('admin.legend_preferred') }}</span>
+    <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#10b981;margin-right:4px;"></span>{{ __('admin.legend_available') }}</span>
+    <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#e5e9f2;border:1px solid #d1d5db;margin-right:4px;"></span>{{ __('admin.legend_no_data') }}</span>
+    <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#fecaca;margin-right:4px;"></span>{{ __('admin.legend_conflict') }}</span>
 </div>
 
 @php
@@ -117,10 +117,10 @@ $subjectColors = [
                                 @php $colorClass = $subjectColors[$slot->subject->name] ?? 'default'; @endphp
                                 <div class="subject-card subject-{{ $colorClass }}" style="position:relative;">
                                     <strong>{{ $slot->subject->displayName() }}</strong><br>
-                                    <span>{{ explode(' ', $slot->teacher->user->displayName())[0] }}</span>
+                                    <span>{{ $slot->teacher->user->displayName() }}</span>
                                     <form action="{{ route('admin.classes.schedule.destroy', [$class, $slot]) }}" method="POST"
                                           class="edit-only-delete" style="display:none;position:absolute;top:2px;right:2px;"
-                                          onsubmit="return confirm('Remove this slot?')">
+                                          onsubmit="return confirm('លុបស្លតនេះ?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" style="background:none;border:none;cursor:pointer;color:inherit;opacity:.7;">
@@ -164,7 +164,7 @@ $subjectColors = [
     <form class="slot-modal" method="POST" id="slotForm" action="" style="width:520px;max-height:90vh;overflow-y:auto;">
         @csrf
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-            <h3 style="margin:0;">Assign Slot</h3>
+            <h3 style="margin:0;">{{ __('admin.assign_slot') }}</h3>
             <span id="slotLabel" style="font-size:13px;color:#6b7280;background:#f3f4f6;padding:4px 10px;border-radius:6px;"></span>
         </div>
         <input type="hidden" name="day_of_week" id="modalDay">
@@ -173,9 +173,9 @@ $subjectColors = [
         <input type="hidden" name="teacher_id" id="modalTeacherId">
 
         <div class="form-group">
-            <label>Subject</label>
+            <label>{{ __('admin.select_subject') }}</label>
             <select name="subject_id" id="modalSubject" required onchange="renderTeacherList()">
-                <option value="">Select a subject</option>
+                <option value="">{{ __('admin.classes.select_a_subject') }}</option>
                 @foreach($subjects as $subject)
                     <option value="{{ $subject->id }}">{{ $subject->displayName() }}</option>
                 @endforeach
@@ -183,19 +183,19 @@ $subjectColors = [
         </div>
 
         <div style="margin-bottom:8px;">
-            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Select Teacher</label>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">{{ __('admin.select_teacher') }}</label>
             <div style="display:flex;gap:12px;font-size:11px;color:#6b7280;margin-bottom:8px;flex-wrap:wrap;">
-                <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#f59e0b;margin-right:3px;"></span>Preferred</span>
-                <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#10b981;margin-right:3px;"></span>Available</span>
-                <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#e5e9f2;margin-right:3px;"></span>No data</span>
-                <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#fecaca;margin-right:3px;"></span>Conflict</span>
+                <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#f59e0b;margin-right:3px;"></span>{{ __('admin.legend_preferred') }}</span>
+                <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#10b981;margin-right:3px;"></span>{{ __('admin.legend_available') }}</span>
+                <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#e5e9f2;margin-right:3px;"></span>{{ __('admin.legend_no_data') }}</span>
+                <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#fecaca;margin-right:3px;"></span>{{ __('admin.legend_conflict') }}</span>
             </div>
             <div id="teacherList" style="display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto;"></div>
         </div>
 
         <div class="form-actions" style="margin-top:16px;">
-            <button type="button" class="cancel-btn" onclick="closeSlotModal()">Cancel</button>
-            <button type="submit" class="save-btn" id="assignBtn" disabled>Assign</button>
+            <button type="button" class="cancel-btn" onclick="closeSlotModal()">{{ __('common.cancel') }}</button>
+            <button type="submit" class="save-btn" id="assignBtn" disabled>{{ __('admin.assign_slot') }}</button>
         </div>
     </form>
 </div>
@@ -248,11 +248,39 @@ $subjectColors = [
 </style>
 
 <script>
-    const SUBJECT_DISPLAY_MAP = @json($subjects->mapWithKeys(fn($s) => [$s->id => $s->displayName()]));
+const SUBJECT_DISPLAY_MAP = @json($subjects->mapWithKeys(fn($s) => [$s->id => $s->displayName()]));
 const AVAILABILITY_MAP  = @json($availabilityMap ?? []);
 const ALL_ASSIGNED      = @json($allAssignedSlots ?? []);
-const TEACHER_DATA      = @json($teacherData ?? []);
+@php
+$locale = app()->getLocale();
+$teacherDataLocalized = collect($teacherData ?? [])->map(function ($t) use ($locale) {
+    $t = (array) $t;
+    if ($locale === 'km' && !empty($t['khmer_name'])) {
+        $t['display_name']      = $t['khmer_name'];
+        $t['display_firstname'] = explode(' ', $t['khmer_name'])[0];
+    } else {
+        $t['display_name']      = $t['name'];
+        $t['display_firstname'] = $t['firstname'];
+    }
+    return $t;
+})->values()->all();
+@endphp
+const TEACHER_DATA = @json($teacherData ?? []);
+const IS_KM = @json(app()->getLocale() === 'km');
+TEACHER_DATA.forEach(t => {
+    t.display_name      = (IS_KM && t.khmer_name) ? t.khmer_name : t.name;
+    t.display_firstname = (IS_KM && t.khmer_name) ? t.khmer_name.split(' ')[0] : t.firstname;
+});
 const PERIOD_TIMES      = @json($periodTimes);
+const DAY_LABELS        = @json(collect($days)->mapWithKeys(fn($d) => [$d => __('common.days.' . $d)]));
+const BADGE_LABELS = {
+    preferred:   '★ {{ __('admin.legend_preferred') }}',
+    available:   '✓ {{ __('admin.legend_available') }}',
+    no_data:     '— {{ __('admin.legend_no_data') }}',
+    unavailable: '✗ មិនអាចបង្រៀនបាន',
+    conflict:    '⚠ កំពុងបង្រៀននៅកន្លែងផ្សេង',
+};
+const NO_SPECIALTY_LABEL = @json(__('admin.no_specialty'));
 
 let editMode = false;
 let currentSlotKey = null;
@@ -300,8 +328,8 @@ function renderChips() {
         teachers.forEach(t => {
             const chip = document.createElement('div');
             chip.className = `avail-chip ${t.avail}`;
-            chip.title = `${t.name} — ${t.avail}`;
-            chip.textContent = t.firstname;
+chip.title       = `${t.display_name} — ${t.avail}`;
+chip.textContent = t.display_firstname;
             container.appendChild(chip);
         });
 
@@ -329,7 +357,7 @@ function openSlotModal(period, day, shift) {
     document.getElementById('modalTeacherId').value = '';
     document.getElementById('assignBtn').disabled = true;
     document.getElementById('slotForm').action = "{{ route('admin.classes.schedule.store', $class) }}";
-    document.getElementById('slotLabel').textContent = `${day} · P${period} · ${PERIOD_TIMES[shift][period]}`;
+    document.getElementById('slotLabel').textContent = `${DAY_LABELS[day] ?? day} · P${period} · ${PERIOD_TIMES[shift][period]}`;
     document.getElementById('modalSubject').value = '';
     renderTeacherList();
     document.getElementById('slotModal').style.display = 'flex';
@@ -360,22 +388,19 @@ function renderTeacherList() {
     teachers.forEach(t => {
         const isConflict = t.avail === 'conflict';
         const dimmed = !t.matchesSubject || isConflict;
-        const badgeLabels = {
-            preferred: '★ Preferred', available: '✓ Available',
-            no_data: '— No data', unavailable: '✗ Unavailable',
-            conflict: '⚠ Teaching elsewhere',
-        };
 
         const row = document.createElement('div');
         row.className = `teacher-row${dimmed ? ' dimmed' : ''}`;
         row.dataset.teacherId = t.id;
         row.innerHTML = `
-            <div class="t-avatar ${t.avail}">${t.firstname.charAt(0)}</div>
+            <div class="t-avatar ${t.avail}">${t.display_firstname.charAt(0)}</div>
+
+
             <div style="flex:1;min-width:0;">
-                <div style="font-weight:600;font-size:13px;">${t.name}</div>
-                <div style="font-size:12px;color:#9ca3af;">${SUBJECT_DISPLAY_MAP[t.subjects[0]] || 'No specialty'}</div>
+                <div style="font-weight:600;font-size:13px;">${t.display_name}</div>
+                <div style="font-size:12px;color:#9ca3af;">${SUBJECT_DISPLAY_MAP[t.subjects[0]] || NO_SPECIALTY_LABEL}</div>
             </div>
-            <span class="avail-badge ${t.avail}">${badgeLabels[t.avail] ?? '—'}</span>
+            <span class="avail-badge ${t.avail}">${BADGE_LABELS[t.avail] ?? '—'}</span>
         `;
 
         if (!dimmed) {

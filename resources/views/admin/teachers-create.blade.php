@@ -84,7 +84,7 @@
             @foreach($subjects as $subject)
                 <label class="section-toggle">
                     <input type="checkbox" name="subjects[]" value="{{ $subject->id }}" {{ in_array($subject->id, old('subjects', [])) ? 'checked' : '' }}>
-                    <span>{{ $subject->name }}</span>
+                    <span>{{ $subject->displayName() }}</span>
                 </label>
             @endforeach
         </div>
@@ -97,7 +97,7 @@
             @foreach($classes as $class)
                 <label class="section-toggle">
                     <input type="checkbox" name="classes[]" value="{{ $class->id }}" {{ in_array($class->id, old('classes', [])) ? 'checked' : '' }}>
-                    <span>{{ $class->name }}</span>
+                    <span>{{ $class->displayName() }}</span>
                 </label>
             @endforeach
         </div>

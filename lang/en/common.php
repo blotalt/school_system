@@ -45,4 +45,18 @@ return [
         'Saturday'  => 'Saturday',
         'Sunday'    => 'Sunday',
     ],
+
+    'subject_names' => [
+        'Mathematics'       => 'Mathematics',
+        'Physics'           => 'Physics',
+        'Biology'           => 'Biology',
+        'Chemistry'         => 'Chemistry',
+        'English'           => 'English',
+        'History'           => 'History',
+        'Geography'         => 'Geography',
+        'Computer Science'  => 'Computer Science',
+        'Khmer Literature'  => 'Khmer Literature',
+        'Earth Science'     => 'Earth Science',
+        'Morality & Civics' => 'Morality & Civics',
+    ],
 ];

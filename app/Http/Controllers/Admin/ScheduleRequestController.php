@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ClassSchedule;
 use App\Models\ScheduleRequest;
+use App\Models\Teacher;
+use App\Models\TeacherAvailability;
 use App\Notifications\ScheduleRequestDecidedNotification;
 use App\Support\Timetable;
 use Illuminate\Http\Request;
@@ -14,11 +16,11 @@ class ScheduleRequestController extends Controller
 {
 public function index(Request $request)
 {
-    $teachers = \App\Models\Teacher::with(['user', 'availability', 'subjects'])->get()
+    $teachers = Teacher::with(['user', 'availability', 'subjects'])->get()
         ->sortBy(fn($t) => $t->user->name)
         ->values();
 
-    $availabilityMap = \App\Models\TeacherAvailability::all()
+    $availabilityMap = TeacherAvailability::all()
         ->groupBy('teacher_id')
         ->map(fn($items) => $items
             ->keyBy(fn($a) => "{$a->shift}-{$a->day_of_week}-{$a->period}")

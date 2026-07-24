@@ -108,8 +108,8 @@ $subjectColors = [
                 <tr>
                     <td>{{ $exam->title }}</td>
                     <td>{{ $exam->subject->name ?? '—' }}</td>
-                    <td><span class="badge">{{ ucfirst($exam->exam_type) }}</span></td>
-                    <td>{{ $exam->exam_date ? \Carbon\Carbon::parse($exam->exam_date)->format('M d, Y') : '—' }}</td>
+                    <td>{{ $exam->subject?->displayName() ?? '—' }}</td>
+<td><span class="badge">{{ __('teacher.exams.' . $exam->exam_type) }}</span></td>
                 </tr>
             @empty
                 <tr><td colspan="4" style="text-align:center;color:#8a94a6;">{{ __('student.schedule.no_exams_scheduled') }}</td></tr>

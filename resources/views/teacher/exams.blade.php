@@ -35,9 +35,9 @@
             @forelse($exams as $exam)
                 <tr>
                     <td>{{ $exam->title }}</td>
-                    <td>{{ $exam->schoolClass->name ?? '—' }}</td>
-                    <td>{{ $exam->subject->name ?? '—' }}</td>
-                    <td><span class="badge badge-subject">{{ ucfirst($exam->exam_type) }}</span></td>
+                    <td>{{ $exam->schoolClass?->displayName() ?? '—' }}</td>
+                    <td>{{ $exam->subject?->displayName() ?? '—' }}</td>
+                    <td><span class="badge badge-subject">{{ __('teacher.exams.' . $exam->exam_type) }}</span></td>
                     <td>{{ \Illuminate\Support\Carbon::parse($exam->exam_date)->format('M j, Y') }}</td>
                     <td>{{ $exam->results_count }}</td>
                     <td>

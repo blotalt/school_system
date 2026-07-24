@@ -4,7 +4,7 @@
 
 <x-page-header>
     <div>
-        <h1>{{ __('teacher.dashboard.welcome', ['name' => $teacher?->user->name ?? auth()->user()->name]) }}</h1>
+        <h1>{{ __('teacher.dashboard.welcome', ['name' => $teacher?->user->displayName() ?? auth()->user()->displayName()]) }}</h1>
         <p>{{ __('teacher.dashboard.subtitle') }}</p>
     </div>
 </x-page-header>
@@ -48,8 +48,8 @@
         <tbody>
             @forelse($classes as $class)
                 <tr>
-                    <td>{{ $class->name }}</td>
-                    <td>{{ $class->track ?? __('common.default_track') }}</td>
+                    <td>{{ $class->displayName() }}</td>
+                    <td>{{ $class->displayTrack() ?: __('common.default_track') }}</td>
                     <td>{{ $class->students_count }}</td>
                 </tr>
             @empty

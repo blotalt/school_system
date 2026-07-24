@@ -24,7 +24,7 @@
             <label>{{ __('common.class') }}</label>
             <select name="class_id">
                 @foreach($classes as $class)
-                    <option value="{{ $class->id }}" {{ (string) old('class_id', $homework->class_id) === (string) $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
+                    <option value="{{ $class->id }}" {{ (string) old('class_id', $homework->class_id) === (string) $class->id ? 'selected' : '' }}>{{ $class->displayName() }}</option>
                 @endforeach
             </select>
             @error('class_id') <span class="field-error">{{ $message }}</span> @enderror
@@ -33,7 +33,7 @@
             <label>{{ __('common.subject') }}</label>
             <select name="subject_id">
                 @foreach($subjects as $subject)
-                    <option value="{{ $subject->id }}" {{ (string) old('subject_id', $homework->subject_id) === (string) $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
+                    <option value="{{ $subject->id }}" {{ (string) old('subject_id', $homework->subject_id) === (string) $subject->id ? 'selected' : '' }}>{{ $subject->displayName() }}</option>
                 @endforeach
             </select>
             @error('subject_id') <span class="field-error">{{ $message }}</span> @enderror

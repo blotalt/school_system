@@ -58,11 +58,11 @@ class DashboardController extends Controller
             ->orderBy('shift')
             ->orderBy('period')
             ->get()
-            ->map(fn (ClassSchedule $s) => (object) [
-                'time'    => self::PERIOD_TIMES[$s->period] ?? '',
-                'subject' => $s->subject->name,
-                'class'   => $s->schoolClass->name,
-            ]);
+->map(fn (ClassSchedule $s) => (object) [
+    'time'    => self::PERIOD_TIMES[$s->period] ?? '',
+    'subject' => $s->subject?->displayName() ?? '',
+    'class'   => $s->schoolClass?->displayName() ?? '',
+]);
 
         return view('teacher.dashboard', compact(
             'teacher', 'classes', 'studentCount', 'examCount', 'attendanceRate', 'announcements', 'todaySchedule'

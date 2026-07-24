@@ -4,12 +4,14 @@
 
 <div class="breadcrumb">
     <a href="{{ route('student.dashboard') }}">{{ __('common.dashboard') }}</a> &gt;
-    <span>{{ $schedule->subject->name ?? __('student.view_class.class_fallback') }}</span>
+    <span>{{ $schedule->subject?->displayName() ?? __('student.view_class.class_fallback') }}</span>
+
 </div>
 
 <x-page-header>
     <div>
-        <h1>{{ $schedule->subject->name ?? '—' }}</h1>
+        <h1>{{ $schedule->subject?->displayName() ?? '—' }}</h1>
+
         <p>{{ $schedule->schoolClass->name ?? '—' }} &middot; {{ __('common.days.' . $schedule->day_of_week) }}, {{ __('student.view_class.period_label', ['period' => $schedule->period]) }}</p>
     </div>
 </x-page-header>
@@ -27,7 +29,7 @@
             <hr>
             <div class="profile-info">
                 <label>{{ __('common.subject') }}</label>
-                <h4>{{ $schedule->subject->name ?? '—' }}</h4>
+                <h4>{{ $schedule->subject?->displayName() ?? '—' }}</h4>
             </div>
             <div class="profile-info">
                 <label>{{ __('common.email') }}</label>

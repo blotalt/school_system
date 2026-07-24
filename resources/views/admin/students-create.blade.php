@@ -88,7 +88,7 @@
             @foreach($classes as $class)
                 <label class="section-toggle">
                     <input type="radio" name="class_id" value="{{ $class->id }}" {{ (string) old('class_id') === (string) $class->id ? 'checked' : '' }}>
-                    <span>{{ $class->name }}</span>
+                    <span>{{ $class->displayName() }}</span>
                 </label>
             @endforeach
         </div>
