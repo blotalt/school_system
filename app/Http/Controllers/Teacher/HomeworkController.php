@@ -5,13 +5,22 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Teacher\Concerns\EnsuresClassOwnership;
 use App\Models\Homework;
+use App\Models\HomeworkSubmission;
+use App\Models\Student;
 use App\Models\Subject;
+use App\Models\User;
+use App\Notifications\HomeworkAssignedNotification;
+use App\Notifications\HomeworkSubmissionGradedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 
 class HomeworkController extends Controller
 {
     use EnsuresClassOwnership;
+
+    private const ATTACHMENT_RULES = ['nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:10240'];
 
     public function index()
     {
@@ -19,6 +28,7 @@ class HomeworkController extends Controller
 
         $homeworks = Homework::where('teacher_id', $teacherId)
             ->with(['schoolClass', 'subject'])
+            ->withCount('submissions')
             ->latest('due_date')
             ->paginate(20);
 
@@ -43,14 +53,25 @@ class HomeworkController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'required|date',
+            'attachment' => self::ATTACHMENT_RULES,
         ]);
 
         $this->ensureTeacherOwnsClass($validated['class_id']);
 
-        Homework::create([
+        $attachment = $this->storeAttachment($request);
+
+        $homework = Homework::create([
             ...$validated,
             'teacher_id' => Auth::user()->teacher->id,
+            'attachment_path' => $attachment['path'] ?? null,
+            'attachment_name' => $attachment['name'] ?? null,
         ]);
+
+        $students = User::where('role', 'student')
+            ->whereHas('student', fn ($q) => $q->where('class_id', $homework->class_id))
+            ->get();
+
+        Notification::send($students, new HomeworkAssignedNotification($homework));
 
         return redirect()->route('teacher.homework.index')
             ->with('status', 'Homework created.');
@@ -79,10 +100,25 @@ class HomeworkController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'required|date',
+            'attachment' => self::ATTACHMENT_RULES,
+            'remove_attachment' => 'nullable|boolean',
         ]);
 
         // If the class is being changed, confirm ownership of the NEW class too.
         $this->ensureTeacherOwnsClass($validated['class_id']);
+
+        $attachment = $this->storeAttachment($request);
+
+        if ($attachment || $request->boolean('remove_attachment')) {
+            if ($homework->attachment_path) {
+                Storage::disk('public')->delete($homework->attachment_path);
+            }
+
+            $validated['attachment_path'] = $attachment['path'] ?? null;
+            $validated['attachment_name'] = $attachment['name'] ?? null;
+        }
+
+        unset($validated['remove_attachment']);
 
         $homework->update($validated);
 
@@ -94,9 +130,81 @@ class HomeworkController extends Controller
     {
         $this->ensureTeacherOwnsClass($homework->class_id);
 
+        if ($homework->attachment_path) {
+            Storage::disk('public')->delete($homework->attachment_path);
+        }
+
         $homework->delete();
 
         return redirect()->route('teacher.homework.index')
             ->with('status', 'Homework deleted.');
+    }
+
+    public function submissions(Homework $homework)
+    {
+        $this->ensureTeacherOwnsClass($homework->class_id);
+
+        $homework->load(['schoolClass', 'subject']);
+
+        $students = Student::with('user')
+            ->where('class_id', $homework->class_id)
+            ->orderBy('roll_no')
+            ->get();
+
+        $submissions = HomeworkSubmission::where('homework_id', $homework->id)
+            ->get()
+            ->keyBy('student_id');
+
+        return view('teacher.homework-submissions', compact('homework', 'students', 'submissions'));
+    }
+
+    public function grade(Request $request, Homework $homework)
+    {
+        $this->ensureTeacherOwnsClass($homework->class_id);
+
+        $validated = $request->validate([
+            'scores'     => ['nullable', 'array'],
+            'scores.*'   => ['nullable', 'integer', 'min:0', 'max:100'],
+            'feedback'   => ['nullable', 'array'],
+            'feedback.*' => ['nullable', 'string'],
+        ]);
+
+        $submissions = HomeworkSubmission::where('homework_id', $homework->id)->get()->keyBy('student_id');
+
+        foreach ($validated['scores'] ?? [] as $studentId => $score) {
+            if ($score === null || $score === '') {
+                continue;
+            }
+
+            // A teacher can only grade work that was actually submitted.
+            $submission = $submissions->get($studentId);
+            if (! $submission) {
+                continue;
+            }
+
+            $submission->update([
+                'score'     => $score,
+                'feedback'  => $validated['feedback'][$studentId] ?? null,
+                'graded_at' => now(),
+            ]);
+
+            $submission->student?->user?->notify(new HomeworkSubmissionGradedNotification($submission));
+        }
+
+        return redirect()->route('teacher.homework.submissions', $homework)->with('success', 'Grades saved.');
+    }
+
+    private function storeAttachment(Request $request): ?array
+    {
+        if (! $request->hasFile('attachment')) {
+            return null;
+        }
+
+        $file = $request->file('attachment');
+
+        return [
+            'path' => $file->store('homework-attachments', 'public'),
+            'name' => $file->getClientOriginalName(),
+        ];
     }
 }

@@ -3,78 +3,86 @@
 @section('content')
 <x-page-header>
     <div>
-        <h1>Teacher Management</h1>
-        <p>Managing 124 teachers for the current semester.</p>
+        <h1>{{ __('admin.teachers.title') }}</h1>
+        <p>{{ __('admin.teachers.subtitle', ['count' => $teachers->total()]) }}</p>
     </div>
 </x-page-header>
 
-@php
-$teachers = [
-    (object)['id' => 'EMP-2023-01', 'name' => 'Mr. Sophea Rath', 'subjects' => ['Physics','Maths'], 'classes' => 'Grade 11-A, Grade 12-B', 'contact' => '+855 12 345 678', 'status' => 'Active'],
-    (object)['id' => 'EMP-2023-08', 'name' => 'Ms. Sreyneang Kim', 'subjects' => ['Biology'], 'classes' => 'Grade 10-C, Grade 11-B', 'contact' => '+855 99 876 543', 'status' => 'Active'],
-    (object)['id' => 'EMP-2020-05', 'name' => 'Dr. Chan Dara', 'subjects' => ['History'], 'classes' => 'N/A (On Leave)', 'contact' => '+855 10 222 333', 'status' => 'Inactive'],
-];
-@endphp
+@if (session('success'))
+    <div class="alert alert-success" style="margin-bottom:16px;padding:12px 16px;background:#e6f9f0;border:1px solid #10b981;border-radius:10px;color:#0a7a4d;">
+        {{ session('success') }}
+    </div>
+@endif
 
 <div class="data-card-header" style="background:#fff;border-radius:16px 16px 0 0;border:1px solid #e5e9f2;border-bottom:none;padding:20px 24px;">
-    <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:space-between;">
-        <div class="search-box" style="width:320px;">
-            <input type="text" placeholder="e.g. Sophea Rath">
-            <i class="fa-solid fa-magnifying-glass"></i>
-        </div>
+    <form method="GET" action="{{ route('admin.teachers.index') }}" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:space-between;width:100%;">
+        <x-live-search :endpoint="route('admin.search')" name="search" :value="$search" placeholder="{{ __('admin.teachers.search_placeholder') }}" style="width:320px;" />
         <div style="display:flex;gap:15px;align-items:center;">
-            <select class="filter-select">
-                <option>All</option>
-                <option>Physics</option>
-                <option>Biology</option>
-                <option>History</option>
-            </select>
-            <select class="filter-select">
-                <option>All</option>
-                <option>Active</option>
-                <option>Inactive</option>
-            </select>
             <a href="{{ route('admin.teachers.create') }}" class="add-btn">
-                <i class="fa-solid fa-user-plus"></i> Add
+                <i class="fa-solid fa-user-plus"></i> {{ __('common.add') }}
             </a>
         </div>
-    </div>
+    </form>
 </div>
 
 <div class="data-card" style="border-radius:0 0 16px 16px;">
     <table class="data-table">
         <thead>
             <tr>
-                <th>Teacher Name</th>
-                <th>Subject(s)</th>
-                <th>Assigned Classes</th>
-                <th>Contact</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>{{ __('admin.teachers.name_column') }}</th>
+                <th>{{ __('common.subject') }}</th>
+                <th>{{ __('admin.teachers.assigned_classes') }}</th>
+                <th>{{ __('common.email') }}</th>
+                <th>{{ __('common.actions') }}</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($teachers as $teacher)
+            @forelse($teachers as $teacher)
                 <tr>
+<td>
+    <div style="display:flex;align-items:center;gap:10px;">
+        <img src="{{ $teacher->user->profilePicture() }}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+        <div>
+            <strong>{{ $teacher->user->displayName() }}</strong>
+            @if(app()->getLocale() === 'km' && $teacher->user->name)
+                <br><span style="color:#6b7280;font-size:12px;">{{ $teacher->user->name }}</span>
+            @elseif(app()->getLocale() !== 'km' && $teacher->user->khmer_name)
+                <br><span style="color:#6b7280;font-size:12px;">{{ $teacher->user->khmer_name }}</span>
+            @endif
+<br><span style="color:#9ca3af;font-size:13px;">TCH-{{ str_pad($teacher->id, 4, '0', STR_PAD_LEFT) }}</span>
+        </div>
+    </div>
+</td>
                     <td>
-                        <strong>{{ $teacher->name }}</strong><br>
-                        <span style="color:#9ca3af;font-size:13px;">{{ $teacher->id }}</span>
+                        @forelse($teacher->subjects as $subject)
+                            <span class="badge badge-subject">{{ $subject->displayName() }}</span>
+                        @empty
+                            <span style="color:#9ca3af;">&mdash;</span>
+                        @endforelse
                     </td>
+                    <td>{{ $teacher->classes->map(fn($c) => $c->displayName())->implode(', ') ?: __('admin.teachers.not_available') }}</td>
+                    <td>{{ $teacher->user->email }}</td>
                     <td>
-                        @foreach($teacher->subjects as $subject)
-                            <span class="badge badge-subject">{{ $subject }}</span>
-                        @endforeach
-                    </td>
-                    <td>{{ $teacher->classes }}</td>
-                    <td>{{ $teacher->contact }}</td>
-                    <td><span class="badge badge-{{ $teacher->status === 'Active' ? 'active' : 'inactive' }}">{{ strtoupper($teacher->status) }}</span></td>
-                    <td>
-                        <a href="#" title="View"><i class="fa-regular fa-eye"></i></a>
-                        <a href="#" title="Edit" style="margin-left:12px;"><i class="fa-solid fa-pen"></i></a>
+                        <a href="{{ route('admin.teachers.edit', $teacher) }}" title="{{ __('common.edit') }}"><i class="fa-solid fa-pen"></i></a>
+                        <form action="{{ route('admin.teachers.destroy', $teacher) }}" method="POST" style="display:inline;margin-left:12px;" onsubmit="return confirm('{{ __('admin.teachers.delete_confirm') }}');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" title="{{ __('common.delete') }}" style="background:none;border:none;cursor:pointer;color:#9ca3af;">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="5" style="text-align:center;color:#9ca3af;padding:24px;">{{ __('admin.teachers.no_teachers_found') }}</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
+</div>
+
+<div style="margin-top:20px;">
+    {{ $teachers->links() }}
 </div>
 @endsection

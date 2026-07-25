@@ -14,7 +14,15 @@ class Student extends Model
         'roll_no',
         'guardian_contact',
         'date_of_birth',
+        'gender',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'date_of_birth' => 'date',
+        ];
+    }
 
     public function user(): BelongsTo
     {
@@ -26,9 +34,18 @@ class Student extends Model
         return $this->belongsTo(SchoolClass::class, 'class_id');
     }
 
-    // Stub for B3's ExamResult model
     public function results(): HasMany
     {
         return $this->hasMany(ExamResult::class);
+    }
+
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    public function submissions(): HasMany
+    {
+        return $this->hasMany(HomeworkSubmission::class);
     }
 }

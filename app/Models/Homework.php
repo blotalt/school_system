@@ -15,6 +15,8 @@ class Homework extends Model
         'title',
         'description',
         'due_date',
+        'attachment_path',
+        'attachment_name',
     ];
 
     protected $casts = [
@@ -34,5 +36,10 @@ class Homework extends Model
     public function subject()
     {
         return $this->belongsTo(Subject::class);
+    }
+
+    public function submissions()
+    {
+        return $this->hasMany(HomeworkSubmission::class);
     }
 }

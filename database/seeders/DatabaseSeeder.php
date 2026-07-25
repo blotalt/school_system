@@ -9,38 +9,48 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // B1 — seed test accounts (kept exactly as B1 wrote it)
         User::updateOrCreate(
             ['email' => 'admin@school.test'],
-            ['name' => 'Test Admin', 'password' => 'password', 'role' => 'admin']
+            [
+                'name'       => 'Test Admin',
+                'khmer_name' => 'គ្រប់គ្រង​ ធ្វើ​តេស្ត',
+                'password'   => '123123123',
+                'role'       => 'admin',
+            ]
         );
 
         User::updateOrCreate(
             ['email' => 'teacher@school.test'],
-            ['name' => 'Test Teacher', 'password' => 'password', 'role' => 'teacher']
+            [
+                'name'       => 'Test Teacher',
+                'khmer_name' => 'គ្រូ​ ធ្វើ​តេស្ត',
+                'password'   => '123123123',
+                'role'       => 'teacher',
+            ]
         );
 
         User::updateOrCreate(
             ['email' => 'student@school.test'],
-            ['name' => 'Test Student', 'password' => 'password', 'role' => 'student']
+            [
+                'name'       => 'Test Student',
+                'khmer_name' => 'សិស្ស​ ធ្វើ​តេស្ត',
+                'password'   => '123123123',
+                'role'       => 'student',
+            ]
         );
 
-        // B2 — order matters: subjects → teachers → classes → students
         $this->call([
             SubjectSeeder::class,
             TeacherSeeder::class,
             ClassSeeder::class,
             StudentSeeder::class,
-        ]);
-
-        // B3 (uncomment after B3 merges)
-        // $this->call([
-        //     ExamSeeder::class,
-        //     AttendanceSeeder::class,
-        // ]);
-
-        // B4 — announcements (B4 owns this table; runs last, after users exist)
-        $this->call([
+            ClassScheduleSeeder::class,
+            TeacherAvailabilitySeeder::class,
+            ScheduleRequestSeeder::class,
+            ExamSeeder::class,
+            AttendanceSeeder::class,
+            HomeworkSeeder::class,
+            HomeworkSubmissionSeeder::class,
             AnnouncementSeeder::class,
         ]);
     }

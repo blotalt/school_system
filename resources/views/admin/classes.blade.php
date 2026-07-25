@@ -1,187 +1,437 @@
-@extends('layouts.admin')
+    @extends('layouts.admin')
 
-@section('content')
-<x-page-header>
-    <div>
-        <h1>Class Timetable - Weekly Grid</h1>
-        <p>Managing Grade 12 - Section A weekly schedule</p>
-    </div>
-    <div style="display:flex;gap:20px;align-items:flex-end;">
-        <div class="header-group">
-            <label>SELECT CLASS</label>
-            <select class="filter-select">
-                <option>Grade 12 - A</option>
-                <option>Grade 12 - B</option>
-                <option>Grade 11 - A</option>
-                <option>Grade 11 - B</option>
-            </select>
+    @section('content')
+    <x-page-header>
+        <div>
+            <h1>{{ __('admin.classes.title') }}</h1>
+            <p>{{ $class ? __('admin.classes.subtitle', ['name' => $class->displayName()]) : __('admin.classes.no_classes_yet') }}</p>
         </div>
-        <div class="header-group">
-            <label>SHIFT SELECTION</label>
-            <div class="shift-toggle">
-                <button type="button" class="shift-btn active" data-shift="morning">Morning shift</button>
-                <button type="button" class="shift-btn" data-shift="afternoon">Afternoon shift</button>
+        @if($class)
+        <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;">
+            <form method="GET" action="{{ route('admin.classes.index') }}">
+                <div class="header-group">
+                    <label>{{ __('admin.classes.select_class') }}</label>
+                    <select name="class" class="filter-select" onchange="this.form.submit()">
+                        @foreach($classes as $c)
+                            <option value="{{ $c->id }}" {{ $class->id === $c->id ? 'selected' : '' }}>
+                                {{ $c->displayName() }}
+                                @if($c->schedule_approved_at) ✓ @endif
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </form>
+            <div class="header-group">
+                <label>{{ __('admin.classes.shift_selection') }}</label>
+                <div class="shift-toggle">
+                    <button type="button" class="shift-btn active" data-shift="morning">{{ __('admin.classes.morning_shift') }}</button>
+                    <button type="button" class="shift-btn" data-shift="afternoon">{{ __('admin.classes.afternoon_shift') }}</button>
+                </div>
             </div>
         </div>
-        <button type="button" class="icon-only-btn"><i class="fa-solid fa-gear"></i></button>
+        @endif
+    </x-page-header>
+
+    @if(session('success'))
+        <div style="margin-bottom:16px;padding:12px 16px;background:#e6f9f0;border:1px solid #10b981;border-radius:10px;color:#0a7a4d;">{{ session('success') }}</div>
+    @endif
+    @if($errors->any())
+        <div style="margin-bottom:16px;padding:12px 16px;background:#fdecea;border:1px solid #f5b7b1;border-radius:10px;color:#c0392b;">{{ $errors->first() }}</div>
+    @endif
+
+    @if(!$class)
+        <div class="data-card" style="padding:40px;text-align:center;color:#9ca3af;">
+            {{ __('admin.classes.no_classes_message') }} <a href="{{ route('admin.classes.create') }}">{{ __('admin.classes.create_one') }}</a> {{ __('admin.classes.to_build_schedule') }}
+        </div>
+    @else
+
+    {{-- Status Bar --}}
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;padding:14px 18px;background:#fff;border-radius:12px;border:1px solid #e5e9f2;">
+        @if($class->schedule_approved_at)
+            <span style="display:flex;align-items:center;gap:6px;background:#d1fae5;color:#065f46;border:1px solid #10b981;border-radius:8px;padding:6px 14px;font-size:13px;font-weight:600;">
+                <i class="fa-solid fa-circle-check"></i>{{ __('admin.status_approved') }}
+            </span>
+            <form method="POST" action="{{ route('admin.classes.schedule.unapprove', $class) }}">
+                @csrf
+                <button type="submit" class="cancel-btn" style="font-size:13px;">
+                    <i class="fa-solid fa-rotate-left"></i>{{ __('admin.revert_draft') }}
+                </button>
+            </form>
+        @else
+            <span style="display:flex;align-items:center;gap:6px;background:#fef3c7;color:#92400e;border:1px solid #f59e0b;border-radius:8px;padding:6px 14px;font-size:13px;font-weight:600;">
+                <i class="fa-regular fa-clock"></i> {{ __('admin.status_draft') }}
+            </span>
+            <form method="POST" action="{{ route('admin.classes.schedule.approve', $class) }}">
+                @csrf
+                <button type="submit" class="save-btn" style="font-size:13px;">
+                    <i class="fa-solid fa-circle-check"></i> អនុម័ត & បោះផ្សាយ
+                </button>
+            </form>
+        @endif
+
+        <div style="margin-left:auto;display:flex;gap:12px;">
+            <button type="button" id="editBtn" class="add-btn" onclick="enterEditMode()">
+                <i class="fa-solid fa-pen"></i> {{ __('admin.edit_schedule') }}
+            </button>
+            <button type="button" id="exitEditBtn" class="cancel-btn" style="display:none;" onclick="exitEditMode()">
+                {{ __('admin.done_editing') }}
+            </button>
+        </div>
     </div>
-</x-page-header>
 
-@php
-$days = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+    {{-- Legend --}}
+    <div style="display:flex;gap:16px;font-size:12px;color:#6b7280;margin-bottom:12px;flex-wrap:wrap;">
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#f59e0b;margin-right:4px;"></span>{{ __('admin.legend_preferred') }}</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#10b981;margin-right:4px;"></span>{{ __('admin.legend_available') }}</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#e5e9f2;border:1px solid #d1d5db;margin-right:4px;"></span>{{ __('admin.legend_no_data') }}</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#fecaca;margin-right:4px;"></span>{{ __('admin.legend_conflict') }}</span>
+    </div>
 
-$morningPeriods = [
-    ['label' => 'P1', 'time' => '7:10 - 8:00', 'slots' => ['Chemistry|SK|chemistry','Math|BK|math','Chemistry|SK|chemistry','Math|BK|math', null]],
-    ['break' => '10 MIN BREAK (8:00 - 8:10 AM)'],
-    ['label' => 'P2', 'time' => '8:10 - 9:00', 'slots' => ['Khmer|SR|khmer','Physics|LV|physics','Physics|LV|physics','Khmer|SR|khmer','Math|BK|math']],
-    ['break' => '10 MIN BREAK (9:00 - 9:10 AM)'],
-    ['label' => 'P3', 'time' => '9:10 - 10:00', 'slots' => ['Math|BK|math','Biology|TM|biology', null, 'Physics|LV|physics','Biology|TM|biology']],
-    ['break' => '10 MIN BREAK (10:00 - 10:10 AM)'],
-    ['label' => 'P4', 'time' => '10:10 - 11:00', 'slots' => ['Physics|LV|physics','Khmer|SR|khmer','Math|BK|math','Chemistry|SK|chemistry','History|NN|khmer']],
-];
+    @php
+    $subjectColors = [
+        'Mathematics' => 'math', 'Physics' => 'physics', 'Biology' => 'biology',
+        'Chemistry' => 'chemistry', 'English' => 'english', 'History' => 'history',
+        'Geography' => 'geography', 'Computer Science' => 'computerscience',
+    ];
+    @endphp
 
-$afternoonPeriods = [
-    ['label' => 'P1', 'time' => '1:10 - 2:00', 'slots' => ['Chemistry|SK|chemistry','Math|BK|math','Chemistry|SK|chemistry','Math|BK|math', null]],
-    ['break' => '10 MIN BREAK (8:00 - 8:10 AM)'],
-    ['label' => 'P2', 'time' => '2:10 - 3:00', 'slots' => ['Khmer|SR|khmer','Physics|LV|physics','Physics|LV|physics','Khmer|SR|khmer','Math|BK|math']],
-    ['break' => '10 MIN BREAK (9:00 - 9:10 AM)'],
-    ['label' => 'P3', 'time' => '3:10 - 4:00', 'slots' => ['Math|BK|math','Biology|TM|biology', null, 'Physics|LV|physics','Biology|TM|biology']],
-    ['break' => '10 MIN BREAK (10:00 - 10:10 AM)'],
-    ['label' => 'P4', 'time' => '4:10 - 5:00', 'slots' => ['Physics|LV|physics','Khmer|SR|khmer','Math|BK|math','Chemistry|SK|chemistry','History|NN|khmer']],
-];
-@endphp
-
-<button type="button" id="editBtn" class="add-btn" style="margin:16px 0;" onclick="enterEditMode()">
-    <i class="fa-solid fa-pen"></i> Edit Schedule
-</button>
-
-@foreach(['morning' => $morningPeriods, 'afternoon' => $afternoonPeriods] as $shiftKey => $periods)
-<div class="timetable-container shift-grid" data-shift="{{ $shiftKey }}" style="{{ $shiftKey === 'afternoon' ? 'display:none;' : '' }}">
-    <table class="schedule-table-grid">
-        <thead>
-            <tr>
-                <th class="time-head">Time</th>
-                @foreach($days as $day)
-                    <th>{{ strtoupper($day) }}</th>
-                @endforeach
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($periods as $row)
-                @if(isset($row['break']))
-                    <tr class="break-row">
-                        <td colspan="6"><i class="fa-regular fa-clock"></i> {{ $row['break'] }}</td>
-                    </tr>
-                @else
+    @foreach(['morning', 'afternoon'] as $shiftKey)
+    <div class="timetable-container shift-grid" data-shift="{{ $shiftKey }}" style="{{ $shiftKey === 'afternoon' ? 'display:none;' : '' }}">
+        <table class="schedule-table-grid">
+            <thead>
+                <tr>
+                    <th class="time-head">{{ __('admin.classes.time_column') }}</th>
+                    @foreach($days as $day)
+                        <th>{{ strtoupper(__('common.days.' . $day)) }}</th>
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody>
+                @for($period = 1; $period <= 4; $period++)
                     <tr>
-                        <td class="time-box">{{ $row['label'] }}<br><small>{{ $row['time'] }}</small></td>
-                        @foreach($row['slots'] as $slot)
+                        <td class="time-box">P{{ $period }}<br><small>{{ $periodTimes[$shiftKey][$period] }}</small></td>
+                        @foreach($days as $day)
+                            @php $slot = $schedules->get("{$shiftKey}-{$day}-{$period}"); @endphp
                             <td>
                                 @if($slot)
-                                    @php [$subj, $initials, $color] = explode('|', $slot); @endphp
-                                    <div class="subject-card subject-{{ $color }}">
-                                        <strong>{{ $subj }}</strong><br>
-                                        <span>{{ $initials }}</span>
+                                    @php $colorClass = $subjectColors[$slot->subject->name] ?? 'default'; @endphp
+                                    <div class="subject-card subject-{{ $colorClass }}" style="position:relative;">
+                                        <strong>{{ $slot->subject->displayName() }}</strong><br>
+                                        <span>{{ $slot->teacher->user->displayName() }}</span>
+                                        <form action="{{ route('admin.classes.schedule.destroy', [$class, $slot]) }}" method="POST"
+                                            class="edit-only-delete" style="display:none;position:absolute;top:2px;right:2px;"
+                                            onsubmit="return confirm('លុបស្លតនេះ?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" style="background:none;border:none;cursor:pointer;color:inherit;opacity:.7;">
+                                                <i class="fa-solid fa-xmark"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 @else
-                                    <div class="empty-slot" onclick="openSlotModal(this)"><i class="fa-solid fa-plus"></i></div>
+                                    <div class="avail-slot"
+                                        data-period="{{ $period }}"
+                                        data-day="{{ $day }}"
+                                        data-shift="{{ $shiftKey }}"
+                                        onclick="openSlotModal({{ $period }}, '{{ $day }}', '{{ $shiftKey }}')">
+                                        <div class="avail-chips" id="chips-{{ $shiftKey }}-{{ $day }}-{{ $period }}"></div>
+                                        <i class="fa-solid fa-plus avail-plus"></i>
+                                    </div>
                                 @endif
                             </td>
                         @endforeach
                     </tr>
-                @endif
-            @endforeach
-        </tbody>
-    </table>
-</div>
-@endforeach
-
-<div class="grid-actions" id="gridActions" style="display:none;">
-    <button type="button" class="save-btn" onclick="applyChanges()"><i class="fa-solid fa-floppy-disk"></i> Apply Changes</button>
-    <button type="button" class="cancel-btn" onclick="resetGrid()">Reset Grid</button>
-</div>
-
-<!-- Add Subject Modal -->
-<div id="slotModal" class="slot-modal-overlay" style="display:none;">
-    <div class="slot-modal">
-        <h3>Add Subject</h3>
-        <div class="form-group">
-            <label>Subject</label>
-            <select id="modalSubject">
-                <option value="Chemistry|chemistry">Chemistry</option>
-                <option value="Math|math">Math</option>
-                <option value="Physics|physics">Physics</option>
-                <option value="Biology|biology">Biology</option>
-                <option value="Khmer|khmer">Khmer</option>
-                <option value="History|khmer">History</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Teacher Initials</label>
-            <input type="text" id="modalInitials" placeholder="e.g. SK" maxlength="3">
-        </div>
-        <div class="form-actions">
-            <button type="button" class="cancel-btn" onclick="closeSlotModal()">Cancel</button>
-            <button type="button" class="save-btn" onclick="confirmAddSubject()">Add</button>
-        </div>
+                    @if($period < 4)
+                        @php
+                            $breakStart = explode(' - ', $periodTimes[$shiftKey][$period])[1];
+                            $breakEnd   = explode(' - ', $periodTimes[$shiftKey][$period + 1])[0];
+                        @endphp
+                        <tr class="break-row">
+                            <td colspan="{{ count($days) + 1 }}">
+                                <i class="fa-regular fa-clock"></i>
+                                {{ __('admin.classes.break_label', ['start' => $breakStart, 'end' => $breakEnd]) }}
+                            </td>
+                        </tr>
+                    @endif
+                @endfor
+            </tbody>
+        </table>
     </div>
-</div>
+    @endforeach
 
-<script>
-let activeSlot = null;
-let editMode = false;
+    {{-- Assign Modal --}}
+    <div id="slotModal" class="slot-modal-overlay" style="display:none;">
+        <form class="slot-modal" method="POST" id="slotForm" action="" style="width:520px;max-height:90vh;overflow-y:auto;">
+            @csrf
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                <h3 style="margin:0;">{{ __('admin.assign_slot') }}</h3>
+                <span id="slotLabel" style="font-size:13px;color:#6b7280;background:#f3f4f6;padding:4px 10px;border-radius:6px;"></span>
+            </div>
+            <input type="hidden" name="day_of_week" id="modalDay">
+            <input type="hidden" name="period" id="modalPeriod">
+            <input type="hidden" name="shift" id="modalShift">
+            <input type="hidden" name="teacher_id" id="modalTeacherId">
 
-function enterEditMode() {
-    editMode = true;
-    document.getElementById('editBtn').style.display = 'none';
-    document.getElementById('gridActions').style.display = 'flex';
-    document.body.classList.add('grid-editing');
-}
+            <div class="form-group">
+                <label>{{ __('admin.select_subject') }}</label>
+                <select name="subject_id" id="modalSubject" required onchange="renderTeacherList()">
+                    <option value="">{{ __('admin.classes.select_a_subject') }}</option>
+                    @foreach($subjects as $subject)
+                        <option value="{{ $subject->id }}">{{ $subject->displayName() }}</option>
+                    @endforeach
+                </select>
+            </div>
 
-function exitEditMode() {
-    editMode = false;
-    document.getElementById('editBtn').style.display = 'inline-flex';
-    document.getElementById('gridActions').style.display = 'none';
-    document.body.classList.remove('grid-editing');
-}
+            <div style="margin-bottom:8px;">
+                <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">{{ __('admin.select_teacher') }}</label>
+                <div style="display:flex;gap:12px;font-size:11px;color:#6b7280;margin-bottom:8px;flex-wrap:wrap;">
+                    <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#f59e0b;margin-right:3px;"></span>{{ __('admin.legend_preferred') }}</span>
+                    <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#10b981;margin-right:3px;"></span>{{ __('admin.legend_available') }}</span>
+                    <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#e5e9f2;margin-right:3px;"></span>{{ __('admin.legend_no_data') }}</span>
+                    <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#fecaca;margin-right:3px;"></span>{{ __('admin.legend_conflict') }}</span>
+                </div>
+                <div id="teacherList" style="display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto;"></div>
+            </div>
 
-function openSlotModal(el) {
-    if (!editMode) return; // only allow adding when in edit mode
-    activeSlot = el;
-    document.getElementById('slotModal').style.display = 'flex';
-}
+            <div class="form-actions" style="margin-top:16px;">
+                <button type="button" class="cancel-btn" onclick="closeSlotModal()">{{ __('common.cancel') }}</button>
+                <button type="submit" class="save-btn" id="assignBtn" disabled>{{ __('admin.assign_slot') }}</button>
+            </div>
+        </form>
+    </div>
 
-function closeSlotModal() {
-    document.getElementById('slotModal').style.display = 'none';
-    activeSlot = null;
-}
+    <style>
+    .avail-slot {
+        min-height: 56px; border: 1px dashed #d1d5db; border-radius: 8px;
+        display: flex; flex-direction: column; align-items: center;
+        justify-content: center; gap: 4px; cursor: default; padding: 6px;
+        transition: background .15s;
+    }
+    .grid-editing .avail-slot { cursor: pointer; }
+    .grid-editing .avail-slot:hover { background: #f0f9ff; border-color: #93c5fd; }
+    .avail-plus { color: #d1d5db; font-size: 12px; display: none; }
+    .grid-editing .avail-plus { display: block; }
+    .avail-chips { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; }
+    .avail-chip {
+        border-radius: 5px; padding: 2px 7px;
+        font-size: 11px; font-weight: 600; white-space: nowrap;
+    }
+    .avail-chip.preferred   { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+    .avail-chip.available   { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+    .avail-chip.no_data     { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e9f2; }
+    .avail-chip.conflict    { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+    .teacher-row {
+        display: flex; align-items: center; gap: 10px;
+        padding: 10px 12px; border-radius: 10px; border: 2px solid #e5e9f2;
+        cursor: pointer; transition: all .15s;
+    }
+    .teacher-row:hover:not(.dimmed) { border-color: #93c5fd; background: #f0f9ff; }
+    .teacher-row.selected { border-color: #1e40af; background: #eff6ff; }
+    .teacher-row.dimmed { opacity: .4; cursor: not-allowed; pointer-events: none; }
+    .t-avatar {
+        width: 34px; height: 34px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .t-avatar.preferred  { background: #f59e0b; }
+    .t-avatar.available  { background: #10b981; }
+    .t-avatar.no_data    { background: #9ca3af; }
+    .t-avatar.conflict   { background: #ef4444; }
+    .avail-badge {
+        margin-left: auto; font-size: 11px; font-weight: 600;
+        padding: 2px 8px; border-radius: 20px; white-space: nowrap;
+    }
+    .avail-badge.preferred  { background: #fef3c7; color: #92400e; }
+    .avail-badge.available  { background: #d1fae5; color: #065f46; }
+    .avail-badge.no_data    { background: #f3f4f6; color: #9ca3af; }
+    .avail-badge.conflict   { background: #fef2f2; color: #b91c1c; }
+    </style>
 
-function confirmAddSubject() {
-    const [subj, color] = document.getElementById('modalSubject').value.split('|');
-    const initials = document.getElementById('modalInitials').value || '--';
-    activeSlot.outerHTML = `<div class="subject-card subject-${color}"><strong>${subj}</strong><br><span>${initials}</span></div>`;
-    closeSlotModal();
-}
+    <script>
+    const SUBJECT_DISPLAY_MAP = @json($subjects->mapWithKeys(fn($s) => [$s->id => $s->displayName()]));
+    const AVAILABILITY_MAP  = @json($availabilityMap ?? []);
+    const ALL_ASSIGNED      = @json($allAssignedSlots ?? []);
+    @php
+    $locale = app()->getLocale();
+    $teacherDataLocalized = collect($teacherData ?? [])->map(function ($t) use ($locale) {
+        $t = (array) $t;
+        if ($locale === 'km' && !empty($t['khmer_name'])) {
+            $t['display_name']      = $t['khmer_name'];
+            $t['display_firstname'] = explode(' ', $t['khmer_name'])[0];
+        } else {
+            $t['display_name']      = $t['name'];
+            $t['display_firstname'] = $t['firstname'];
+        }
+        return $t;
+    })->values()->all();
+    @endphp
+    const TEACHER_DATA = @json($teacherData ?? []);
+    const IS_KM = @json(app()->getLocale() === 'km');
+    TEACHER_DATA.forEach(t => {
+        t.display_name      = (IS_KM && t.khmer_name) ? t.khmer_name : t.name;
+        t.display_firstname = (IS_KM && t.khmer_name) ? t.khmer_name.split(' ')[0] : t.firstname;
+    });
+    const PERIOD_TIMES      = @json($periodTimes);
+    const DAY_LABELS        = @json(collect($days)->mapWithKeys(fn($d) => [$d => __('common.days.' . $d)]));
+    const BADGE_LABELS = {
+        preferred:   '★ {{ __('admin.legend_preferred') }}',
+        available:   '✓ {{ __('admin.legend_available') }}',
+        no_data:     '— {{ __('admin.legend_no_data') }}',
+        unavailable: '✗ មិនអាចបង្រៀនបាន',
+        conflict:    '⚠ កំពុងបង្រៀននៅកន្លែងផ្សេង',
+    };
+    const NO_SPECIALTY_LABEL = @json(__('admin.no_specialty'));
 
-function applyChanges() {
-    alert('Changes saved (not yet connected to backend).');
-    exitEditMode();
-}
+    let editMode = false;
+    let currentSlotKey = null;
+    let selectedTeacherId = null;
 
-function resetGrid() {
-    location.reload();
-}
+    function enterEditMode() {
+        editMode = true;
+        document.getElementById('editBtn').style.display = 'none';
+        document.getElementById('exitEditBtn').style.display = 'inline-flex';
+        document.body.classList.add('grid-editing');
+        document.querySelectorAll('.edit-only-delete').forEach(el => el.style.display = 'block');
+    }
 
-document.querySelectorAll('.shift-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('.shift-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
+    function exitEditMode() {
+        editMode = false;
+        document.getElementById('editBtn').style.display = 'inline-flex';
+        document.getElementById('exitEditBtn').style.display = 'none';
+        document.body.classList.remove('grid-editing');
+        document.querySelectorAll('.edit-only-delete').forEach(el => el.style.display = 'none');
+    }
 
-        const shift = this.dataset.shift;
-        document.querySelectorAll('.shift-grid').forEach(grid => {
-            grid.style.display = (grid.dataset.shift === shift) ? 'block' : 'none';
+    function getAvailability(teacherId, slotKey) {
+        const assigned = ALL_ASSIGNED[teacherId] ?? [];
+        if (assigned.includes(slotKey)) return 'conflict';
+        return AVAILABILITY_MAP[teacherId]?.[slotKey] ?? 'no_data';
+    }
+
+    function availOrder(status) {
+        return { preferred: 0, available: 1, no_data: 2, unavailable: 3, conflict: 4 }[status] ?? 2;
+    }
+
+    function renderChips() {
+        document.querySelectorAll('.avail-slot').forEach(cell => {
+            const key = `${cell.dataset.shift}-${cell.dataset.day}-${cell.dataset.period}`;
+            const container = document.getElementById(`chips-${cell.dataset.shift}-${cell.dataset.day}-${cell.dataset.period}`);
+            if (!container) return;
+
+            const teachers = TEACHER_DATA
+                .map(t => ({ ...t, avail: getAvailability(t.id, key) }))
+                .filter(t => t.avail !== 'conflict' && t.avail !== 'unavailable')
+                .sort((a, b) => availOrder(a.avail) - availOrder(b.avail))
+                .slice(0, 4);
+
+            container.innerHTML = '';
+            teachers.forEach(t => {
+                const chip = document.createElement('div');
+                chip.className = `avail-chip ${t.avail}`;
+    chip.title       = `${t.display_name} — ${t.avail}`;
+    chip.textContent = t.display_firstname;
+                container.appendChild(chip);
+            });
+
+            const totalAvail = TEACHER_DATA.filter(t => {
+                const a = getAvailability(t.id, key);
+                return a !== 'conflict' && a !== 'unavailable' && a !== 'no_data';
+            }).length;
+
+            if (totalAvail > 4) {
+                const more = document.createElement('div');
+                more.className = 'avail-chip no_data';
+                more.textContent = `+${totalAvail - 4}`;
+                container.appendChild(more);
+            }
+        });
+    }
+
+    function openSlotModal(period, day, shift) {
+        if (!editMode) return;
+        currentSlotKey = `${shift}-${day}-${period}`;
+        selectedTeacherId = null;
+        document.getElementById('modalPeriod').value = period;
+        document.getElementById('modalDay').value = day;
+        document.getElementById('modalShift').value = shift;
+        document.getElementById('modalTeacherId').value = '';
+        document.getElementById('assignBtn').disabled = true;
+        document.getElementById('slotForm').action = "{{ route('admin.classes.schedule.store', $class) }}";
+        document.getElementById('slotLabel').textContent = `${DAY_LABELS[day] ?? day} · P${period} · ${PERIOD_TIMES[shift][period]}`;
+        document.getElementById('modalSubject').value = '';
+        renderTeacherList();
+        document.getElementById('slotModal').style.display = 'flex';
+    }
+
+    function closeSlotModal() {
+        document.getElementById('slotModal').style.display = 'none';
+        currentSlotKey = null;
+        selectedTeacherId = null;
+    }
+
+    function renderTeacherList() {
+        const subjectId = parseInt(document.getElementById('modalSubject').value) || null;
+        const list = document.getElementById('teacherList');
+        list.innerHTML = '';
+
+        const teachers = TEACHER_DATA
+            .map(t => ({
+                ...t,
+                avail: getAvailability(t.id, currentSlotKey),
+                matchesSubject: !subjectId || t.subjects.includes(subjectId),
+            }))
+            .sort((a, b) => {
+                if (a.matchesSubject !== b.matchesSubject) return a.matchesSubject ? -1 : 1;
+                return availOrder(a.avail) - availOrder(b.avail);
+            });
+
+        teachers.forEach(t => {
+            const isConflict = t.avail === 'conflict';
+            const dimmed = !t.matchesSubject || isConflict;
+
+            const row = document.createElement('div');
+            row.className = `teacher-row${dimmed ? ' dimmed' : ''}`;
+            row.dataset.teacherId = t.id;
+            row.innerHTML = `
+                <div class="t-avatar ${t.avail}">${t.display_firstname.charAt(0)}</div>
+
+
+                <div style="flex:1;min-width:0;">
+                    <div style="font-weight:600;font-size:13px;">${t.display_name}</div>
+                    <div style="font-size:12px;color:#9ca3af;">${SUBJECT_DISPLAY_MAP[t.subjects[0]] || NO_SPECIALTY_LABEL}</div>
+                </div>
+                <span class="avail-badge ${t.avail}">${BADGE_LABELS[t.avail] ?? '—'}</span>
+            `;
+
+            if (!dimmed) {
+                row.addEventListener('click', () => {
+                    document.querySelectorAll('.teacher-row').forEach(r => r.classList.remove('selected'));
+                    row.classList.add('selected');
+                    selectedTeacherId = t.id;
+                    document.getElementById('modalTeacherId').value = t.id;
+                    document.getElementById('assignBtn').disabled = !document.getElementById('modalSubject').value;
+                });
+            }
+            list.appendChild(row);
+        });
+    }
+
+    document.getElementById('modalSubject').addEventListener('change', function() {
+        document.getElementById('assignBtn').disabled = !(this.value && selectedTeacherId);
+        renderTeacherList();
+    });
+
+    document.querySelectorAll('.shift-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.shift-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            document.querySelectorAll('.shift-grid').forEach(g => {
+                g.style.display = (g.dataset.shift === this.dataset.shift) ? 'block' : 'none';
+            });
         });
     });
-});
-</script>
-@endsection
+
+    renderChips();
+    </script>
+    @endif
+    @endsection

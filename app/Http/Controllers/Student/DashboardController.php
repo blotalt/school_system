@@ -5,11 +5,19 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Announcement;
 use App\Models\Attendance;
+use App\Models\ClassSchedule;
 use App\Models\ExamResult;
 use App\Models\Homework;
 
 class DashboardController extends Controller
 {
+    private const PERIOD_TIMES = [
+        1 => '7:10 - 8:00',
+        2 => '8:10 - 9:00',
+        3 => '9:10 - 10:00',
+        4 => '10:10 - 11:00',
+    ];
+
     public function index()
     {
         $student = auth()->user()->student;
@@ -23,6 +31,7 @@ class DashboardController extends Controller
                 'examCount'      => 0,
                 'homeworkCount'  => 0,
                 'announcements'  => collect(),
+                'todaySchedule'  => collect(),
             ]);
         }
 
@@ -43,8 +52,21 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        $todaySchedule = ClassSchedule::where('class_id', $student->class_id)
+            ->where('day_of_week', now()->format('l'))
+            ->with(['subject', 'teacher.user'])
+            ->orderBy('shift')
+            ->orderBy('period')
+            ->get()
+->map(fn (ClassSchedule $s) => (object) [
+    'id'      => $s->id,
+    'time'    => self::PERIOD_TIMES[$s->period] ?? '',
+    'subject' => $s->subject?->displayName() ?? '',
+    'teacher' => $s->teacher?->user?->displayName() ?? '',
+]);
+
         return view('student.dashboard', compact(
-            'student', 'class', 'attendanceRate', 'examCount', 'homeworkCount', 'announcements'
+            'student', 'class', 'attendanceRate', 'examCount', 'homeworkCount', 'announcements', 'todaySchedule'
         ));
     }
 }

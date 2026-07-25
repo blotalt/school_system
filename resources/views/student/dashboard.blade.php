@@ -1,64 +1,79 @@
 @extends('layouts.student')
 
 @section('content')
-<x-page-header>
-    <div>
-        <h1>Welcome back{{ $student ? ', ' . auth()->user()->name : '' }}</h1>
-        <p>
-            @if($class)
-                {{ $class->name }}{{ $class->track ? ' • ' . $class->track : '' }} • Academic Session 2025-2026
-            @else
-                Your student profile is not set up yet. Please contact the administrator.
-            @endif
-        </p>
+
+<div class="welcome-card">
+    <div class="welcome-left">
+        <div class="avatar-circle" style="width:64px;height:64px;font-size:20px;">
+            {{ collect(explode(' ', $student?->user->name ?? auth()->user()->name))->map(fn ($n) => mb_substr($n, 0, 1))->take(2)->implode('') }}
+        </div>
+        <div>
+            <h1>{{ __('student.dashboard.hello', ['name' => $student?->user->displayName() ?? auth()->user()->displayName()]) }}</h1>
+            <div class="student-badge">
+                <span class="grade-badge">{{ $class->name ?? __('student.dashboard.unassigned') }}</span>
+                @if($class?->track)
+                    <span class="track-badge">{{ $class->displayTrack() }}</span>
+                @endif
+            </div>
+        </div>
     </div>
-</x-page-header>
+</div>
 
 <div class="stat-grid">
     <div class="stat-card">
         <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
         <div class="stat-value">{{ $attendanceRate }}%</div>
-        <div class="stat-label">Attendance Rate</div>
+        <div class="stat-label">{{ __('student.dashboard.stat_attendance_rate') }}</div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon"><i class="fa-solid fa-award"></i></div>
-        <div class="stat-value">{{ $examCount }}</div>
-        <div class="stat-label">Exam Results</div>
+        <div class="stat-icon"><i class="fa-regular fa-clipboard"></i></div>
+        <div class="stat-value">{{ number_format($examCount) }}</div>
+        <div class="stat-label">{{ __('student.dashboard.stat_exam_results') }}</div>
     </div>
     <div class="stat-card">
         <div class="stat-icon"><i class="fa-solid fa-book"></i></div>
-        <div class="stat-value">{{ $homeworkCount }}</div>
-        <div class="stat-label">Assigned Homework</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
-        <div class="stat-value">{{ $class?->teacher?->user?->name ?? '—' }}</div>
-        <div class="stat-label">Homeroom Teacher</div>
+        <div class="stat-value">{{ number_format($homeworkCount) }}</div>
+        <div class="stat-label">{{ __('student.dashboard.stat_homework_assigned') }}</div>
     </div>
 </div>
 
-<div class="data-card">
-    <div class="data-card-header">
-        <h3>Announcements</h3>
-        <a href="/student/schedule">View Schedule</a>
+<div class="today-card">
+    <div class="today-header">
+        <h2>{{ __('student.dashboard.todays_schedule') }}</h2>
     </div>
-    @forelse($announcements as $a)
-        <div class="announcement-card">
-            <div class="announcement-icon navy"><i class="fa-solid fa-bullhorn"></i></div>
-            <div class="announcement-content">
-                <div class="announcement-top"><h3>{{ $a->title }}</h3></div>
-                <div class="announcement-info">
-                    <span><i class="fa-regular fa-calendar"></i> {{ $a->created_at->format('M d, Y') }}</span>
-                    <span><i class="fa-regular fa-user"></i> {{ $a->author->name ?? 'School' }}</span>
+
+    @forelse($todaySchedule as $slot)
+        <a href="{{ route('student.view-class', $slot->id) }}" style="text-decoration:none;color:inherit;">
+            <div class="today-item">
+                <div class="today-left">
+                    <span class="today-time">{{ $slot->time }}</span>
+                    <h3>{{ $slot->subject }}</h3>
+                    <p><i class="fa-regular fa-user"></i> {{ $slot->teacher }}</p>
                 </div>
-                <p>{{ $a->body }}</p>
-                <div class="announcement-footer">
-                    <span class="priority {{ $a->priority }}">{{ ucfirst($a->priority) }}</span>
-                </div>
+            </div>
+        </a>
+    @empty
+        <div class="today-item"><div class="today-left"><p>{{ __('student.dashboard.no_classes_scheduled') }}</p></div></div>
+    @endforelse
+</div>
+
+<div class="today-card" style="margin-top:20px;">
+    <div class="today-header">
+        <h2>{{ __('student.dashboard.recent_announcements') }}</h2>
+        <a href="/student/announcements">{{ __('common.view_all') }}</a>
+    </div>
+
+    @forelse($announcements as $announcement)
+        <div class="today-item">
+            <div class="today-left">
+                <span class="today-time">{{ $announcement->created_at->format('M j, Y') }}</span>
+                <h3>{{ $announcement->title }}</h3>
+                <p>{{ $announcement->author->name ?? __('student.dashboard.school_fallback') }}</p>
             </div>
         </div>
     @empty
-        <p style="padding:16px;color:#8a94a6;">No announcements right now.</p>
+        <div class="today-item"><div class="today-left"><p>{{ __('student.dashboard.no_announcements_yet') }}</p></div></div>
     @endforelse
 </div>
+
 @endsection
