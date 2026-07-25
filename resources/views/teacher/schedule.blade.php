@@ -16,7 +16,6 @@
     $uniqueClasses  = $assignedSlots->map(fn($s) => $s->schoolClass)->filter()->unique('id')->values();
     $uniqueSubjects = $assignedSlots->map(fn($s) => $s->subject)->filter()->unique('id')->values();
     $totalHours     = $assignedSlots->count();
-    $allApproved    = $uniqueClasses->isNotEmpty() && $uniqueClasses->every(fn($c) => !is_null($c->schedule_approved_at));
 @endphp
 
 {{-- Stats --}}
@@ -133,7 +132,7 @@
 @endif
 
 {{-- Availability Section --}}
-@if($allApproved)
+@if($scheduleApproved)
     <div style="margin-top:24px;padding:14px 18px;background:#d1fae5;border:1px solid #10b981;border-radius:10px;color:#065f46;font-size:13px;">
         <i class="fa-solid fa-circle-check"></i> {{ __('teacher.schedule.schedule_finalized') }}
     </div>

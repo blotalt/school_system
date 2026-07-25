@@ -10,31 +10,38 @@ use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
-    public function index()
-    {
-        $teacher = auth()->user()->teacher;
+   public function index()
+{
+    $teacher = auth()->user()->teacher;
 
-$mySchedules = $teacher
-    ? ClassSchedule::with(['subject', 'schoolClass'])
-        ->where('teacher_id', $teacher->id)
-        ->get()
-        ->keyBy(fn($s) => "{$s->shift}-{$s->day_of_week}-{$s->period}")
-    : collect();
+    $mySchedules = $teacher
+        ? ClassSchedule::with(['subject', 'schoolClass'])
+            ->where('teacher_id', $teacher->id)
+            ->get()
+            ->keyBy(fn($s) => "{$s->shift}-{$s->day_of_week}-{$s->period}")
+        : collect();
 
-        $availability = $teacher
-            ? TeacherAvailability::where('teacher_id', $teacher->id)
-                ->get()
-                ->keyBy(fn($a) => "{$a->shift}-{$a->day_of_week}-{$a->period}")
-            : collect();
+    $availability = $teacher
+        ? TeacherAvailability::where('teacher_id', $teacher->id)
+            ->get()
+            ->keyBy(fn($a) => "{$a->shift}-{$a->day_of_week}-{$a->period}")
+        : collect();
 
-        return view('teacher.schedule', [
-            'mySchedules'  => $mySchedules,
-            'availability' => $availability,
-            'days'         => Timetable::DAYS,
-            'periodTimes'  => Timetable::PERIOD_TIMES,
-            'teacher'      => $teacher,
-        ]);
-    }
+    $uniqueClasses = $mySchedules->values()
+        ->map(fn($s) => $s->schoolClass)->filter()->unique('id')->values();
+
+    $scheduleApproved = $uniqueClasses->isNotEmpty()
+        && $uniqueClasses->every(fn($c) => !is_null($c->schedule_approved_at));
+
+    return view('teacher.schedule', [
+        'mySchedules'     => $mySchedules,
+        'availability'    => $availability,
+        'days'            => Timetable::DAYS,
+        'periodTimes'     => Timetable::PERIOD_TIMES,
+        'teacher'         => $teacher,
+        'scheduleApproved' => $scheduleApproved,
+    ]);
+}
 
     public function store(Request $request)
     {

@@ -6,126 +6,211 @@ use App\Models\ClassSchedule;
 use App\Models\SchoolClass;
 use App\Models\Subject;
 use App\Models\Teacher;
-use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 
+/**
+ * Builds a complete, gap-free Monday-Friday timetable for every class: all
+ * 4 periods x 5 days filled, in exactly one shift per class (no class ever
+ * mixes morning/afternoon rows). Saturday is deliberately left untouched —
+ * ScheduleRequestSeeder uses it for sample "request a Saturday session"
+ * data, since the weekday grid ends up 100% full.
+ *
+ * Every teacher created by TeacherSeeder is guaranteed at least one slot
+ * here (that's the whole point of TeacherSeeder's pool sizing) — nothing
+ * in this seeder creates new teachers.
+ */
 class ClassScheduleSeeder extends Seeder
 {
-    private const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    private const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
     private const PERIODS = [1, 2, 3, 4];
-    private const SHIFT = 'morning';
+    private const SLOTS_PER_WEEK = 20; // 5 days x 4 periods
 
-    private array $firstNames = [
-        'Sophea', 'Dara', 'Chanthy', 'Vichea', 'Sreymom', 'Pisey', 'Rithy', 'Kunthea',
-        'Bopha', 'Chandara', 'Sovann', 'Malis', 'Ratanak', 'Sokha', 'Vanna', 'Chenda',
-        'Phirun', 'Kanya', 'Sarun', 'Mealea',
+    /** Grade level => shift. */
+    private const GRADE_SHIFT = ['10' => 'morning', '11' => 'afternoon', '12' => 'morning'];
+
+    /** Track => [subject => weekly occurrences], each summing to 20. */
+    private const SUBJECT_FREQUENCY = [
+        'Science' => [
+            'Mathematics' => 3, 'Khmer Literature' => 3, 'English' => 3,
+            'Physics' => 2, 'Chemistry' => 2, 'Biology' => 2, 'Computer Science' => 2,
+            'Earth Science' => 1, 'History' => 1, 'Geography' => 1,
+        ],
+        'Social Science' => [
+            'Mathematics' => 3, 'Khmer Literature' => 3, 'English' => 3,
+            'History' => 3, 'Geography' => 2, 'Morality & Civics' => 2,
+            'Computer Science' => 1, 'Earth Science' => 1, 'Physics' => 1, 'Biology' => 1,
+        ],
+        'General' => [
+            'Mathematics' => 3, 'Khmer Literature' => 3, 'English' => 3,
+            'History' => 2, 'Geography' => 2, 'Computer Science' => 2,
+            'Physics' => 1, 'Chemistry' => 1, 'Biology' => 1, 'Earth Science' => 1, 'Morality & Civics' => 1,
+        ],
+        'Arts' => [
+            'Mathematics' => 3, 'Khmer Literature' => 3, 'English' => 3,
+            'History' => 3, 'Geography' => 2, 'Computer Science' => 2,
+            'Morality & Civics' => 1, 'Physics' => 1, 'Biology' => 1, 'Earth Science' => 1,
+        ],
+        'Commerce' => [
+            'Mathematics' => 3, 'Khmer Literature' => 3, 'English' => 3,
+            'Computer Science' => 3, 'Geography' => 2, 'History' => 2,
+            'Earth Science' => 1, 'Morality & Civics' => 1, 'Physics' => 1, 'Biology' => 1,
+        ],
     ];
 
-    private array $lastNames = [
-        'Chan', 'Sok', 'Meas', 'Heng', 'Tan', 'Prak', 'Ly', 'Sar', 'Nguon', 'Chea',
-    ];
+    /** @var array<string,int> subject name => subject id, resolved once */
+    private array $subjectIds = [];
 
-    /**
-     * Gives every class every subject, one weekly slot each, taught by a
-     * teacher who specializes in only that subject. Each subject gets 2-5
-     * teachers who randomly split the classes between them. Slot picking
-     * avoids double-booking the class OR the teacher for that day/period.
-     */
     public function run(): void
     {
         $classes = SchoolClass::orderBy('name')->get();
-        $subjects = Subject::orderBy('name')->get();
-
-        if ($classes->isEmpty() || $subjects->isEmpty()) {
-            $this->command?->warn('No classes or subjects found — nothing to schedule.');
-
+        if ($classes->isEmpty()) {
+            $this->command?->warn('ClassScheduleSeeder: no classes found, skipping.');
             return;
         }
 
-        $classSlotsUsed = [];   // [class_id]['Day-Period'] => true
-        $teacherSlotsUsed = []; // [teacher_id]['Day-Period'] => true
-        $nameIndex = 0;
+        $this->subjectIds = Subject::pluck('id', 'name')->all();
 
-        foreach ($subjects as $subject) {
-            $teacherCount = min($classes->count(), random_int(2, 5));
+        $classesByShift = $classes->groupBy(fn (SchoolClass $c) => self::GRADE_SHIFT[$c->grade_level] ?? 'morning');
 
-            // Reuse teachers who already specialize in this subject before
-            // creating new ones, so real teachers (e.g. from TeacherSeeder)
-            // aren't duplicated by fresh randomly-generated ones.
-            $teachers = Teacher::whereHas('subjects', fn ($q) => $q->where('subjects.id', $subject->id))->get();
-
-            while ($teachers->count() < $teacherCount) {
-                $teachers->push($this->makeTeacher($subject, $nameIndex++));
-            }
-
-            // Randomly split all classes among this subject's teachers —
-            // every teacher gets at least one, coverage is guaranteed.
-            $shuffledClasses = $classes->shuffle()->values();
-            $shuffledTeachers = $teachers->shuffle()->values();
-
-            foreach ($shuffledClasses as $index => $class) {
-                $teacher = $shuffledTeachers[$index % $shuffledTeachers->count()];
-
-                $slot = $this->findFreeSlot($class->id, $teacher->id, $classSlotsUsed, $teacherSlotsUsed);
-
-                ClassSchedule::create([
-                    'class_id'    => $class->id,
-                    'subject_id'  => $subject->id,
-                    'teacher_id'  => $teacher->id,
-                    'day_of_week' => $slot['day'],
-                    'period'      => $slot['period'],
-                    'shift'       => self::SHIFT,
-                ]);
-
-                $classSlotsUsed[$class->id][$slot['key']] = true;
-                $teacherSlotsUsed[$teacher->id][$slot['key']] = true;
-            }
+        foreach ($classesByShift as $shift => $shiftClasses) {
+            $this->scheduleShift($shift, $shiftClasses->values());
         }
     }
 
-    private function makeTeacher(Subject $subject, int $index): Teacher
+    private function scheduleShift(string $shift, Collection $shiftClasses): void
     {
-        $name = $this->firstNames[$index % count($this->firstNames)]
-            . ' ' . $this->lastNames[intdiv($index, count($this->firstNames)) % count($this->lastNames)];
+        $teacherPools = []; // subject => Collection<Teacher>
+        $pointer = [];      // subject => round-robin index into its pool
+        $busy = [];         // "day-period" => [teacherId => true]
 
-        $email = 'teacher.' . $subject->id . '.' . $index . '@school.test';
+        $classCount = $shiftClasses->count();
 
-        $user = User::create([
-            'name'     => $name,
-            'email'    => $email,
-            'password' => 'password',
-            'role'     => 'teacher',
-        ]);
+        foreach ($shiftClasses as $classIndex => $class) {
+            $frequency = self::SUBJECT_FREQUENCY[$class->track] ?? self::SUBJECT_FREQUENCY['General'];
+            $sequence = $this->buildSequence($frequency);
+            $offset = (int) round($classIndex * self::SLOTS_PER_WEEK / max($classCount, 1));
+            $sequence = array_merge(array_slice($sequence, $offset), array_slice($sequence, 0, $offset));
 
-        $teacher = Teacher::create([
-            'user_id'           => $user->id,
-            'subject_specialty' => $subject->name,
-        ]);
+            $teacherUsage = []; // teacherId => count, to pick a sensible homeroom teacher after
 
-        $teacher->subjects()->attach($subject->id);
+            $cell = 0;
+            foreach (self::WEEKDAYS as $day) {
+                foreach (self::PERIODS as $period) {
+                    $subjectName = $sequence[$cell];
+                    $cell++;
 
-        return $teacher;
+                    $teacherPools[$subjectName] ??= $this->teacherPoolFor($subjectName, $shift);
+                    $slotKey = "{$day}-{$period}";
+                    $busy[$slotKey] ??= [];
+
+                    $teacherId = $this->pickFreeTeacher($teacherPools[$subjectName], $pointer, $subjectName, $busy[$slotKey], $shift, $day, $period);
+
+                    ClassSchedule::create([
+                        'class_id'    => $class->id,
+                        'subject_id'  => $this->subjectIds[$subjectName],
+                        'teacher_id'  => $teacherId,
+                        'day_of_week' => $day,
+                        'period'      => $period,
+                        'shift'       => $shift,
+                    ]);
+
+                    $busy[$slotKey][$teacherId] = true;
+                    $teacherUsage[$teacherId] = ($teacherUsage[$teacherId] ?? 0) + 1;
+                }
+            }
+
+            arsort($teacherUsage);
+            $homeroomTeacherId = array_key_first($teacherUsage);
+
+            $class->update([
+                'teacher_id'           => $homeroomTeacherId,
+                'schedule_approved_at' => now(),
+            ]);
+        }
     }
 
-    private function findFreeSlot(int $classId, int $teacherId, array &$classUsed, array &$teacherUsed): array
+    private function pickFreeTeacher(Collection $pool, array &$pointer, string $subjectName, array $busyAtSlot, string $shift, string $day, int $period): int
     {
-        $combos = [];
-        foreach (self::DAYS as $day) {
-            foreach (self::PERIODS as $period) {
-                $combos[] = ['day' => $day, 'period' => $period, 'key' => "{$day}-{$period}"];
-            }
-        }
-        shuffle($combos);
+        $size = $pool->count();
+        $pointer[$subjectName] ??= 0;
 
-        foreach ($combos as $combo) {
-            $classFree = empty($classUsed[$classId][$combo['key']]);
-            $teacherFree = empty($teacherUsed[$teacherId][$combo['key']]);
+        for ($tries = 0; $tries < $size; $tries++) {
+            $candidate = $pool[($pointer[$subjectName] + $tries) % $size];
+            if (empty($busyAtSlot[$candidate->id])) {
+                $pointer[$subjectName] = ($pointer[$subjectName] + $tries + 1) % $size;
 
-            if ($classFree && $teacherFree) {
-                return $combo;
+                return $candidate->id;
             }
         }
 
-        throw new \RuntimeException("No free schedule slot for class {$classId} / teacher {$teacherId}.");
+        // Extremely unlikely given pool sizing, but never crash: borrow any
+        // teacher (any subject) free at this exact slot as a substitute.
+        $busyTeacherIds = ClassSchedule::where('day_of_week', $day)
+            ->where('period', $period)
+            ->where('shift', $shift)
+            ->pluck('teacher_id');
+
+        $substituteId = Teacher::whereNotIn('id', $busyTeacherIds)->value('id');
+
+        if (! $substituteId) {
+            throw new \RuntimeException("No teacher available at all for {$day} period {$period} ({$shift}).");
+        }
+
+        return $substituteId;
+    }
+
+    /**
+     * Splits every teacher of this subject between the two shifts,
+     * proportional to the target [morning, afternoon] sizing but scaled to
+     * consume the full available set — self-correcting if the actual
+     * headcount differs slightly from the target (e.g. the pre-existing
+     * test teacher adding one extra Mathematics teacher), so nobody is
+     * ever left unused.
+     */
+    private function teacherPoolFor(string $subjectName, string $shift): Collection
+    {
+        [$morningTarget, $afternoonTarget] = TeacherSeeder::SUBJECT_POOL_SIZES[$subjectName] ?? [2, 2];
+
+        $ordered = Teacher::whereHas('subjects', fn ($q) => $q->where('subjects.name', $subjectName))
+            ->orderBy('id')
+            ->get();
+
+        $total = $ordered->count();
+        if ($total === 0) {
+            return collect();
+        }
+
+        $morningShare = (int) round($total * $morningTarget / max($morningTarget + $afternoonTarget, 1));
+        // Keep both shares non-empty (pool sizing always targets >=2 per shift, so total is always >=4).
+        $morningShare = max(1, min($morningShare, $total - 1));
+
+        return $shift === 'morning'
+            ? $ordered->slice(0, $morningShare)->values()
+            : $ordered->slice($morningShare)->values();
+    }
+
+    /**
+     * Evenly spread each subject's weekly occurrences across 20 slots
+     * (largest-remainder-style placement) so the same subject never
+     * clusters together within a week.
+     *
+     * @param array<string,int> $frequency
+     * @return string[] length-20 ordered subject names
+     */
+    private function buildSequence(array $frequency): array
+    {
+        $entries = [];
+
+        foreach ($frequency as $subject => $count) {
+            for ($j = 0; $j < $count; $j++) {
+                $position = ($j + 0.5) * (self::SLOTS_PER_WEEK / $count);
+                $entries[] = [$position, $subject];
+            }
+        }
+
+        usort($entries, fn ($a, $b) => $a[0] <=> $b[0]);
+
+        return array_map(fn ($e) => $e[1], $entries);
     }
 }

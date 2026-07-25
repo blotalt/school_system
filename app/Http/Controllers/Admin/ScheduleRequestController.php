@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 
 namespace App\Http\Controllers\Admin;
 
@@ -99,4 +99,4 @@ public function index(Request $request)
 
         return redirect()->route('admin.schedule-requests.index')->with('success', 'Request rejected.');
     }
-}
+} -->

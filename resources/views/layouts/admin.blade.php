@@ -22,14 +22,7 @@
                 <li><a href="/admin/students" class="{{ request()->is('admin/students*') ? 'active' : '' }}"><i class="fa-solid fa-user-graduate"></i> {{ __('nav.students_nav') }}</a></li>
                 <li><a href="/admin/teachers" class="{{ request()->is('admin/teachers*') ? 'active' : '' }}"><i class="fa-solid fa-chalkboard-user"></i> {{ __('nav.teachers_nav') }}</a></li>
                 <li><a href="/admin/classes" class="{{ request()->is('admin/classes*') ? 'active' : '' }}"><i class="fa-solid fa-school"></i> {{ __('nav.classes_nav') }}</a></li>
-                <li>
-                    <a href="/admin/schedule-requests" class="{{ request()->is('admin/schedule-requests*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-calendar-check"></i> {{ __('nav.schedule_requests_nav') }}
-                        @if($pendingScheduleRequestsCount > 0)
-                            <span class="nav-badge">{{ $pendingScheduleRequestsCount > 9 ? '9+' : $pendingScheduleRequestsCount }}</span>
-                        @endif
-                    </a>
-                </li>
+
                 <li><a href="/admin/attendance" class="{{ request()->is('admin/attendance*') ? 'active' : '' }}"><i class="fa-solid fa-user-check"></i> {{ __('nav.attendance_nav') }}</a></li>
                 <li><a href="/admin/exams" class="{{ request()->is('admin/exams*') ? 'active' : '' }}"><i class="fa-regular fa-clipboard"></i> {{ __('nav.exams_nav') }}</a></li>
                 <li><a href="/admin/announcements" class="{{ request()->is('admin/announcements*') ? 'active' : '' }}"><i class="fa-solid fa-bullhorn"></i> {{ __('nav.announcements_nav') }}</a></li>

@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+{{-- @extends('layouts.admin')
 
 @section('content')
 <x-page-header>
@@ -134,4 +134,4 @@ document.querySelectorAll('.shift-btn[data-day]').forEach(btn => {
     });
 });
 </script>
-@endsection
+@endsection --}}

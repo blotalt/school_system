@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\SchoolClass;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -46,13 +45,13 @@ class DatabaseSeeder extends Seeder
             ClassSeeder::class,
             StudentSeeder::class,
             ClassScheduleSeeder::class,
+            TeacherAvailabilitySeeder::class,
+            ScheduleRequestSeeder::class,
             ExamSeeder::class,
             AttendanceSeeder::class,
+            HomeworkSeeder::class,
+            HomeworkSubmissionSeeder::class,
             AnnouncementSeeder::class,
-        ]);
-
-        SchoolClass::whereHas('schedules')->update([
-            'schedule_approved_at' => now(),
         ]);
     }
 }
