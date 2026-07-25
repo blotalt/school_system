@@ -73,7 +73,7 @@
                 <span><i class="fa-regular fa-calendar"></i> {{ $a->created_at->format('M d, Y') }}</span>
                 <span><i class="fa-regular fa-user"></i> {{ $a->author->name ?? __('admin.announcements.school_fallback') }}</span>
             </div>
-            <p>{{ $a->body }}</p>
+            <p>{!! $a->body !!}</p>
             <div class="announcement-footer">
                 <span class="tag {{ $a->audience }}">
                     {{ $a->audience === 'class' ? ($a->schoolClass->name ?? __('admin.announcements.audience_class_fallback')) : ($audiences[$a->audience] ?? ucfirst($a->audience)) }}
@@ -89,6 +89,8 @@
 @php
     $editingAnnouncement = old('_editing_id') ? $announcements->firstWhere('id', (int) old('_editing_id')) : null;
 @endphp
+
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
 <!-- New / Edit Announcement Modal -->
 <div id="newAnnouncementModal" class="slot-modal-overlay" style="display:{{ $errors->any() ? 'flex' : 'none' }};">
@@ -111,10 +113,11 @@
             @error('title') <span style="color:#c0392b;">{{ $message }}</span> @enderror
         </div>
         <div class="form-group">
-            <label>{{ __('admin.announcements.message') }}</label>
-            <textarea name="body" id="modalBodyInput" rows="4" style="width:100%;border:1px solid #e5e9f2;border-radius:10px;padding:12px;">{{ old('body', $editingAnnouncement->body ?? '') }}</textarea>
-            @error('body') <span style="color:#c0392b;">{{ $message }}</span> @enderror
-        </div>
+    <label>{{ __('admin.announcements.message') }}</label>
+    <div id="quillEditor" style="height:180px;border-radius:0 0 10px 10px;"></div>
+    <input type="hidden" name="body" id="modalBodyInput" value="{{ old('body', $editingAnnouncement->body ?? '') }}">
+    @error('body') <span style="color:#c0392b;">{{ $message }}</span> @enderror
+</div>
         <div class="form-group">
             <label>{{ __('admin.announcements.audience_label') }}</label>
             <select name="audience" id="modalAudienceSelect">
@@ -130,7 +133,7 @@
             <select name="class_id" id="modalClassSelect">
                 <option value="">—</option>
                 @foreach($classes as $class)
-                    <option value="{{ $class->id }}" @selected((string) old('class_id', $editingAnnouncement->class_id ?? '') === (string) $class->id)>{{ $class->name }}</option>
+                    <option value="{{ $class->id }}" @selected((string) old('class_id', $editingAnnouncement->class_id ?? '') === (string) $class->id)>{{ $class->displayName() }}</option>
                 @endforeach
             </select>
             @error('class_id') <span style="color:#c0392b;">{{ $message }}</span> @enderror
@@ -151,7 +154,29 @@
     </form>
 </div>
 
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script>
+var quill = new Quill('#quillEditor', {
+    theme: 'snow',
+    modules: {
+        toolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['link'],
+            ['clean']
+        ]
+    }
+});
+
+var initialBody = document.getElementById('modalBodyInput').value;
+if (initialBody) quill.root.innerHTML = initialBody;
+
+document.getElementById('modalSubmitBtn').addEventListener('click', function() {
+    var content = quill.root.innerHTML;
+    if (content === '<p><br></p>') content = '';
+    document.getElementById('modalBodyInput').value = content;
+});
+
 function toggleAnnouncementMenu(e, btn) {
     e.stopPropagation();
     const dropdown = btn.nextElementSibling;
@@ -171,6 +196,7 @@ function openCreateAnnouncementModal() {
     document.getElementById('modalEditingId').value = '';
     document.getElementById('modalSubmitBtn').textContent = @json(__('admin.announcements.post_announcement'));
     document.getElementById('modalTitleInput').value = '';
+    quill.setText('');
     document.getElementById('modalBodyInput').value = '';
     document.getElementById('modalAudienceSelect').value = 'everyone';
     document.getElementById('modalClassSelect').value = '';
@@ -194,7 +220,8 @@ function openEditAnnouncementModal(btn) {
     document.getElementById('modalEditingId').value = card.dataset.id;
     document.getElementById('modalSubmitBtn').textContent = @json(__('common.save_changes'));
     document.getElementById('modalTitleInput').value = card.dataset.title;
-    document.getElementById('modalBodyInput').value = card.dataset.body;
+    quill.root.innerHTML = card.dataset.body || '';
+    document.getElementById('modalBodyInput').value = card.dataset.body || '';
     document.getElementById('modalAudienceSelect').value = card.dataset.audience;
     document.getElementById('modalClassSelect').value = card.dataset.classId || '';
     document.getElementById('modalPrioritySelect').value = card.dataset.priority;
