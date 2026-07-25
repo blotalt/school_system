@@ -21,8 +21,8 @@
             <ul class="menu">
                 <li><a href="/teacher/dashboard" class="{{ request()->is('teacher/dashboard') || request()->is('teacher') ? 'active' : '' }}"><i class="fa-solid fa-gauge"></i> {{ __('common.dashboard') }}</a></li>
                 <li><a href="/teacher/schedule" class="{{ request()->is('teacher/schedule*') ? 'active' : '' }}"><i class="fa-regular fa-calendar"></i> {{ __('nav.schedule_nav') }}</a></li>
-                <li><a href="/teacher/classes" class="{{ request()->is('teacher/classes*') ? 'active' : '' }}"><i class="fa-solid fa-school"></i> {{ __('nav.classes_nav') }}</a></li>
-                <li><a href="/teacher/attendance" class="{{ request()->is('teacher/attendance*') ? 'active' : '' }}"><i class="fa-solid fa-user-check"></i> {{ __('nav.attendance_nav') }}</a></li>
+                <li><a href="/teacher/classes" class="{{ request()->is('teacher/classes') ? 'active' : '' }}"><i class="fa-solid fa-school"></i> {{ __('nav.classes_nav') }}</a></li>
+                <li><a href="/teacher/attendance" class="{{ request()->is('teacher/classes/*/attendance*') || request()->is('teacher/attendance*') ? 'active' : '' }}"><i class="fa-solid fa-user-check"></i> {{ __('nav.attendance_nav') }}</a></li>
                 <li><a href="/teacher/homework" class="{{ request()->is('teacher/homework*') ? 'active' : '' }}"><i class="fa-solid fa-book"></i> {{ __('nav.homework_nav') }}</a></li>
                 <li><a href="/teacher/exams" class="{{ request()->is('teacher/exams*') ? 'active' : '' }}"><i class="fa-solid fa-file-lines"></i> {{ __('nav.exams_nav') }}</a></li>
                 <li><a href="/teacher/gradebook" class="{{ request()->is('teacher/gradebook*') ? 'active' : '' }}"><i class="fa-regular fa-clipboard"></i> {{ __('nav.gradebook_nav') }}</a></li>

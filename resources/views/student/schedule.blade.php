@@ -107,7 +107,7 @@ $subjectColors = [
             @forelse($exams as $exam)
                 <tr>
                     <td>{{ $exam->title }}</td>
-                    <td>{{ $exam->subject->name ?? '—' }}</td>
+                    <td>{{ $exam->subject?->displayName() ?? '—' }}</td>
                     <td>{{ $exam->subject?->displayName() ?? '—' }}</td>
 <td><span class="badge">{{ __('teacher.exams.' . $exam->exam_type) }}</span></td>
                 </tr>
